@@ -188,3 +188,17 @@ Bootstrap 5 sử dụng hệ thống breakpoints:
 
 > **Area controllers CHƯA có `[Authorize]`** — sẽ thêm ở Phần 3 (Authentication). 
 > Hiện tại ai cũng truy cập được `/Admin/Dashboard` và `/Client/Dashboard`.
+
+---
+
+## 7. Bảo mật cấu hình (12-Factor App & Deployment)
+
+Để chuẩn bị deploy ứng dụng (vd: lên Render) và đảm bảo an toàn tuyệt đối, dự án tuân thủ theo nguyên tắc **12-Factor App** (tách cấu hình ra khỏi code):
+
+| Môi trường | Cách lưu Connection String | File / Vị trí | Github |
+|------------|----------------------------|---------------|--------|
+| **Development** (Local)| `appsettings.Development.json` | File config nội bộ | ❌ Đã đưa vào `.gitignore` |
+| **Production** (Host) | Environment Variable (Render Dashboard) | `ConnectionStrings__DefaultConnection` | ❌ Không có trong repo |
+| **Source code repo** | `appsettings.json` với nội dung ảo (placeholder) | File codebase chính | ✅ An toàn (chỉ chứa placeholder) |
+
+Cách triển khai trên đã được áp dụng, đảm bảo password Supabase không bao giờ tồn tại trên GitHub, sẵn sàng cho CI/CD.
