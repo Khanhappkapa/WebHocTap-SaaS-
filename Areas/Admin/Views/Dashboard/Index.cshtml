@@ -1,0 +1,60 @@
+@* ============================================================
+    File: Areas/Admin/Views/Dashboard/Index.cshtml
+    Mô tả: Trang Dashboard Admin
+============================================================ *@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 fw-bold">📊 Admin Dashboard</h1>
+
+    <div class="row g-4">
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-primary">👥</div>
+                    <h5 class="mt-2">Người dùng</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-success">📚</div>
+                    <h5 class="mt-2">Khóa học</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-warning">📝</div>
+                    <h5 class="mt-2">Bài tập</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-info">📄</div>
+                    <h5 class="mt-2">Bài nộp</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Chào mừng đến Admin Panel</h5>
+            <p class="text-muted">
+                Đây là trang quản trị hệ thống ClassManagement.
+                Bạn có thể quản lý người dùng, khóa học, xem thống kê từ sidebar bên trái.
+            </p>
+        </div>
+    </div>
+</div>

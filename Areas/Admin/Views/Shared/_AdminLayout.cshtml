@@ -1,0 +1,122 @@
+@* ============================================================
+    File: Areas/Admin/Views/Shared/_AdminLayout.cshtml
+    Mô tả: Layout cho khu vực Admin — sidebar trái + content phải
+    CHECKPOINT: Màu nền sidebar TỐI (#1a1a2e) để phân biệt với Client
+    Responsive: sidebar ẩn thành offcanvas khi < 992px
+============================================================ *@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+
+    @* --------------------------------------------------
+       CHECKPOINT: Topbar Admin — hiển thị trên mọi kích thước
+       Nút burger chỉ hiển thị khi < 992px (d-lg-none)
+    -------------------------------------------------- *@
+    <header>
+        <nav class="navbar navbar-dark admin-topbar px-3">
+            <button class="navbar-toggler d-lg-none" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#adminSidebar"
+                    aria-controls="adminSidebar" aria-label="Mở menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <span class="navbar-brand mb-0 h1">🛡️ Admin Panel</span>
+            <div class="d-flex align-items-center">
+                <span class="text-light me-3">👤 Admin</span>
+                <a href="/Account/Logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="d-flex">
+        @* --------------------------------------------------
+           CHECKPOINT: Sidebar Admin
+           Desktop (≥992px): sidebar cố định bên trái, width 250px
+           Mobile (<992px): sidebar ẩn, mở bằng offcanvas Bootstrap
+        -------------------------------------------------- *@
+
+        @* Sidebar cho Desktop — ẩn khi < 992px *@
+        <nav class="sidebar admin-sidebar d-none d-lg-flex flex-column" id="adminSidebarDesktop">
+            <div class="sidebar-header p-3">
+                <h5 class="text-white mb-0">📊 Quản trị</h5>
+            </div>
+            <ul class="nav flex-column px-2">
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                        📋 Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#">
+                        👥 Người dùng
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#">
+                        📚 Khóa học
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link sidebar-link" href="#">
+                        📈 Thống kê
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        @* Offcanvas Sidebar cho Mobile — hiển thị khi < 992px *@
+        <div class="offcanvas offcanvas-start admin-sidebar" tabindex="-1"
+             id="adminSidebar" aria-labelledby="adminSidebarLabel"
+             style="width: 250px;">
+            <div class="offcanvas-header">
+                <h5 class="text-white" id="adminSidebarLabel">📊 Quản trị</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Đóng"></button>
+            </div>
+            <div class="offcanvas-body p-0">
+                <ul class="nav flex-column px-2">
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
+                            📋 Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" href="#">
+                            👥 Người dùng
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" href="#">
+                            📚 Khóa học
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" href="#">
+                            📈 Thống kê
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        @* --------------------------------------------------
+           CHECKPOINT: Vùng nội dung chính
+           Desktop: margin-left 250px (nhường chỗ cho sidebar)
+           Mobile: margin-left 0 (sidebar ẩn)
+        -------------------------------------------------- *@
+        <main class="main-content flex-grow-1 p-4">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

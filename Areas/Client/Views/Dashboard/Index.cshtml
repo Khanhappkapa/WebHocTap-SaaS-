@@ -1,0 +1,51 @@
+@* ============================================================
+    File: Areas/Client/Views/Dashboard/Index.cshtml
+    Mô tả: Trang Dashboard Client (Teacher / Student)
+============================================================ *@
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+    <h1 class="h3 mb-4 fw-bold">🏠 Client Dashboard</h1>
+
+    <div class="row g-4">
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-primary">📚</div>
+                    <h5 class="mt-2">Khóa học của tôi</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-warning">📝</div>
+                    <h5 class="mt-2">Bài tập cần nộp</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="display-6 text-success">🎥</div>
+                    <h5 class="mt-2">Buổi học sắp tới</h5>
+                    <p class="display-6 fw-bold text-dark">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Chào mừng bạn!</h5>
+            <p class="text-muted">
+                Đây là trang dashboard của bạn. Từ sidebar bên trái, bạn có thể
+                truy cập khóa học, duyệt khóa mới, và quản lý bài tập.
+            </p>
+        </div>
+    </div>
+</div>
