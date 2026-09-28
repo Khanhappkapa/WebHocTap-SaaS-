@@ -28,23 +28,35 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     // --------------------------------------------------
     // CHECKPOINT: Password Policy (trade-off có chủ đích)
-    // Nới lỏng: ký tự đặc biệt + chữ hoa/thường (thuận tiện demo)
-    // Giữ chặt: độ dài tối thiểu 6 + bắt buộc chữ số (bảo mật cơ bản)
     // --------------------------------------------------
     options.Password.RequireDigit = true;             // Giữ: bắt buộc có chữ số
-    options.Password.RequireLowercase = false;         // Nới: không bắt chữ thường
+    options.Password.RequireLowercase = true;          // Giữ: bắt buộc chữ thường (sửa: đã bật lại để 123456 bị reject)
     options.Password.RequireUppercase = false;         // Nới: không bắt chữ hoa
     options.Password.RequireNonAlphanumeric = false;   // Nới: không bắt ký tự đặc biệt
     options.Password.RequiredLength = 6;               // Giữ: tối thiểu 6 ký tự
 
     // Cấu hình đăng nhập
     options.SignIn.RequireConfirmedAccount = false;     // Không yêu cầu xác nhận email
+
+    // --------------------------------------------------
+    // CHECKPOINT: Lockout (chống Brute-force)
+    // --------------------------------------------------
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5); // Khóa 5 phút
+    options.Lockout.MaxFailedAccessAttempts = 5;                      // Tối đa 5 lần sai
+    options.Lockout.AllowedForNewUsers = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()      // Sử dụng ApplicationDbContext
 .AddDefaultTokenProviders();                           // Token cho reset password, email confirm...
 
 // Add services to the container
-builder.Services.AddControllersWithViews();
+// --------------------------------------------------
+// CHECKPOINT: Global ValidateAntiForgeryToken
+// Tự động validate CSRF token cho mọi request POST/PUT/DELETE
+// --------------------------------------------------
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new Microsoft.AspNetCore.Mvc.AutoValidateAntiforgeryTokenAttribute());
+});
 
 // --------------------------------------------------
 // CHECKPOINT: Cấu hình đường dẫn đăng nhập/đăng xuất cho Identity

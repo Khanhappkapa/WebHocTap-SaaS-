@@ -67,31 +67,33 @@ namespace WebHocTap_SaaS_.Data
         /// <summary>
         /// Helper: tạo 1 user nếu chưa tồn tại.
         /// Đồng bộ cả 2 nguồn sự thật: cột UserRole + Identity Roles.
+        /// Tính tự chữa lành: Nếu user đã tồn tại nhưng thiếu role, sẽ tự động cấp role.
         /// </summary>
         private static async Task SeedUserAsync(
             UserManager<AppUser> userManager,
             string email, string password, string fullName, string role)
         {
-            // CHECKPOINT: Idempotent — chỉ tạo nếu email chưa tồn tại
-            if (await userManager.FindByEmailAsync(email) != null)
-                return;
-
-            var user = new AppUser
+            // CHECKPOINT: Tự chữa lành (Self-healing Seed)
+            // Tách việc tạo user và gán role. Nếu user đã tồn tại, vẫn tiến hành kiểm tra/gán role.
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null)
             {
-                UserName = email,
-                Email = email,
-                FullName = fullName,
-                UserRole = role,        // Đồng bộ điểm 1: cột trong DB
-                IsActive = true,
-                EmailConfirmed = true   // Seed user không cần xác nhận email
-            };
+                user = new AppUser
+                {
+                    UserName = email,
+                    Email = email,
+                    FullName = fullName,
+                    UserRole = role,        // Đồng bộ điểm 1: cột trong DB
+                    IsActive = true,
+                    EmailConfirmed = true   // Seed user không cần xác nhận email
+                };
 
-            var result = await userManager.CreateAsync(user, password);
+                await userManager.CreateAsync(user, password);
+            }
 
-            if (result.Succeeded)
+            // CHECKPOINT: Đồng bộ điểm 2 — luôn kiểm tra và gán role kể cả khi user đã tồn tại
+            if (!await userManager.IsInRoleAsync(user, role))
             {
-                // CHECKPOINT: Đồng bộ điểm 2 — thêm vào AspNetUserRoles
-                // Nếu thiếu, [Authorize(Roles="Admin")] sẽ không nhận diện user này
                 await userManager.AddToRoleAsync(user, role);
             }
         }

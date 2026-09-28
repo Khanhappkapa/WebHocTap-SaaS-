@@ -134,19 +134,19 @@ public class CourseController : BaseAdminController { ... }
 |-----------|---------|-------|
 | `RequiredLength` | 6 | **GIỮ CHẶT** — tối thiểu 6 ký tự, cân bằng bảo mật + thuận tiện |
 | `RequireDigit` | `true` | **GIỮ CHẶT** — bắt buộc có chữ số, chống password quá đơn giản |
-| `RequireLowercase` | `false` | **NỚI** — không bắt buộc chữ thường, thuận tiện cho demo |
+| `RequireLowercase` | `true` | **GIỮ CHẶT** — bắt buộc chữ thường, để đảm bảo "123456" bị từ chối do thiếu chữ cái |
 | `RequireUppercase` | `false` | **NỚI** — không bắt buộc chữ hoa |
 | `RequireNonAlphanumeric` | `false` | **NỚI** — không bắt buộc ký tự đặc biệt (@, #, !) |
 
 **Đây là quyết định có chủ đích:**
 - Mục tiêu: đồ án demo, cần balance giữa bảo mật vừa đủ và trải nghiệm người dùng
-- Giữ: độ dài (6) + chữ số → vẫn đảm bảo password "123456" bị từ chối (vì thiếu chữ cái) nhưng "Admin@123" được chấp nhận
-- Nới: uppercase/lowercase/special char → người dùng demo không bị annoyed vì password bị reject liên tục
+- Giữ: độ dài (6), chữ số, chữ thường → đảm bảo password ngây ngô "123456" bị từ chối. Mật khẩu như "abc123", "Admin@123" được chấp nhận.
+- Nới: uppercase/special char → người dùng demo không bị annoyed vì password bị reject liên tục.
 - **Trong production**: nên bật đầy đủ + RequiredLength ≥ 8
 
 ---
 
-## 5. Tính Idempotent của DbSeeder
+## 5. Tính Idempotent & Tự chữa lành của DbSeeder
 
 **Idempotent** = gọi nhiều lần, kết quả vẫn giống hệt như gọi 1 lần:
 
@@ -157,9 +157,15 @@ if (!await roleManager.RoleExistsAsync(role))
     await roleManager.CreateAsync(new IdentityRole(role));
 
 // Lần 1: chưa có user admin@class.com → TẠO MỚI
-// Lần 2: đã có user → BỎ QUA (FindByEmailAsync != null)
-if (await userManager.FindByEmailAsync(email) != null)
-    return;
+// Lần 2: đã có user → BỎ QUA TẠO
+if (user == null) {
+    // Tạo user
+}
+// -----------------------------
+// Tự chữa lành (Self-healing): luôn kiểm tra role dù user cũ hay mới
+if (!await userManager.IsInRoleAsync(user, role)) {
+    await userManager.AddToRoleAsync(user, role);
+}
 ```
 
 | Lần chạy | Roles | Users | Kết quả |
@@ -220,3 +226,15 @@ Hệ thống có **2 nguồn sự thật** về vai trò:
 | `admin@class.com` | `Admin@123` | Admin | /Admin/Dashboard |
 | `teacher@class.com` | `Teacher@123` | Teacher | /Client/Dashboard |
 | `student@class.com` | `Student@123` | Student | /Client/Dashboard |
+
+---
+
+## 9. Tăng cường Bảo mật Thông tin (Security Patch 0.3.5)
+
+Vào phiên bản 0.3.5, dự án đã vá 2 lỗ hổng và áp dụng 3 cơ chế nâng cao:
+
+| Cơ chế | Áp dụng | Tác dụng |
+|--------|---------|----------|
+| **Global Anti-Forgery Token** | `options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute())` | Thay vì chỉ có thẻ `<input name="__RequestVerificationToken">` ngầm ẩn trong HTML, MVC giờ đây **chủ động kiểm tra** token này trên mọi request POST/PUT/DELETE trên toàn cục ứng dụng. Lớp bảo vệ CSRF được hoàn thiện 100%. (Lưu ý: Mọi AJAX fetch gọi POST từ nay phải kèm token trong header). |
+| **Lockout Protection** | `lockoutOnFailure: true` (AccountController) + Cấu hình trong `Program.cs` | Chống Brute-force: Nếu nhập sai mật khẩu 5 lần, tài khoản tự động khóa 5 phút. |
+| **Self-healing Seed Data** | Tách user creation và role assignment trong `DbSeeder` | Nếu user đã tồn tại nhưng mất role trong bảng AspNetUserRoles, tiến trình Seed sẽ tự động dò và cấp lại role, đảm bảo khả năng **tự chữa lành** dữ liệu phân quyền. |

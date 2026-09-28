@@ -141,7 +141,7 @@ namespace WebHocTap_SaaS_.Controllers
             }
 
             var result = await _signInManager.PasswordSignInAsync(
-                user, model.Password, model.RememberMe, lockoutOnFailure: false);
+                user, model.Password, model.RememberMe, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {
