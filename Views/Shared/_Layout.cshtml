@@ -1,10 +1,13 @@
 ﻿@* ============================================================
     File: Views/Shared/_Layout.cshtml (PUBLIC)
-    Mô tả: Layout cho trang công khai (khách chưa đăng nhập)
-    CHECKPOINT: Navbar responsive (navbar-expand-lg + navbar-toggler)
+    Mô tả: Layout cho trang công khai
+    CHECKPOINT: @inject SignInManager — hiển thị khác nhau khi login/chưa login
     SEO: <html lang="vi">, <meta description>, semantic tags
-    CHỈ reference Bootstrap từ ~/lib/bootstrap — KHÔNG thêm CDN
 ============================================================ *@
+@using Microsoft.AspNetCore.Identity
+@using WebHocTap_SaaS_.Models
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -13,17 +16,11 @@
     <title>@ViewData["Title"] - ClassManagement</title>
     <meta name="description" content="@ViewData["Description"]" />
     <meta name="author" content="ClassManagement Team" />
-    @* CHECKPOINT: Chỉ dùng Bootstrap local — KHÔNG thêm CDN để tránh xung đột version *@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
 
-    @* --------------------------------------------------
-       CHECKPOINT: Navbar PUBLIC — responsive với navbar-expand-lg
-       Khi < 992px: thu gọn thành hamburger menu
-       Khi ≥ 992px: hiển thị đầy đủ các link
-    -------------------------------------------------- *@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark public-navbar sticky-top">
             <div class="container">
@@ -31,7 +28,6 @@
                     🎓 ClassManagement
                 </a>
 
-                @* Nút hamburger cho mobile *@
                 <button class="navbar-toggler" type="button"
                         data-bs-toggle="collapse" data-bs-target="#publicNavbar"
                         aria-controls="publicNavbar" aria-expanded="false"
@@ -40,7 +36,6 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="publicNavbar">
-                    @* Menu trái *@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="Index">Trang chủ</a>
@@ -53,26 +48,36 @@
                         </li>
                     </ul>
 
-                    @* Nút bên phải *@
-                    <div class="d-flex gap-2">
-                        <a href="/Account/Login" class="btn btn-outline-light">Đăng nhập</a>
-                        <a href="/Account/Register" class="btn btn-warning fw-semibold">Đăng ký</a>
+                    @* --------------------------------------------------
+                       CHECKPOINT: Hiển thị nút theo trạng thái đăng nhập
+                       Chưa login → Đăng nhập / Đăng ký
+                       Đã login → Xin chào FullName + form POST logout
+                    -------------------------------------------------- *@
+                    <div class="d-flex gap-2 align-items-center">
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            var appUser = await UserManager.GetUserAsync(User);
+                            <span class="text-light me-2">Xin chào, <strong>@appUser?.FullName</strong></span>
+                            @* CHECKPOINT: Logout BẮT BUỘC form POST — chống CSRF *@
+                            <form asp-controller="Account" asp-action="Logout" method="post">
+                                <button type="submit" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-controller="Account" asp-action="Login" class="btn btn-outline-light">Đăng nhập</a>
+                            <a asp-controller="Account" asp-action="Register" class="btn btn-warning fw-semibold">Đăng ký</a>
+                        }
                     </div>
                 </div>
             </div>
         </nav>
     </header>
 
-    @* --------------------------------------------------
-       CHECKPOINT: Nội dung chính — semantic <main> tag
-    -------------------------------------------------- *@
     <main>
         @RenderBody()
     </main>
 
-    @* --------------------------------------------------
-       CHECKPOINT: Footer — semantic <footer> tag
-    -------------------------------------------------- *@
     <footer class="public-footer text-center py-4 mt-5">
         <div class="container">
             <p class="mb-1">&copy; 2026 ClassManagement — Website SaaS Quản Lý Lớp Học Trực Tuyến</p>
@@ -84,7 +89,6 @@
         </div>
     </footer>
 
-    @* CHECKPOINT: Script — chỉ dùng local, KHÔNG CDN *@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

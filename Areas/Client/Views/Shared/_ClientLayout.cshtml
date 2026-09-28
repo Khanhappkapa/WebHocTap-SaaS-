@@ -1,9 +1,15 @@
 @* ============================================================
     File: Areas/Client/Views/Shared/_ClientLayout.cshtml
     Mô tả: Layout cho khu vực Client (Teacher + Student)
-    CHECKPOINT: Topbar + Sidebar trái (màu xanh dương #0d47a1)
-    Responsive: sidebar ẩn thành offcanvas khi < 992px
+    CHECKPOINT: @inject UserManager — hiển thị FullName thật + badge role + form POST logout
 ============================================================ *@
+@using Microsoft.AspNetCore.Identity
+@using WebHocTap_SaaS_.Models
+@inject UserManager<AppUser> UserManager
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+    var roleBadge = currentUser?.UserRole == "Teacher" ? "bg-success" : "bg-info";
+}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -15,10 +21,6 @@
 </head>
 <body>
 
-    @* --------------------------------------------------
-       CHECKPOINT: Topbar Client — hiển thị trên mọi kích thước
-       Nút burger chỉ hiển thị khi < 992px (d-lg-none)
-    -------------------------------------------------- *@
     <header>
         <nav class="navbar navbar-dark client-topbar px-3">
             <button class="navbar-toggler d-lg-none" type="button"
@@ -28,21 +30,19 @@
             </button>
             <span class="navbar-brand mb-0 h1">🎓 ClassManagement</span>
             <div class="d-flex align-items-center">
-                <span class="text-light me-3">👤 Người dùng</span>
-                <a href="/Account/Logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                @* CHECKPOINT: Hiển thị FullName thật + badge role (Teacher=xanh lá, Student=xanh dương) *@
+                <span class="text-light me-2">👤 @currentUser?.FullName</span>
+                <span class="badge @roleBadge me-3">@currentUser?.UserRole</span>
+                @* CHECKPOINT: Logout BẮT BUỘC form POST — chống CSRF *@
+                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+                </form>
             </div>
         </nav>
     </header>
 
     <div class="d-flex">
-        @* --------------------------------------------------
-           CHECKPOINT: Sidebar Client
-           Desktop (≥992px): sidebar cố định bên trái, width 250px
-           Mobile (<992px): sidebar ẩn, mở bằng offcanvas Bootstrap
-           Màu xanh dương (#0d47a1) — phân biệt với Admin (#1a1a2e)
-        -------------------------------------------------- *@
-
-        @* Sidebar cho Desktop — ẩn khi < 992px *@
+        @* Sidebar cho Desktop *@
         <nav class="sidebar client-sidebar d-none d-lg-flex flex-column" id="clientSidebarDesktop">
             <div class="sidebar-header p-3">
                 <h5 class="text-white mb-0">📖 Menu</h5>
@@ -71,7 +71,7 @@
             </ul>
         </nav>
 
-        @* Offcanvas Sidebar cho Mobile — hiển thị khi < 992px *@
+        @* Offcanvas Sidebar cho Mobile *@
         <div class="offcanvas offcanvas-start client-sidebar" tabindex="-1"
              id="clientSidebar" aria-labelledby="clientSidebarLabel"
              style="width: 250px;">
@@ -105,11 +105,6 @@
             </div>
         </div>
 
-        @* --------------------------------------------------
-           CHECKPOINT: Vùng nội dung chính
-           Desktop: margin-left nhường chỗ cho sidebar (CSS)
-           Mobile: margin-left 0 (sidebar ẩn)
-        -------------------------------------------------- *@
         <main class="main-content flex-grow-1 p-4">
             @RenderBody()
         </main>

@@ -1,15 +1,14 @@
 // ============================================================
 // File: Areas/Client/Controllers/DashboardController.cs
 // Mô tả: Controller trang Dashboard cho Client (Teacher + Student)
-// CHECKPOINT: [Area("Client")] — CHƯA gắn [Authorize], sẽ thêm ở Phần 3
+// CHECKPOINT: Kế thừa BaseClientController → tự động có [Area("Client")] + [Authorize(Roles="Teacher,Student")]
 // ============================================================
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebHocTap_SaaS_.Areas.Client.Controllers
 {
-    [Area("Client")]
-    public class DashboardController : Controller
+    public class DashboardController : BaseClientController
     {
         public IActionResult Index()
         {

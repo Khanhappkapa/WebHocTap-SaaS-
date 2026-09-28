@@ -1,15 +1,14 @@
 // ============================================================
 // File: Areas/Admin/Controllers/DashboardController.cs
 // Mô tả: Controller trang Dashboard cho Admin
-// CHECKPOINT: [Area("Admin")] — CHƯA gắn [Authorize], sẽ thêm ở Phần 3
+// CHECKPOINT: Kế thừa BaseAdminController → tự động có [Area("Admin")] + [Authorize(Roles="Admin")]
 // ============================================================
 
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebHocTap_SaaS_.Areas.Admin.Controllers
 {
-    [Area("Admin")]
-    public class DashboardController : Controller
+    public class DashboardController : BaseAdminController
     {
         public IActionResult Index()
         {

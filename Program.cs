@@ -1,7 +1,7 @@
 // ============================================================
 // File: Program.cs
 // Mô tả: Cấu hình ứng dụng ASP.NET Core MVC
-// CHECKPOINT: Đăng ký DbContext (PostgreSQL) + Identity (AppUser, IdentityRole)
+// CHECKPOINT: DbContext + Identity + Cookie + Seed
 // ============================================================
 
 using Microsoft.AspNetCore.Identity;
@@ -26,12 +26,16 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 // --------------------------------------------------
 builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
-    // Cấu hình mật khẩu (có thể tùy chỉnh theo yêu cầu)
-    options.Password.RequireDigit = true;             // Yêu cầu có chữ số
-    options.Password.RequireLowercase = true;          // Yêu cầu có chữ thường
-    options.Password.RequireUppercase = false;         // Không bắt buộc chữ hoa
-    options.Password.RequireNonAlphanumeric = false;   // Không bắt buộc ký tự đặc biệt
-    options.Password.RequiredLength = 6;               // Độ dài tối thiểu 6 ký tự
+    // --------------------------------------------------
+    // CHECKPOINT: Password Policy (trade-off có chủ đích)
+    // Nới lỏng: ký tự đặc biệt + chữ hoa/thường (thuận tiện demo)
+    // Giữ chặt: độ dài tối thiểu 6 + bắt buộc chữ số (bảo mật cơ bản)
+    // --------------------------------------------------
+    options.Password.RequireDigit = true;             // Giữ: bắt buộc có chữ số
+    options.Password.RequireLowercase = false;         // Nới: không bắt chữ thường
+    options.Password.RequireUppercase = false;         // Nới: không bắt chữ hoa
+    options.Password.RequireNonAlphanumeric = false;   // Nới: không bắt ký tự đặc biệt
+    options.Password.RequiredLength = 6;               // Giữ: tối thiểu 6 ký tự
 
     // Cấu hình đăng nhập
     options.SignIn.RequireConfirmedAccount = false;     // Không yêu cầu xác nhận email
@@ -51,6 +55,10 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
+    // CHECKPOINT: Cookie hết hạn sau 4 giờ, SlidingExpiration tự động gia hạn
+    // nếu user hoạt động liên tục (không cần login lại giữa chừng)
+    options.ExpireTimeSpan = TimeSpan.FromHours(4);
+    options.SlidingExpiration = true;
 });
 
 var app = builder.Build();
@@ -88,5 +96,14 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+// --------------------------------------------------
+// CHECKPOINT: Seed Data — chạy TRƯỚC app.Run()
+// DbSeeder.SeedAsync là idempotent: gọi nhiều lần không crash
+// --------------------------------------------------
+using (var scope = app.Services.CreateScope())
+{
+    await DbSeeder.SeedAsync(scope.ServiceProvider);
+}
 
 app.Run();

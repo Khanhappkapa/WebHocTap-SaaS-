@@ -1,9 +1,14 @@
 @* ============================================================
     File: Areas/Admin/Views/Shared/_AdminLayout.cshtml
     Mô tả: Layout cho khu vực Admin — sidebar trái + content phải
-    CHECKPOINT: Màu nền sidebar TỐI (#1a1a2e) để phân biệt với Client
-    Responsive: sidebar ẩn thành offcanvas khi < 992px
+    CHECKPOINT: @inject UserManager — hiển thị FullName thật + form POST logout
 ============================================================ *@
+@using Microsoft.AspNetCore.Identity
+@using WebHocTap_SaaS_.Models
+@inject UserManager<AppUser> UserManager
+@{
+    var currentUser = await UserManager.GetUserAsync(User);
+}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -15,10 +20,6 @@
 </head>
 <body>
 
-    @* --------------------------------------------------
-       CHECKPOINT: Topbar Admin — hiển thị trên mọi kích thước
-       Nút burger chỉ hiển thị khi < 992px (d-lg-none)
-    -------------------------------------------------- *@
     <header>
         <nav class="navbar navbar-dark admin-topbar px-3">
             <button class="navbar-toggler d-lg-none" type="button"
@@ -28,20 +29,19 @@
             </button>
             <span class="navbar-brand mb-0 h1">🛡️ Admin Panel</span>
             <div class="d-flex align-items-center">
-                <span class="text-light me-3">👤 Admin</span>
-                <a href="/Account/Logout" class="btn btn-outline-light btn-sm">Đăng xuất</a>
+                @* CHECKPOINT: Hiển thị FullName thật + badge role *@
+                <span class="text-light me-2">👤 @currentUser?.FullName</span>
+                <span class="badge bg-danger me-3">Admin</span>
+                @* CHECKPOINT: Logout BẮT BUỘC form POST — chống CSRF *@
+                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="">
+                    <button type="submit" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+                </form>
             </div>
         </nav>
     </header>
 
     <div class="d-flex">
-        @* --------------------------------------------------
-           CHECKPOINT: Sidebar Admin
-           Desktop (≥992px): sidebar cố định bên trái, width 250px
-           Mobile (<992px): sidebar ẩn, mở bằng offcanvas Bootstrap
-        -------------------------------------------------- *@
-
-        @* Sidebar cho Desktop — ẩn khi < 992px *@
+        @* Sidebar cho Desktop *@
         <nav class="sidebar admin-sidebar d-none d-lg-flex flex-column" id="adminSidebarDesktop">
             <div class="sidebar-header p-3">
                 <h5 class="text-white mb-0">📊 Quản trị</h5>
@@ -70,7 +70,7 @@
             </ul>
         </nav>
 
-        @* Offcanvas Sidebar cho Mobile — hiển thị khi < 992px *@
+        @* Offcanvas Sidebar cho Mobile *@
         <div class="offcanvas offcanvas-start admin-sidebar" tabindex="-1"
              id="adminSidebar" aria-labelledby="adminSidebarLabel"
              style="width: 250px;">
@@ -104,11 +104,6 @@
             </div>
         </div>
 
-        @* --------------------------------------------------
-           CHECKPOINT: Vùng nội dung chính
-           Desktop: margin-left 250px (nhường chỗ cho sidebar)
-           Mobile: margin-left 0 (sidebar ẩn)
-        -------------------------------------------------- *@
         <main class="main-content flex-grow-1 p-4">
             @RenderBody()
         </main>
