@@ -1,0 +1,62 @@
+@model WebHocTap_SaaS_.Models.ViewModels.CourseListViewModel
+
+@if (Model.Items.Count == 0)
+{
+    <div class="alert alert-info shadow-sm">
+        Không tìm thấy khóa học nào phù hợp.
+    </div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+        @foreach (var item in Model.Items)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title text-primary">@item.Title</h5>
+                        <p class="text-muted small mb-2">👨‍🏫 GV: @item.TeacherName</p>
+                        <p class="card-text flex-grow-1">
+                            @(item.Description != null && item.Description.Length > 100 ? item.Description.Substring(0, 100) + "..." : item.Description)
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="badge bg-secondary">@item.StudentCount học viên</span>
+                            
+                            @if (User.IsInRole("Teacher"))
+                            {
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                            }
+                            else if (item.IsEnrolled)
+                            {
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-success btn-sm">Đã đăng ký (Vào học)</a>
+                            }
+                            else
+                            {
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Xem chi tiết</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Phân trang -->
+    @if (Model.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.HasPrevious ? "" : "disabled")">
+                    <button class="page-link page-link-ajax" data-page="@(Model.Page - 1)">Trang trước</button>
+                </li>
+                <li class="page-item disabled">
+                    <span class="page-link">@Model.Page / @Model.TotalPages</span>
+                </li>
+                <li class="page-item @(Model.HasNext ? "" : "disabled")">
+                    <button class="page-link page-link-ajax" data-page="@(Model.Page + 1)">Trang sau</button>
+                </li>
+            </ul>
+        </nav>
+    }
+}

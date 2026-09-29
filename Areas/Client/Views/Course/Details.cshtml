@@ -1,0 +1,117 @@
+@model WebHocTap_SaaS_.Models.Course
+@{
+    ViewData["Title"] = Model.Title;
+    bool isTeacher = User.IsInRole("Teacher");
+    bool isEnrolled = ViewBag.IsEnrolled == true;
+    int studentCount = ViewBag.StudentCount;
+}
+
+<div class="container-fluid">
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-start">
+                <div>
+                    <h2 class="text-primary mb-2">@Model.Title</h2>
+                    <p class="text-muted mb-3">👨‍🏫 Trình bày bởi: <strong>@Model.Teacher.FullName</strong></p>
+                    <p class="mb-1">
+                        <span class="badge bg-secondary me-2">Tạo ngày: @Model.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        <span class="badge bg-info me-2" id="studentCountBadge">@studentCount học viên</span>
+                        
+                        @if(Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                        {
+                            <span class="badge bg-success">Công khai</span>
+                        }
+                        else if(Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
+                        {
+                            <span class="badge bg-danger">Đã đóng</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark">Bản nháp</span>
+                        }
+                    </p>
+                </div>
+                
+                @if (!isTeacher)
+                {
+                    @if (isEnrolled)
+                    {
+                        <div class="badge bg-success fs-6 p-2 shadow-sm">✅ Đã đăng ký</div>
+                    }
+                    else if (Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                    {
+                        <!-- Input ẩn chứa Anti-Forgery Token cho AJAX POST -->
+                        @Html.AntiForgeryToken()
+                        <button id="btnEnroll" class="btn btn-primary shadow-sm" data-id="@Model.Id">
+                            🚀 Đăng ký khóa học
+                        </button>
+                    }
+                    else
+                    {
+                        <div class="badge bg-danger fs-6 p-2 shadow-sm">🔒 Không nhận đăng ký</div>
+                    }
+                }
+                else
+                {
+                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning shadow-sm">✏️ Sửa khóa học</a>
+                }
+            </div>
+            
+            <hr class="my-4" />
+            
+            <h5>Mô tả:</h5>
+            <p style="white-space: pre-wrap;">@(Model.Description ?? "Chưa có mô tả.")</p>
+        </div>
+    </div>
+
+    @if (isEnrolled || isTeacher)
+    {
+        <div class="alert alert-info shadow-sm fw-bold">
+            💡 Nội dung bài giảng, tài liệu sẽ được hiển thị ở đây (Phần 5-6).
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        const btnEnroll = document.getElementById('btnEnroll');
+        if (btnEnroll) {
+            btnEnroll.addEventListener('click', function () {
+                const courseId = this.getAttribute('data-id');
+                // CHECKPOINT: Lấy token từ input hidden của ASP.NET Core
+                const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+                // Disable nút, hiện trạng thái pending
+                btnEnroll.disabled = true;
+                btnEnroll.innerHTML = '⏳ Đang xử lý...';
+
+                // AJAX POST kèm Anti-Forgery Token
+                fetch('/Client/Course/Enroll/' + courseId, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': token // Bắt buộc cho Global AutoValidateAntiforgeryTokenAttribute
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        alert(data.message);
+                        // UX Update: đổi nút thành badge đã đăng ký, cập nhật sĩ số
+                        document.getElementById('studentCountBadge').innerText = data.data + ' học viên';
+                        btnEnroll.outerHTML = '<div class="badge bg-success fs-6 p-2 shadow-sm">✅ Đã đăng ký</div>';
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                        btnEnroll.disabled = false;
+                        btnEnroll.innerHTML = '🚀 Đăng ký khóa học';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('Đã xảy ra lỗi mạng!');
+                    btnEnroll.disabled = false;
+                    btnEnroll.innerHTML = '🚀 Đăng ký khóa học';
+                });
+            });
+        }
+    </script>
+}

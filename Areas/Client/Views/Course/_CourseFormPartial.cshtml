@@ -1,0 +1,23 @@
+@model WebHocTap_SaaS_.Models.ViewModels.CourseViewModel
+
+<div class="mb-3">
+    <label asp-for="Title" class="form-label fw-bold"></label>
+    <input asp-for="Title" class="form-control" placeholder="Nhập tên khóa học..." />
+    <span asp-validation-for="Title" class="text-danger small"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Status" class="form-label fw-bold"></label>
+    <select asp-for="Status" class="form-select">
+        <option value="Draft">⚠️ Bản nháp (Học sinh không thấy)</option>
+        <option value="Published">✅ Công khai (Học sinh có thể đăng ký)</option>
+        <option value="Closed">🔒 Đóng cửa (Không nhận thêm học sinh)</option>
+    </select>
+    <span asp-validation-for="Status" class="text-danger small"></span>
+</div>
+
+<div class="mb-3">
+    <label asp-for="Description" class="form-label fw-bold"></label>
+    <textarea asp-for="Description" class="form-control" rows="5" placeholder="Viết mô tả ngắn gọn về khóa học..."></textarea>
+    <span asp-validation-for="Description" class="text-danger small"></span>
+</div>

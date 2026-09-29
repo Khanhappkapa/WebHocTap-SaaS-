@@ -1,0 +1,68 @@
+@model IEnumerable<WebHocTap_SaaS_.Models.ViewModels.CourseCardViewModel>
+@{
+    ViewData["Title"] = "Quản lý khóa học (Teacher)";
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🛠️ Quản lý khóa học của tôi</h2>
+        <a asp-action="Create" class="btn btn-primary">➕ Tạo khóa học mới</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Bạn chưa tạo khóa học nào.</div>
+    }
+    else
+    {
+        <div class="table-responsive bg-white rounded shadow-sm p-3">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th width="35%">Tên khóa học</th>
+                        <th width="20%">Trạng thái</th>
+                        <th width="15%">Số học viên</th>
+                        <th width="15%">Ngày tạo</th>
+                        <th width="15%" class="text-end">Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var course in Model)
+                    {
+                        <tr>
+                            <td>
+                                <strong>@course.Title</strong>
+                            </td>
+                            <td>
+                                @if(course.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                                {
+                                    <span class="badge bg-success">Công khai</span>
+                                }
+                                else if(course.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
+                                {
+                                    <span class="badge bg-danger">Đã đóng</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning text-dark">Bản nháp</span>
+                                }
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary">@course.StudentCount hv</span>
+                            </td>
+                            <td>@course.CreatedAt.ToString("dd/MM/yyyy")</td>
+                            <td class="text-end">
+                                <a asp-action="Details" asp-route-id="@course.Id" class="btn btn-sm btn-info text-white" title="Xem chi tiết (IDOR Protected)">👁️</a>
+                                <a asp-action="Edit" asp-route-id="@course.Id" class="btn btn-sm btn-warning mb-1" title="Sửa (IDOR Protected)">✏️</a>
+                                
+                                <form asp-action="Delete" asp-route-id="@course.Id" method="post" class="d-inline" onsubmit="return confirm('Bạn có chắc chắn muốn xóa khóa học này không? Cả bài tập và dữ liệu bên trong sẽ bị xóa theo!');">
+                                    <button type="submit" class="btn btn-sm btn-danger mb-1" title="Xóa (IDOR Protected)">🗑️</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>

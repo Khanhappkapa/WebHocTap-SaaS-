@@ -1,0 +1,71 @@
+@model WebHocTap_SaaS_.Models.ViewModels.CourseListViewModel
+@{
+    ViewData["Title"] = "Duyệt khóa học";
+}
+
+<div class="container-fluid">
+    <div class="row align-items-center mb-4">
+        <div class="col-md-6">
+            <h2>🔍 Duyệt khóa học</h2>
+        </div>
+        <div class="col-md-6">
+            <input type="text" id="searchInput" class="form-control" placeholder="Tìm kiếm tên khóa học (nhấn Enter hoặc chờ 0.5s)..." value="@Model.Search" />
+        </div>
+    </div>
+
+    <!-- Nơi render partial view bằng JS AJAX -->
+    <div id="courseCards">
+        <partial name="_CourseCards" model="Model" />
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        let debounceTimer;
+
+        // Bắt sự kiện gõ chữ trên ô input
+        document.getElementById('searchInput').addEventListener('input', function () {
+            clearTimeout(debounceTimer);
+            var query = this.value;
+            // Debounce 300ms
+            debounceTimer = setTimeout(() => {
+                fetchCourses(query, 1);
+            }, 300);
+        });
+
+        // Hàm gọi AJAX
+        function fetchCourses(search, page) {
+            // URL có search params
+            const url = new URL(window.location.href);
+            url.searchParams.set('search', search);
+            url.searchParams.set('page', page);
+            
+            // Cập nhật URL trình duyệt (UX)
+            window.history.pushState({}, '', url);
+
+            // Fetch GET: BẮT BUỘC có header X-Requested-With để Controller trả về PartialView
+            fetch(url, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(res => res.text())
+            .then(html => {
+                // Thay thế nguyên khối HTML
+                document.getElementById('courseCards').innerHTML = html;
+            })
+            .catch(err => console.error(err));
+        }
+
+        // Ủy quyền sự kiện (Event Delegation) cho các nút phân trang bên trong #courseCards
+        document.getElementById('courseCards').addEventListener('click', function(e) {
+            if (e.target.closest('.page-link-ajax')) {
+                e.preventDefault();
+                const btn = e.target.closest('.page-link-ajax');
+                const page = btn.getAttribute('data-page');
+                const search = document.getElementById('searchInput').value;
+                fetchCourses(search, page);
+            }
+        });
+    </script>
+}

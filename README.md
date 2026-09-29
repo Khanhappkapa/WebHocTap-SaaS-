@@ -6,3 +6,5 @@ O.2.5: (Security Patch) Áp dụng 12-Factor App, chuyển Secret vào Environme
 0.3: Authentication + Phân quyền + Seed → ✅ XONG
 
 0.3.5: (Security Patch) Valid CSRF, Password Policy, Self-healing Seed, Lockout Brute-force → ✅ XONG
+
+0.4: Module Classes (CRUD + AJAX Catalog + IDOR) → ✅ XONG

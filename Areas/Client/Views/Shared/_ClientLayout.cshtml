@@ -53,16 +53,27 @@
                         🏠 Dashboard
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#">
-                        📚 Khóa học của tôi
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#">
-                        🔍 Duyệt khóa học
-                    </a>
-                </li>
+                @if (User.IsInRole("Teacher"))
+                {
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                            🛠️ Quản lý khóa học
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
+                            📚 Khóa học của tôi
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Index">
+                            🔍 Duyệt khóa học
+                        </a>
+                    </li>
+                }
                 <li class="nav-item">
                     <a class="nav-link sidebar-link" href="#">
                         📝 Bài tập
@@ -86,16 +97,27 @@
                             🏠 Dashboard
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link sidebar-link" href="#">
-                            📚 Khóa học của tôi
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link sidebar-link" href="#">
-                            🔍 Duyệt khóa học
-                        </a>
-                    </li>
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                                🛠️ Quản lý khóa học
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
+                                📚 Khóa học của tôi
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Index">
+                                🔍 Duyệt khóa học
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
                         <a class="nav-link sidebar-link" href="#">
                             📝 Bài tập
