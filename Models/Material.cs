@@ -2,6 +2,7 @@
 // File: Models/Material.cs
 // Mô tả: Model tài liệu học tập
 // CHECKPOINT: FK tới Course, sử dụng enum FileType
+// PHẦN 5: Thêm FileName, ContentType, FileData lưu file vào DB (bytea) thay vì wwwroot
 // ============================================================
 
 using System.ComponentModel.DataAnnotations;
@@ -51,6 +52,29 @@ namespace WebHocTap_SaaS_.Models
         /// </summary>
         [Display(Name = "Loại tệp")]
         public FileType? FileType { get; set; }
+
+        // --------------------------------------------------
+        // PHẦN 5: Lưu file trực tiếp vào DB (bytea) — Render ephemeral disk safe
+        // --------------------------------------------------
+
+        /// <summary>
+        /// Tên file gốc khi tải xuống (Guid + extension gốc)
+        /// </summary>
+        [StringLength(300)]
+        [Display(Name = "Tên file")]
+        public string? FileName { get; set; }
+
+        /// <summary>
+        /// MIME type (application/pdf, ...)
+        /// </summary>
+        [StringLength(100)]
+        public string? ContentType { get; set; }
+
+        /// <summary>
+        /// Nội dung file (bytea trong PostgreSQL)
+        /// Null khi FileType == Link
+        /// </summary>
+        public byte[]? FileData { get; set; }
 
         /// <summary>
         /// Thời điểm tải lên

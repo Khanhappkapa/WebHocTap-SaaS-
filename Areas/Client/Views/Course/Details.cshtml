@@ -1,27 +1,25 @@
-@model WebHocTap_SaaS_.Models.Course
+@model WebHocTap_SaaS_.Models.ViewModels.CourseDetailsViewModel
 @{
-    ViewData["Title"] = Model.Title;
-    bool isTeacher = User.IsInRole("Teacher");
-    bool isEnrolled = ViewBag.IsEnrolled == true;
-    int studentCount = ViewBag.StudentCount;
+    ViewData["Title"] = Model.Course.Title;
+    var course = Model.Course;
 }
 
 <div class="container-fluid">
+    @* ===== PHẦN 1: THÔNG TIN KHÓA HỌC ===== *@
     <div class="card shadow-sm border-0 mb-4">
         <div class="card-body p-4">
-            <div class="d-flex justify-content-between align-items-start">
+            <div class="d-flex justify-content-between align-items-start flex-wrap">
                 <div>
-                    <h2 class="text-primary mb-2">@Model.Title</h2>
-                    <p class="text-muted mb-3">👨‍🏫 Trình bày bởi: <strong>@Model.Teacher.FullName</strong></p>
+                    <h2 class="text-primary mb-2">@course.Title</h2>
+                    <p class="text-muted mb-3">👨‍🏫 Trình bày bởi: <strong>@course.Teacher.FullName</strong></p>
                     <p class="mb-1">
-                        <span class="badge bg-secondary me-2">Tạo ngày: @Model.CreatedAt.ToString("dd/MM/yyyy")</span>
-                        <span class="badge bg-info me-2" id="studentCountBadge">@studentCount học viên</span>
-                        
-                        @if(Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                        <span class="badge bg-secondary me-2">Tạo ngày: @course.CreatedAt.ToString("dd/MM/yyyy")</span>
+                        <span class="badge bg-info me-2" id="studentCountBadge">@Model.StudentCount học viên</span>
+                        @if(course.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
                         {
                             <span class="badge bg-success">Công khai</span>
                         }
-                        else if(Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
+                        else if(course.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
                         {
                             <span class="badge bg-danger">Đã đóng</span>
                         }
@@ -31,18 +29,17 @@
                         }
                     </p>
                 </div>
-                
-                @if (!isTeacher)
+
+                @if (!Model.IsOwner && !User.IsInRole("Teacher"))
                 {
-                    @if (isEnrolled)
+                    @if (Model.IsEnrolled)
                     {
                         <div class="badge bg-success fs-6 p-2 shadow-sm">✅ Đã đăng ký</div>
                     }
-                    else if (Model.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                    else if (course.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
                     {
-                        <!-- Input ẩn chứa Anti-Forgery Token cho AJAX POST -->
                         @Html.AntiForgeryToken()
-                        <button id="btnEnroll" class="btn btn-primary shadow-sm" data-id="@Model.Id">
+                        <button id="btnEnroll" class="btn btn-primary shadow-sm" data-id="@course.Id">
                             🚀 Đăng ký khóa học
                         </button>
                     }
@@ -51,23 +48,161 @@
                         <div class="badge bg-danger fs-6 p-2 shadow-sm">🔒 Không nhận đăng ký</div>
                     }
                 }
-                else
+                else if (Model.IsOwner)
                 {
-                    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning shadow-sm">✏️ Sửa khóa học</a>
+                    <a asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning shadow-sm">✏️ Sửa khóa học</a>
                 }
             </div>
-            
+
             <hr class="my-4" />
-            
             <h5>Mô tả:</h5>
-            <p style="white-space: pre-wrap;">@(Model.Description ?? "Chưa có mô tả.")</p>
+            <p style="white-space: pre-wrap;">@(course.Description ?? "Chưa có mô tả.")</p>
         </div>
     </div>
 
-    @if (isEnrolled || isTeacher)
+    @* ===== PHẦN 2: NỘI DUNG BUỔI HỌC + TÀI LIỆU ===== *@
+    @if (Model.IsOwner || Model.IsEnrolled)
     {
-        <div class="alert alert-info shadow-sm fw-bold">
-            💡 Nội dung bài giảng, tài liệu sẽ được hiển thị ở đây (Phần 5-6).
+        @* ----- BUỔI HỌC ----- *@
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-primary bg-opacity-10 d-flex justify-content-between align-items-center px-4 py-3">
+                <h5 class="mb-0 text-primary">📅 Buổi học</h5>
+                @if (Model.IsOwner)
+                {
+                    <a asp-area="Client" asp-controller="Session" asp-action="Create" asp-route-courseId="@course.Id"
+                       class="btn btn-primary btn-sm">➕ Thêm buổi học</a>
+                }
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Sessions.Count == 0)
+                {
+                    <p class="text-muted">Chưa có buổi học nào được tạo.</p>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Tiêu đề</th>
+                                    <th>Bắt đầu</th>
+                                    <th>Kết thúc</th>
+                                    <th>Trạng thái</th>
+                                    <th>Link</th>
+                                    @if (Model.IsOwner) { <th class="text-end">Thao tác</th> }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var s in Model.Sessions)
+                                {
+                                    var now = DateTime.UtcNow;
+                                    bool isLive = s.StartTime <= now && now <= s.EndTime;
+                                    bool isUpcoming = s.StartTime > now;
+                                    <tr>
+                                        <td><strong>@s.Title</strong></td>
+                                        <td>@s.StartTime.ToString("dd/MM HH:mm")</td>
+                                        <td>@s.EndTime.ToString("dd/MM HH:mm")</td>
+                                        <td>
+                                            @if (isLive)
+                                            {
+                                                <span class="badge bg-danger">🔴 Đang diễn ra</span>
+                                            }
+                                            else if (isUpcoming)
+                                            {
+                                                <span class="badge bg-warning text-dark">⏰ Sắp diễn ra</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge bg-secondary">✅ Đã kết thúc</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (!string.IsNullOrEmpty(s.MeetingUrl))
+                                            {
+                                                <a href="@s.MeetingUrl" target="_blank" class="btn btn-outline-primary btn-sm">🔗 Join</a>
+                                            }
+                                        </td>
+                                        @if (Model.IsOwner)
+                                        {
+                                            <td class="text-end">
+                                                <a asp-area="Client" asp-controller="Session" asp-action="Edit" asp-route-id="@s.Id"
+                                                   class="btn btn-sm btn-warning">✏️</a>
+                                                <form asp-area="Client" asp-controller="Session" asp-action="Delete" asp-route-id="@s.Id"
+                                                      method="post" class="d-inline"
+                                                      onsubmit="return confirm('Xóa buổi học này?');">
+                                                    <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                                                </form>
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+
+        @* ----- TÀI LIỆU ----- *@
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-header bg-success bg-opacity-10 d-flex justify-content-between align-items-center px-4 py-3">
+                <h5 class="mb-0 text-success">📄 Tài liệu</h5>
+                @if (Model.IsOwner)
+                {
+                    <a asp-area="Client" asp-controller="Material" asp-action="Create" asp-route-courseId="@course.Id"
+                       class="btn btn-success btn-sm">➕ Thêm tài liệu</a>
+                }
+            </div>
+            <div class="card-body p-4">
+                @if (Model.Materials.Count == 0)
+                {
+                    <p class="text-muted">Chưa có tài liệu nào.</p>
+                }
+                else
+                {
+                    <div class="list-group">
+                        @foreach (var m in Model.Materials)
+                        {
+                            <div class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>@m.Title</strong>
+                                    @if (m.FileType == WebHocTap_SaaS_.Models.FileType.Link)
+                                    {
+                                        <span class="badge bg-info ms-2">🔗 Link</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-primary ms-2">📁 @m.FileType</span>
+                                    }
+                                    <small class="text-muted ms-2">@m.UploadedAt.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <div>
+                                    <a asp-area="Client" asp-controller="Material" asp-action="Download" asp-route-id="@m.Id"
+                                       class="btn btn-outline-success btn-sm" target="_blank">⬇️ Tải xuống</a>
+                                    @if (Model.IsOwner)
+                                    {
+                                        <form asp-area="Client" asp-controller="Material" asp-action="Delete" asp-route-id="@m.Id"
+                                              method="post" class="d-inline"
+                                              onsubmit="return confirm('Xóa tài liệu này?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">🗑️</button>
+                                        </form>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    }
+    else
+    {
+        @* Student CHƯA đăng ký: CTA *@
+        <div class="card shadow-sm border-0 mb-4 border-warning">
+            <div class="card-body text-center py-5">
+                <h4 class="text-warning mb-3">🔒 Nội dung bị khóa</h4>
+                <p class="text-muted">Đăng ký khóa học để xem buổi học, tài liệu và bài tập.</p>
+            </div>
         </div>
     }
 </div>
@@ -78,27 +213,20 @@
         if (btnEnroll) {
             btnEnroll.addEventListener('click', function () {
                 const courseId = this.getAttribute('data-id');
-                // CHECKPOINT: Lấy token từ input hidden của ASP.NET Core
                 const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
 
-                // Disable nút, hiện trạng thái pending
                 btnEnroll.disabled = true;
                 btnEnroll.innerHTML = '⏳ Đang xử lý...';
 
-                // AJAX POST kèm Anti-Forgery Token
                 fetch('/Client/Course/Enroll/' + courseId, {
                     method: 'POST',
-                    headers: {
-                        'RequestVerificationToken': token // Bắt buộc cho Global AutoValidateAntiforgeryTokenAttribute
-                    }
+                    headers: { 'RequestVerificationToken': token }
                 })
                 .then(res => res.json())
                 .then(data => {
                     if (data.success) {
                         alert(data.message);
-                        // UX Update: đổi nút thành badge đã đăng ký, cập nhật sĩ số
-                        document.getElementById('studentCountBadge').innerText = data.data + ' học viên';
-                        btnEnroll.outerHTML = '<div class="badge bg-success fs-6 p-2 shadow-sm">✅ Đã đăng ký</div>';
+                        location.reload(); // Reload để hiện nội dung buổi học + tài liệu
                     } else {
                         alert('Lỗi: ' + data.message);
                         btnEnroll.disabled = false;

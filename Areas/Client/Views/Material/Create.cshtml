@@ -1,0 +1,78 @@
+@model WebHocTap_SaaS_.Models.ViewModels.MaterialCreateViewModel
+@{
+    ViewData["Title"] = "Thêm tài liệu";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 mt-4">
+                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center p-3">
+                    <h4 class="mb-0">📄 Thêm tài liệu — @ViewBag.CourseTitle</h4>
+                    <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
+                       class="btn btn-light btn-sm">Quay lại</a>
+                </div>
+                <div class="card-body p-4">
+                    @* BẮT BUỘC: enctype="multipart/form-data" cho file upload *@
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="CourseId" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-bold"></label>
+                            <input asp-for="Title" class="form-control" placeholder="VD: Slide buổi 1" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="FileType" class="form-label fw-bold"></label>
+                            <select asp-for="FileType" class="form-select" id="fileTypeSelect">
+                                <option value="Pdf">📕 PDF</option>
+                                <option value="Docx">📘 Word (DOCX)</option>
+                                <option value="Video">🎥 Video (PPTX/XLSX)</option>
+                                <option value="Link">🔗 Link bên ngoài</option>
+                            </select>
+                            <span asp-validation-for="FileType" class="text-danger small"></span>
+                        </div>
+
+                        @* Khu vực URL (chỉ hiện khi chọn Link) *@
+                        <div class="mb-3" id="urlSection" style="display:none;">
+                            <label asp-for="FileUrl" class="form-label fw-bold"></label>
+                            <input asp-for="FileUrl" class="form-control" placeholder="https://..." />
+                            <span asp-validation-for="FileUrl" class="text-danger small"></span>
+                        </div>
+
+                        @* Khu vực Upload (chỉ hiện khi KHÔNG chọn Link) *@
+                        <div class="mb-3" id="uploadSection">
+                            <label asp-for="UploadFile" class="form-label fw-bold"></label>
+                            <input asp-for="UploadFile" type="file" class="form-control"
+                                   accept=".pdf,.docx,.pptx,.xlsx" />
+                            <span asp-validation-for="UploadFile" class="text-danger small"></span>
+                            <small class="text-muted">Cho phép: .pdf, .docx, .pptx, .xlsx — Tối đa 10MB</small>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-success px-4">🚀 Tải lên</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Toggle hiển thị URL / Upload dựa trên loại tài liệu
+        const sel = document.getElementById('fileTypeSelect');
+        function toggleSections() {
+            const isLink = sel.value === 'Link' || sel.value === '3';
+            document.getElementById('urlSection').style.display = isLink ? 'block' : 'none';
+            document.getElementById('uploadSection').style.display = isLink ? 'none' : 'block';
+        }
+        sel.addEventListener('change', toggleSections);
+        toggleSections(); // init
+    </script>
+}

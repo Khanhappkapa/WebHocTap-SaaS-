@@ -177,7 +177,7 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
         }
 
         // --------------------------------------------------
-        // XEM CHI TIẾT KHÓA HỌC
+        // XEM CHI TIẾT KHÓA HỌC (PHẦN 5: Mở rộng với Sessions + Materials)
         // CHECKPOINT: IDOR Visibility Check
         // --------------------------------------------------
         [HttpGet]
@@ -193,31 +193,56 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
             if (course == null) return NotFound();
 
             bool isTeacher = User.IsInRole("Teacher");
-            
+            bool isOwner = isTeacher && course.TeacherId == userId;
+            bool isEnrolled = false;
+
             // Xử lý quyền xem (IDOR Protection)
             if (isTeacher)
             {
-                // Giáo viên chỉ được xem khóa học của MÌNH
                 if (course.TeacherId != userId)
                     return Forbid();
             }
             else
             {
-                // Học sinh chỉ được xem khóa Published HOẶC khóa mà mình đã đăng ký
-                bool isEnrolled = await _context.Enrollments
+                isEnrolled = await _context.Enrollments
                     .AnyAsync(e => e.CourseId == id && e.StudentId == userId);
-                
+
                 if (course.Status != CourseStatus.Published && !isEnrolled)
                 {
                     return Forbid();
                 }
-
-                ViewBag.IsEnrolled = isEnrolled;
             }
 
-            ViewBag.StudentCount = await _context.Enrollments.CountAsync(e => e.CourseId == id);
+            // Load sessions + materials nếu có quyền xem nội dung
+            var sessions = new List<Models.Session>();
+            var materials = new List<Models.Material>();
 
-            return View(course);
+            if (isOwner || isEnrolled)
+            {
+                sessions = await _context.Sessions
+                    .AsNoTracking()
+                    .Where(s => s.CourseId == id)
+                    .OrderBy(s => s.StartTime)
+                    .ToListAsync();
+
+                materials = await _context.Materials
+                    .AsNoTracking()
+                    .Where(m => m.CourseId == id)
+                    .OrderByDescending(m => m.UploadedAt)
+                    .ToListAsync();
+            }
+
+            var model = new CourseDetailsViewModel
+            {
+                Course = course,
+                Sessions = sessions,
+                Materials = materials,
+                IsEnrolled = isEnrolled,
+                IsOwner = isOwner,
+                StudentCount = await _context.Enrollments.CountAsync(e => e.CourseId == id)
+            };
+
+            return View(model);
         }
 
         // ==========================================================

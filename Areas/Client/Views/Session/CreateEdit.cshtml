@@ -1,0 +1,71 @@
+@model WebHocTap_SaaS_.Models.ViewModels.SessionViewModel
+@{
+    bool isEdit = Model.Id > 0;
+    ViewData["Title"] = isEdit ? "Sửa buổi học" : "Thêm buổi học";
+}
+
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow border-0 mt-4">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
+                    <h4 class="mb-0">@(isEdit ? "✏️ Sửa buổi học" : "➕ Thêm buổi học") — @ViewBag.CourseTitle</h4>
+                    <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
+                       class="btn btn-light btn-sm">Quay lại</a>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+                        @if (isEdit)
+                        {
+                            <input type="hidden" asp-for="Id" />
+                        }
+                        <input type="hidden" asp-for="CourseId" />
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label fw-bold"></label>
+                            <input asp-for="Title" class="form-control" placeholder="VD: Buổi 1 - Giới thiệu" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartTime" class="form-label fw-bold"></label>
+                                <input asp-for="StartTime" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="StartTime" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EndTime" class="form-label fw-bold"></label>
+                                <input asp-for="EndTime" type="datetime-local" class="form-control" />
+                                <span asp-validation-for="EndTime" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="MeetingUrl" class="form-label fw-bold"></label>
+                            <input asp-for="MeetingUrl" class="form-control" placeholder="https://meet.google.com/..." />
+                            <span asp-validation-for="MeetingUrl" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nội dung buổi học..."></textarea>
+                            <span asp-validation-for="Description" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mt-4 text-end">
+                            <button type="submit" class="btn btn-primary px-4">
+                                @(isEdit ? "💾 Lưu thay đổi" : "🚀 Tạo buổi học")
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
