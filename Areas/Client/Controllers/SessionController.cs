@@ -39,7 +39,13 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
             var course = await GetOwnedCourseAsync(courseId);
             if (course == null) return Forbid(); // IDOR Protection
 
-            var model = new SessionViewModel { CourseId = courseId };
+            // Mặc định thời gian: Bắt đầu từ hiện tại (UTC), kết thúc sau đó 1 ngày
+            var model = new SessionViewModel 
+            { 
+                CourseId = courseId,
+                StartTime = DateTime.UtcNow,
+                EndTime = DateTime.UtcNow.AddDays(1)
+            };
             ViewBag.CourseTitle = course.Title;
             return View("CreateEdit", model);
         }
@@ -68,8 +74,9 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
                 CourseId = model.CourseId,
                 Title = model.Title,
                 Description = model.Description,
-                StartTime = model.StartTime,
-                EndTime = model.EndTime,
+                // Ép kiểu UTC để tránh lỗi Npgsql: "Cannot write DateTime with Kind=Local/Unspecified"
+                StartTime = DateTime.SpecifyKind(model.StartTime, DateTimeKind.Utc),
+                EndTime = DateTime.SpecifyKind(model.EndTime, DateTimeKind.Utc),
                 MeetingUrl = model.MeetingUrl,
                 CreatedAt = DateTime.UtcNow
             };
@@ -136,8 +143,9 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
 
             session.Title = model.Title;
             session.Description = model.Description;
-            session.StartTime = model.StartTime;
-            session.EndTime = model.EndTime;
+            // Ép kiểu UTC cho an toàn DB
+            session.StartTime = DateTime.SpecifyKind(model.StartTime, DateTimeKind.Utc);
+            session.EndTime = DateTime.SpecifyKind(model.EndTime, DateTimeKind.Utc);
             session.MeetingUrl = model.MeetingUrl;
 
             await _context.SaveChangesAsync();
