@@ -11,4 +11,4 @@ O.2.5: (Security Patch) Áp dụng 12-Factor App, chuyển Secret vào Environme
 
 0.5: Sessions & Materials (Upload vào PostgreSQL Db (bytea), IDOR Protection) → ✅ XONG
 
-0.5.5: Design System v1 thay placeholder (CSS Token + Component + Bootstrap Icons, Migrate P2–P5) → ✅ XONG
+0.5.1: Design System v1 thay placeholder (CSS Token + Component + Bootstrap Icons, Migrate P2–P5) → ✅ XONG
