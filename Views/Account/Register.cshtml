@@ -16,7 +16,7 @@
             <div class="col-md-6 col-lg-5">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-4">
-                        <h1 class="h3 text-center fw-bold mb-4">📝 Đăng ký tài khoản</h1>
+                        <h1 class="h3 text-center fw-bold mb-4"><i class="bi bi-person-plus"></i> Đăng ký tài khoản</h1>
 
                         @* CHECKPOINT: Hiển thị lỗi chung (vd: Identity errors) *@
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
@@ -60,14 +60,14 @@
                                 <label asp-for="UserRole" class="form-label"></label>
                                 <select asp-for="UserRole" class="form-select">
                                     <option value="">-- Chọn vai trò --</option>
-                                    <option value="Teacher">👨‍🏫 Giáo viên (Teacher)</option>
-                                    <option value="Student">👨‍🎓 Học viên (Student)</option>
+                                    <option value="Teacher"><i class="bi bi-person-video3"></i> Giáo viên (Teacher)</option>
+                                    <option value="Student"><i class="bi bi-mortarboard"></i> Học viên (Student)</option>
                                 </select>
                                 <span asp-validation-for="UserRole" class="text-danger small"></span>
                             </div>
 
                             <button type="submit" class="btn btn-primary w-100 fw-semibold py-2">
-                                🚀 Đăng ký
+                                <i class="bi bi-rocket-takeoff"></i> Đăng ký
                             </button>
                         </form>
 

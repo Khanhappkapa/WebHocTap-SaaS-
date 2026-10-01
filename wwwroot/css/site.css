@@ -1,11 +1,37 @@
 /* ============================================================
    File: wwwroot/css/site.css
    Mô tả: CSS tùy chỉnh cho toàn bộ ứng dụng
-   CHECKPOINT: Sidebar, Responsive, Public navbar, Hero, Cards
+   PHẦN 5.5: DESIGN SYSTEM v1 — Token + Component + Migrate
 ============================================================ */
 
+/* ============================================================
+   DESIGN SYSTEM v1 — DESIGN TOKENS
+   Đổi màu thương hiệu = sửa 1 dòng. Dùng var(--cm-...) mọi nơi.
+============================================================ */
+:root {
+    /* Màu thương hiệu */
+    --cm-primary: #0d47a1;
+    --cm-primary-dark: #1a237e;
+    --cm-primary-light: #1565c0;
+    --cm-admin-dark: #1a1a2e;
+    --cm-admin-light: #16213e;
+    --cm-accent: #ffc107;
+    /* Nền & chữ */
+    --cm-bg: #f4f6f9;
+    --cm-surface: #ffffff;
+    --cm-text: #212529;
+    --cm-muted: #6c757d;
+    /* Trạng thái */
+    --cm-success: #198754;
+    --cm-danger: #dc3545;
+    /* Hình khối */
+    --cm-radius: .5rem;
+    --cm-shadow: 0 .25rem .75rem rgba(0, 0, 0, .08);
+    --cm-shadow-hover: 0 .5rem 1rem rgba(0, 0, 0, .12);
+}
+
 /* --------------------------------------------------
-   CHECKPOINT: Base styles
+   Base styles
 -------------------------------------------------- */
 html {
     font-size: 14px;
@@ -22,22 +48,118 @@ html {
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    font-family: 'Be Vietnam Pro', 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--cm-bg);
+    color: var(--cm-text);
 }
 
 /* Focus styles cho accessibility */
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
-.form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
+/* ============================================================
+   DESIGN SYSTEM v1 — COMPONENT LIBRARY
+============================================================ */
+
+/* Card khóa học / nội dung */
+.card-course {
+    background: var(--cm-surface);
+    border: none;
+    border-radius: var(--cm-radius);
+    box-shadow: var(--cm-shadow);
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card-course:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--cm-shadow-hover);
+}
+
+/* Card số liệu dashboard */
+.card-stat {
+    background: var(--cm-surface);
+    border: none;
+    border-radius: var(--cm-radius);
+    box-shadow: var(--cm-shadow);
+    text-align: center;
+}
+
+.card-stat .stat-icon {
+    font-size: 2.5rem;
+    color: var(--cm-primary);
+}
+
+.card-stat .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--cm-primary);
+}
+
+/* Badge trạng thái khóa học */
+.badge-status-draft,
+.badge-status-published,
+.badge-status-closed {
+    color: #fff;
+    padding: .35em .6em;
+    border-radius: .375rem;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.badge-status-draft {
+    background: var(--cm-muted);
+}
+
+.badge-status-published {
+    background: var(--cm-success);
+}
+
+.badge-status-closed {
+    background: var(--cm-text);
+}
+
+/* Nút CTA vàng */
+.btn-cta {
+    background: var(--cm-accent);
+    border: none;
+    color: var(--cm-text);
+    font-weight: 600;
+}
+
+.btn-cta:hover {
+    background: #ffca2c;
+    color: var(--cm-text);
+}
+
+/* Khối "chưa có dữ liệu" */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--cm-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: .75rem;
+}
+
+/* Khung form căn giữa */
+.form-page {
+    max-width: 480px;
+    margin: 3rem auto;
+}
+
 /* --------------------------------------------------
-   CHECKPOINT: PUBLIC NAVBAR
-   Gradient nền xanh đậm, sticky top
+   PUBLIC NAVBAR — gradient thương hiệu
 -------------------------------------------------- */
 .public-navbar {
-    background: linear-gradient(135deg, #1a237e 0%, #0d47a1 100%);
+    background: linear-gradient(135deg, var(--cm-primary-dark) 0%, var(--cm-primary) 100%);
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
@@ -56,10 +178,10 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: PUBLIC FOOTER
+   PUBLIC FOOTER
 -------------------------------------------------- */
 .public-footer {
-    background-color: #1a237e;
+    background-color: var(--cm-primary-dark);
     color: rgba(255, 255, 255, 0.8);
 }
 
@@ -68,11 +190,10 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: HERO SECTION (Landing page)
-   Gradient background, min-height cho visual impact
+   HERO SECTION (Landing page)
 -------------------------------------------------- */
 .hero-section {
-    background: linear-gradient(135deg, #0d47a1 0%, #1565c0 40%, #42a5f5 100%);
+    background: linear-gradient(135deg, var(--cm-primary) 0%, var(--cm-primary-light) 40%, #42a5f5 100%);
     min-height: 500px;
     padding: 80px 0;
 }
@@ -89,29 +210,28 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: FEATURE CARDS (Landing page)
-   Hover effect + icon size
+   FEATURE CARDS (Landing page)
 -------------------------------------------------- */
 .feature-card {
     transition: transform 0.2s, box-shadow 0.2s;
-    border-radius: 12px;
+    border-radius: var(--cm-radius);
 }
 
 .feature-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12) !important;
+    box-shadow: var(--cm-shadow-hover) !important;
 }
 
 .feature-icon {
     font-size: 3rem;
+    color: var(--cm-primary);
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: PRICING CARDS
-   Featured card scale slightly larger
+   PRICING CARDS
 -------------------------------------------------- */
 .pricing-card {
-    border-radius: 12px;
+    border-radius: var(--cm-radius);
     transition: transform 0.2s;
 }
 
@@ -128,48 +248,40 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: SIDEBAR (dùng chung cho Admin & Client)
-   Desktop (≥992px): cố định bên trái, width 250px
-   Mobile (<992px): ẩn, dùng offcanvas Bootstrap
+   SIDEBAR (dùng chung cho Admin & Client)
 -------------------------------------------------- */
 .sidebar {
     width: 250px;
     min-height: 100vh;
     position: fixed;
-    top: 56px; /* Dưới topbar */
+    top: 56px;
     left: 0;
     z-index: 100;
     overflow-y: auto;
 }
 
-/* --------------------------------------------------
-   CHECKPOINT: ADMIN SIDEBAR — màu tối #1a1a2e
-   Phân biệt trực quan với Client sidebar
--------------------------------------------------- */
+/* Admin sidebar */
 .admin-sidebar {
-    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(180deg, var(--cm-admin-dark) 0%, var(--cm-admin-light) 100%);
 }
 
 .admin-topbar {
-    background: linear-gradient(90deg, #1a1a2e 0%, #16213e 100%);
+    background: linear-gradient(90deg, var(--cm-admin-dark) 0%, var(--cm-admin-light) 100%);
     height: 56px;
 }
 
-/* --------------------------------------------------
-   CHECKPOINT: CLIENT SIDEBAR — màu xanh dương #0d47a1
-   Phân biệt trực quan với Admin sidebar
--------------------------------------------------- */
+/* Client sidebar */
 .client-sidebar {
-    background: linear-gradient(180deg, #0d47a1 0%, #1565c0 100%);
+    background: linear-gradient(180deg, var(--cm-primary) 0%, var(--cm-primary-light) 100%);
 }
 
 .client-topbar {
-    background: linear-gradient(90deg, #0d47a1 0%, #1565c0 100%);
+    background: linear-gradient(90deg, var(--cm-primary) 0%, var(--cm-primary-light) 100%);
     height: 56px;
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: SIDEBAR LINKS — hover effect
+   SIDEBAR LINKS
 -------------------------------------------------- */
 .sidebar-link {
     color: rgba(255, 255, 255, 0.8) !important;
@@ -191,9 +303,7 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: MAIN CONTENT AREA
-   Desktop (≥992px): margin-left 250px (nhường sidebar)
-   Mobile (<992px): margin-left 0 (sidebar ẩn)
+   MAIN CONTENT AREA
 -------------------------------------------------- */
 .main-content {
     margin-left: 250px;
@@ -202,13 +312,10 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: RESPONSIVE — Media query < 992px
-   Sidebar ẩn, main content full width
-   Bootstrap offcanvas xử lý sidebar mobile
+   RESPONSIVE — < 992px
 -------------------------------------------------- */
 @media (max-width: 991.98px) {
     .sidebar {
-        /* Desktop sidebar ẩn — dùng offcanvas thay thế */
         display: none !important;
     }
 
@@ -216,7 +323,6 @@ body {
         margin-left: 0;
     }
 
-    /* Offcanvas sidebar styling */
     .offcanvas.admin-sidebar,
     .offcanvas.client-sidebar {
         top: 0;
@@ -224,10 +330,10 @@ body {
 }
 
 /* --------------------------------------------------
-   CHECKPOINT: Dashboard stat cards
+   Dashboard & general card hover
 -------------------------------------------------- */
 .card {
-    border-radius: 10px;
+    border-radius: var(--cm-radius);
 }
 
 .card:hover {
