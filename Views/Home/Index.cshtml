@@ -1,90 +1,344 @@
-﻿@* ============================================================
-    File: Views/Home/Index.cshtml
-    Mô tả: Landing page — trang chủ công khai
-    CHECKPOINT: Hero section + 3 card tính năng
-    SEO: ViewData["Title"], ViewData["Description"], h1 → h2
-============================================================ *@
-@{
-    ViewData["Title"] = "Trang chủ";
-    ViewData["Description"] = "ClassManagement — Nền tảng SaaS quản lý lớp học trực tuyến hàng đầu. Tạo khóa học, quản lý học sinh, giao bài tập và chấm điểm dễ dàng.";
+﻿@{
+    ViewData["Title"] = "Quản lý lớp học trực tuyến dễ dàng";
+    ViewData["Description"] = "Quản lý khóa học, tài liệu, buổi học trực tuyến và bài tập tại một nơi. Bắt đầu tổ chức lớp học của bạn miễn phí.";
 }
 
-@* --------------------------------------------------
-   CHECKPOINT: Hero Section — giới thiệu SaaS
-   Gradient nền + CTA buttons
--------------------------------------------------- *@
-<section class="hero-section text-white text-center d-flex align-items-center">
-    <div class="container py-5">
-        <h1 class="display-4 fw-bold mb-3">
-            Quản lý lớp học trực tuyến<br />thông minh & hiệu quả
-        </h1>
-        <p class="lead mb-4 mx-auto" style="max-width: 600px;">
-            ClassManagement giúp giáo viên tạo khóa học, quản lý học sinh,
-            giao bài tập và chấm điểm — tất cả trên một nền tảng duy nhất.
-        </p>
-        <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <a href="/Account/Register" class="btn btn-cta btn-lg fw-semibold px-4">
-                <i class="bi bi-rocket-takeoff"></i> Bắt đầu miễn phí
-            </a>
-            <a asp-controller="Home" asp-action="Pricing" class="btn btn-outline-light btn-lg px-4">
-                <i class="bi bi-cash-stack"></i> Xem bảng giá
-            </a>
-        </div>
-    </div>
-</section>
+<div class="on-public hs-home">
+    @* Khối 2 — Hero. Navbar và footer do _Layout.cshtml cung cấp. *@
+    <section class="hs-section hs-hero" aria-labelledby="hero-title">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6">
+                <p class="hs-eyebrow">Một nơi cho cả lớp học</p>
 
-@* --------------------------------------------------
-   CHECKPOINT: 3 Card tính năng chính
-   Responsive: col-lg-4 (3 cột desktop) → col-md-6 → col-12 (mobile)
-   SEO: h2 cho section title, h3 cho card title
--------------------------------------------------- *@
-<section class="py-5 bg-light" id="features">
-    <div class="container">
-        <h2 class="text-center fw-bold mb-2">Tính năng nổi bật</h2>
-        <p class="text-center text-muted mb-5">Mọi thứ bạn cần để quản lý lớp học hiệu quả</p>
+                <h1 id="hero-title">
+                    Quản lý lớp học<br />
+                    trực tuyến<br />
+                    <span class="handwritten hs-accent">dễ dàng</span>
+                </h1>
+
+                <p class="hs-lead">
+                    Quản lý khóa học, tài liệu, buổi học và bài tập tại một nơi —
+                    để việc dạy và học gọn gàng hơn.
+                </p>
+
+                <div class="hs-hero-actions">
+                    <div class="d-flex flex-wrap gap-3">
+                        <a class="btn btn-cta" href="/Account/Register">
+                            Bắt đầu miễn phí
+                        </a>
+                        <a class="btn btn-cta-ghost" href="#features">
+                            Xem tính năng
+                            <i class="bi bi-arrow-down" aria-hidden="true"></i>
+                        </a>
+                    </div>
+
+                    <svg class="sketch-arrow hs-hero-arrow d-none d-md-block"
+                         viewBox="0 0 220 80"
+                         aria-hidden="true"
+                         focusable="false">
+                        <path d="M 190 70 Q 40 70 30 10" />
+                        <path class="solid-path" d="M 18 26 L 30 10 L 42 26" />
+                    </svg>
+
+                    <p class="handwritten hs-action-note d-none d-md-block"
+                       aria-hidden="true">
+                        Bắt đầu từ đây!
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="hs-hero-art">
+                    <div class="blob hs-hero-blob" aria-hidden="true"></div>
+
+                    <div class="sketch-hand hs-placeholder hs-dashboard"
+                         role="img"
+                         aria-label="Khung chờ ảnh chụp Dashboard">
+                        <span>Ảnh chụp Dashboard</span>
+                    </div>
+
+                    <i class="bi bi-circle-fill tack hs-tack"
+                       aria-hidden="true"></i>
+
+                    <p class="handwritten hs-art-caption" aria-hidden="true">
+                        Lớp học, trong một nơi.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Khối 3 — Số liệu placeholder; thay bằng dữ liệu thật khi nối P8. *@
+    <section id="stats"
+             class="hs-section hs-stats"
+             aria-label="Số liệu lớp học — dữ liệu chờ cập nhật">
+        <div class="row justify-content-center g-4">
+            <div class="col-6 col-md-3">
+                <div class="sketch-hand hs-stat">
+                    <span class="handwritten hs-stat-number">0+</span>
+                    <span class="hs-stat-label">học viên</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="sketch-hand hs-stat">
+                    <span class="handwritten hs-stat-number">0+</span>
+                    <span class="hs-stat-label">khóa học</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="sketch-hand hs-stat">
+                    <span class="handwritten hs-stat-number">0+</span>
+                    <span class="hs-stat-label">buổi học</span>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="sketch-hand hs-stat">
+                    <span class="handwritten hs-stat-number">0+</span>
+                    <span class="hs-stat-label">bài nộp</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* Khối 4 — Công cụ cốt lõi. *@
+    <section id="features"
+             class="hs-section"
+             aria-labelledby="features-title">
+        <p class="hs-eyebrow">Tính năng cốt lõi</p>
+        <h2 id="features-title">Mọi công cụ bạn cần…</h2>
 
         <div class="row g-4">
-            @* Card 1: Quản lý khóa học *@
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon mb-3"><i class="bi bi-journal-code"></i></div>
-                        <h3 class="h5 fw-bold">Quản lý khóa học</h3>
-                        <p class="text-muted">
-                            Tạo và quản lý khóa học dễ dàng. Đăng tải tài liệu,
-                            lên lịch buổi học trực tuyến chỉ với vài cú click.
-                        </p>
-                    </div>
+            <div class="col-md-6 col-lg-3">
+                <article class="sketch-hand hs-feature">
+                    <i class="bi bi-journal-code hs-feature-icon"
+                       aria-hidden="true"></i>
+                    <h3>Tùy biến khóa học</h3>
+                    <p>Sắp xếp nội dung và bài học theo cách bạn giảng dạy.</p>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="sketch-hand hs-feature hs-postit tilt-1">
+                    <i class="bi bi-file-earmark-lock hs-feature-icon"
+                       aria-hidden="true"></i>
+                    <h3>Tài liệu an toàn</h3>
+                    <p>chống tải lậu = Download kiểm quyền</p>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="sketch-hand hs-feature">
+                    <i class="bi bi-camera-video hs-feature-icon"
+                       aria-hidden="true"></i>
+                    <h3>Lớp trực tuyến</h3>
+                    <p>Tổ chức buổi học, theo dõi lịch và kết nối cả lớp.</p>
+                </article>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <article class="sketch-hand hs-feature">
+                    <i class="bi bi-pencil-square hs-feature-icon"
+                       aria-hidden="true"></i>
+                    <h3>Bài tập &amp; chấm điểm</h3>
+                    <p>Giao bài, nhận bài nộp và gửi nhận xét tại một nơi.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    @* Khối 5 — Hai hàng zig-zag; không xoay khung ảnh. *@
+    <section class="hs-section hs-audiences"
+             aria-label="Không gian dành cho giáo viên và học viên">
+        <div class="row align-items-center g-5 hs-audience-row">
+            <div class="col-lg-6">
+                <div class="sketch-hand hs-placeholder hs-audience-image"
+                     role="img"
+                     aria-label="Khung chờ ảnh minh họa không gian Giáo viên">
+                    <span>Ảnh minh họa không gian Giáo viên</span>
                 </div>
             </div>
 
-            @* Card 2: Giao & chấm bài tập *@
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon mb-3"><i class="bi bi-pencil-square"></i></div>
-                        <h3 class="h5 fw-bold">Giao & chấm bài tập</h3>
-                        <p class="text-muted">
-                            Tạo bài tập với deadline, nhận bài nộp từ học sinh,
-                            chấm điểm và gửi nhận xét trực tiếp trên hệ thống.
-                        </p>
-                    </div>
-                </div>
+            <div class="col-lg-6">
+                <p class="hs-eyebrow">Tổ chức &amp; giảng dạy</p>
+                <h2>Dành cho Giáo viên</h2>
+                <p>
+                    Tổ chức khóa học, chia sẻ tài liệu, giảng dạy trực tuyến
+                    và giao bài tập trong cùng một không gian lớp học.
+                </p>
+                <h3 class="handwritten hs-decorative-heading">
+                    Từ giáo án đến lớp học.
+                </h3>
+            </div>
+        </div>
+
+        <div class="row align-items-center g-5">
+            <div class="col-lg-6 order-2 order-lg-1">
+                <p class="hs-eyebrow">Theo dõi &amp; thực hành</p>
+                <h2>Trải nghiệm Học viên</h2>
+                <p>
+                    Theo dõi bài học, tìm tài liệu, tham gia buổi học
+                    và nộp bài tập theo tiến trình của khóa học.
+                </p>
+                <h3 class="handwritten hs-decorative-heading">
+                    Việc học có một nơi riêng.
+                </h3>
             </div>
 
-            @* Card 3: Học trực tuyến *@
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm feature-card">
-                    <div class="card-body text-center p-4">
-                        <div class="feature-icon mb-3"><i class="bi bi-camera-video"></i></div>
-                        <h3 class="h5 fw-bold">Học trực tuyến</h3>
-                        <p class="text-muted">
-                            Tích hợp link họp (Zoom, Google Meet) cho buổi học.
-                            Quản lý lịch học và theo dõi tiến độ học sinh.
-                        </p>
-                    </div>
+            <div class="col-lg-6 order-1 order-lg-2">
+                <div class="sketch-hand hs-placeholder hs-audience-image"
+                     role="img"
+                     aria-label="Khung chờ ảnh minh họa không gian Học viên">
+                    <span>Ảnh minh họa không gian Học viên</span>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+    @* Khối 6 — Ba bước. *@
+    <section class="hs-section hs-how" aria-labelledby="how-title">
+        <p class="hs-eyebrow">Cách bắt đầu</p>
+        <h2 id="how-title">Bắt đầu với 3 bước đơn giản</h2>
+
+        <div class="hs-steps">
+            <svg class="squiggly hs-step-connector d-none d-md-block"
+                 viewBox="0 0 900 100"
+                 preserveAspectRatio="xMidYMid slice"
+                 aria-hidden="true"
+                 focusable="false">
+                <!-- Line 1 to 2 -->
+                <path d="M 190 50 C 260 10, 330 90, 400 50" />
+                <path class="solid-path" d="M 385 41 L 400 50 L 385 59" />
+                
+                <!-- Line 2 to 3 -->
+                <path d="M 500 50 C 570 10, 640 90, 710 50" />
+                <path class="solid-path" d="M 695 41 L 710 50 L 695 59" />
+            </svg>
+
+            <ol class="row g-4 hs-step-list">
+                <li class="col-md-4">
+                    <span class="sketch-hand handwritten hs-step-number"
+                          aria-hidden="true">1</span>
+                    <h3>Tạo khóa &amp; tải tài liệu</h3>
+                </li>
+                <li class="col-md-4">
+                    <span class="sketch-hand handwritten hs-step-number"
+                          aria-hidden="true">2</span>
+                    <h3>Mời học viên (Enrollment)</h3>
+                </li>
+                <li class="col-md-4">
+                    <span class="sketch-hand handwritten hs-step-number"
+                          aria-hidden="true">3</span>
+                    <h3>Giảng dạy &amp; giao bài</h3>
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    @* Khối 7 — Chỉ xem nhanh, không phải bảng giá đầy đủ. *@
+    <section class="hs-section" aria-labelledby="pricing-title">
+        <p class="hs-eyebrow">Gói sử dụng</p>
+        <h2 id="pricing-title">Chọn gói phù hợp với lớp học</h2>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <article class="sketch-hand hs-price-card">
+                    <h3>Free</h3>
+                    <p>Bắt đầu tổ chức lớp học.</p>
+                    <div class="handwritten hs-price">Miễn phí</div>
+                    <a class="btn btn-cta-ghost"
+                       href="/Home/Pricing"
+                       aria-label="Xem chi tiết gói Free">
+                        Xem chi tiết
+                    </a>
+                </article>
+            </div>
+
+            <div class="col-md-4">
+                <article class="sketch-hand hs-price-card hs-postit">
+                    <span class="handwritten hs-ribbon tilt-2">Phổ biến</span>
+                    <h3>Pro</h3>
+                    <p>Cho nhu cầu giảng dạy mở rộng.</p>
+                    <div class="handwritten hs-price">Chưa công bố</div>
+                    <a class="btn btn-cta"
+                       href="/Home/Pricing"
+                       aria-label="Xem chi tiết gói Pro">
+                        Xem chi tiết
+                    </a>
+                </article>
+            </div>
+
+            <div class="col-md-4">
+                <article class="sketch-hand hs-price-card">
+                    <h3>Enterprise</h3>
+                    <p>Dành cho tổ chức &amp; đội ngũ.</p>
+                    <div class="handwritten hs-price">Liên hệ</div>
+                    <a class="btn btn-cta-ghost"
+                       href="/Home/Pricing"
+                       aria-label="Xem chi tiết gói Enterprise">
+                        Xem chi tiết
+                    </a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    @* Khối 8 — Trích dẫn minh họa. *@
+    @* Dữ liệu mẫu minh họa — chưa có người dùng thật *@
+    <section class="hs-section" aria-labelledby="testimonials-title">
+        <p class="hs-eyebrow">Trích dẫn minh họa</p>
+
+        <div class="hs-testimonial-heading">
+            <h2 id="testimonials-title">Góc nhìn từ lớp học</h2>
+            <p class="hs-sample-note">
+                Dữ liệu mẫu minh họa — chưa có người dùng thật
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6">
+                <figure class="hs-testimonial">
+                    <blockquote class="sketch-hand hs-speech">
+                        <i class="bi bi-quote hs-quote-icon"
+                           aria-hidden="true"></i>
+                        <p>
+                            “Tôi muốn gom tài liệu và bài tập về cùng
+                            một chỗ để dễ theo dõi lớp.”
+                        </p>
+                    </blockquote>
+                    <figcaption class="hs-person">
+                        <span class="hs-avatar" aria-hidden="true">GV</span>
+                        <span>Giáo viên mẫu</span>
+                    </figcaption>
+                </figure>
+            </div>
+
+            <div class="col-md-6">
+                <figure class="hs-testimonial">
+                    <blockquote class="sketch-hand hs-speech">
+                        <i class="bi bi-quote hs-quote-icon"
+                           aria-hidden="true"></i>
+                        <p>
+                            “Tôi muốn biết bài học tiếp theo và nộp bài
+                            ngay trong không gian lớp học.”
+                        </p>
+                    </blockquote>
+                    <figcaption class="hs-person">
+                        <span class="hs-avatar" aria-hidden="true">HV</span>
+                        <span>Học viên mẫu</span>
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    @* Khối 9 — Nút paper/ink trên nền tối. *@
+    <section class="hs-section hs-bottom-section" aria-labelledby="cta-title">
+        <div class="invert-tone sketch-hand hs-bottom-cta">
+            <h2 id="cta-title">Sẵn sàng số hóa lớp học?</h2>
+            <a class="btn btn-cta hs-large-button" href="/Account/Register">
+                Tạo tài khoản miễn phí
+            </a>
+            <p>Không cần thẻ tín dụng</p>
+        </div>
+    </section>
+</div>

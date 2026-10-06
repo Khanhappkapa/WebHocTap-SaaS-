@@ -31,6 +31,8 @@ namespace WebHocTap_SaaS_.Models
         Pdf = 0,
         Docx = 1,
         Video = 2,
-        Link = 3
+        Link = 3,
+        Pptx = 4,
+        Xlsx = 5
     }
 }

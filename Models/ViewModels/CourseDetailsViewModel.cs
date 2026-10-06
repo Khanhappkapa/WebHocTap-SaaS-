@@ -9,6 +9,7 @@ namespace WebHocTap_SaaS_.Models.ViewModels
         public Course Course { get; set; } = null!;
         public List<Session> Sessions { get; set; } = new();
         public List<Material> Materials { get; set; } = new();
+        public List<Assignment> Assignments { get; set; } = new();
         public bool IsEnrolled { get; set; }
         public bool IsOwner { get; set; }
         public int StudentCount { get; set; }

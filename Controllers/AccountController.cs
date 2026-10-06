@@ -117,7 +117,7 @@ namespace WebHocTap_SaaS_.Controllers
         // --------------------------------------------------
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
         {
             if (!ModelState.IsValid)
                 return View(model);
@@ -145,6 +145,9 @@ namespace WebHocTap_SaaS_.Controllers
 
             if (result.Succeeded)
             {
+                if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+                    return LocalRedirect(returnUrl);
+
                 // CHECKPOINT: Redirect theo role
                 // Admin → /Admin/Dashboard
                 // Teacher/Student → /Client/Dashboard

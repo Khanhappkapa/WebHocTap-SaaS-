@@ -15,6 +15,10 @@ namespace WebHocTap_SaaS_.Controllers
 
         public IActionResult Index()
         {
+            if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Client" });
+            }
             return View();
         }
 

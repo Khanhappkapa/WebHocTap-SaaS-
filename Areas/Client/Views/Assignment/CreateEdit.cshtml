@@ -1,0 +1,91 @@
+@model WebHocTap_SaaS_.Models.ViewModels.AssignmentCreateViewModel
+@{
+    ViewData["Title"] = Model.IsEdit ? "Sửa Bài Tập" : "Giao Bài Tập Mới";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="assignment-page">
+    <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
+       class="breadcrumb-back">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Về @Model.CourseName
+    </a>
+
+    <form class="form-page assignment-create-card"
+          method="post"
+          asp-controller="Assignment"
+          asp-action="@(Model.IsEdit ? "Edit" : "Create")"
+          asp-route-id="@(Model.IsEdit ? Model.Id : null)"
+          asp-route-courseId="@(Model.IsEdit ? null : Model.CourseId)"
+          novalidate>
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="CourseId" value="@Model.CourseId" />
+
+        <span class="assignment-chip">Trong khóa: @Model.CourseName</span>
+        <h1>@(Model.IsEdit ? "Sửa Bài Tập" : "Giao Bài Tập Mới")</h1>
+
+        <svg class="assignment-wave assignment-decoration"
+             viewBox="0 0 320 14"
+             aria-hidden="true" focusable="false">
+            <path d="M3 8 C22 2 39 12 58 6
+                     S96 11 116 6 S153 11 174 6
+                     S213 11 234 6 S275 11 317 6" />
+        </svg>
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        <div class="form-group assignment-field">
+            <label class="assignment-label" asp-for="Title">Tiêu đề bài tập</label>
+            <input asp-for="Title"
+                   class="sketch-input assignment-control @(ViewData.ModelState.ContainsKey("Title") && ViewData.ModelState["Title"]!.Errors.Count > 0 ? "assignment-control-error" : "")"
+                   type="text"
+                   required />
+            <span asp-validation-for="Title" class="assignment-validation"></span>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-12 col-lg-8">
+                <div class="form-group assignment-field">
+                    <label class="assignment-label" asp-for="Deadline">Hạn nộp</label>
+                    <input asp-for="Deadline"
+                           class="sketch-input assignment-control"
+                           type="datetime-local"
+                           required />
+                    <span asp-validation-for="Deadline" class="assignment-validation"></span>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="form-group assignment-field">
+                    <label class="assignment-label" asp-for="MaxScore">Điểm tối đa</label>
+                    <input asp-for="MaxScore"
+                           class="sketch-input assignment-control"
+                           type="number" min="1" step="1"
+                           required />
+                    <span asp-validation-for="MaxScore" class="assignment-validation"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group assignment-field">
+            <label class="assignment-label" asp-for="Description">Nội dung đề bài</label>
+            <textarea asp-for="Description"
+                      class="sketch-input assignment-control"
+                      rows="7"></textarea>
+            <span asp-validation-for="Description" class="assignment-validation"></span>
+        </div>
+
+        <div class="assignment-form-actions">
+            <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
+               class="btn btn-cta-ghost assignment-button assignment-download">
+                Hủy
+            </a>
+            <button type="submit"
+                    class="btn btn-cta assignment-button assignment-primary">
+                @(Model.IsEdit ? "Lưu Thay Đổi" : "Giao Bài")
+            </button>
+        </div>
+    </form>
+</main>

@@ -1,0 +1,349 @@
+@model WebHocTap_SaaS_.Models.ViewModels.AssignmentDetailsViewModel
+@{
+    ViewData["Title"] = Model.Assignment.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<main class="assignment-page">
+    <a asp-controller="Course" asp-action="Details" asp-route-id="@Model.Assignment.CourseId"
+       class="breadcrumb-back">
+        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+        Về @Model.Assignment.Course.Title
+    </a>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">@TempData["Error"]</div>
+    }
+
+    @* ========== CỤM BANNER — render cho mọi role ========== *@
+    <section class="assignment-banner" aria-labelledby="assignment-title">
+        <svg class="assignment-paperclip assignment-decoration"
+             viewBox="0 0 32 48"
+             aria-hidden="true" focusable="false">
+            <path d="M12 36 L17 10 C18 3 28 4 27 12
+                     L22 36 C20 47 5 45 7 33
+                     L12 8 C13 1 23 2 22 9
+                     L17 34 C16 39 10 38 11 33 L15 13" />
+        </svg>
+
+        <p class="assignment-eyebrow">Đề bài</p>
+        <h1 id="assignment-title">@Model.Assignment.Title</h1>
+
+        <div class="assignment-meta d-flex flex-wrap">
+            <span class="assignment-chip">Hạn nộp: @Model.Assignment.Deadline.ToString("dd/MM/yyyy · HH:mm")</span>
+            <span class="assignment-chip">Điểm tối đa: @Model.Assignment.MaxScore</span>
+            @if (Model.Assignment.Deadline < DateTime.UtcNow)
+            {
+                <span class="pill-late">
+                    <span class="assignment-red-dot" aria-hidden="true"></span>
+                    Đã hết hạn
+                </span>
+            }
+            else if ((Model.Assignment.Deadline - DateTime.UtcNow).TotalHours <= 24)
+            {
+                <span class="pill-late">
+                    <span class="assignment-red-dot" aria-hidden="true"></span>
+                    Sắp đến hạn
+                </span>
+            }
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Assignment.Description))
+        {
+            <div class="assignment-description">
+                <h2>Nội dung đề bài</h2>
+                <p style="white-space: pre-wrap;">@Model.Assignment.Description</p>
+            </div>
+        }
+    </section>
+
+    @* ========== NHÁNH 5 — TEACHER GRADING ========== *@
+    @if (Model.IsOwner)
+    {
+        <section class="assignment-work" aria-labelledby="grading-title">
+            <div class="assignment-grading-summary">
+                <p>Đã nộp <strong>@Model.SubmittedCount/@Model.TotalStudents</strong></p>
+                <p>Chưa chấm <strong class="assignment-ungraded-count">@Model.UngradedCount</strong></p>
+            </div>
+
+            <h2 id="grading-title" class="assignment-grading-heading">Bài nộp của học sinh</h2>
+
+            <div class="grade-grid assignment-grid-header" aria-hidden="true">
+                <span>Học sinh / Thời gian nộp</span>
+                <span>Bài làm</span>
+                <span>Điểm</span>
+                <span>Lời phê của giáo viên</span>
+                <span>Thao tác</span>
+            </div>
+
+            @if (Model.Submissions.Count > 0)
+            {
+                <div class="assignment-grading-list">
+                    @foreach (var sub in Model.Submissions)
+                    {
+                        var initials = sub.Student?.FullName?.Length >= 2
+                            ? sub.Student.FullName.Substring(0, 2).ToUpper()
+                            : "??";
+                        var isGraded = sub.Score != null;
+
+                        <form class="detail-row grade-grid assignment-grading-row"
+                              method="post"
+                              asp-controller="Assignment" asp-action="Grade"
+                              data-action="@(isGraded ? "edit-grade" : "save-grade")">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="SubmissionId" value="@sub.Id" />
+
+                            <div class="assignment-student">
+                                <span class="assignment-avatar" aria-hidden="true">@initials</span>
+                                <div class="assignment-student-copy">
+                                    <h3>@sub.Student?.FullName</h3>
+                                    <p><time datetime="@sub.SubmittedAt.ToString("yyyy-MM-ddTHH:mm")">@sub.SubmittedAt.ToString("dd/MM/yyyy · HH:mm")</time></p>
+                                    @if (sub.SubmittedAt <= Model.Assignment.Deadline)
+                                    {
+                                        <span class="pill-ontime">Đúng hạn</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="pill-late">
+                                            <span class="assignment-red-dot" aria-hidden="true"></span>
+                                            Nộp muộn
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div>
+                                <a asp-controller="Assignment" asp-action="Download" asp-route-id="@sub.Id"
+                                   class="btn btn-cta-ghost assignment-button assignment-download"
+                                   aria-label="Tải bài của @sub.Student?.FullName">Tải bài</a>
+                            </div>
+
+                            <div class="assignment-grade-field">
+                                <label class="grade-cell-label" for="score-@sub.Id">Điểm</label>
+                                <input id="score-@sub.Id"
+                                       class="sketch-input assignment-control assignment-score-input"
+                                       type="number" name="Score"
+                                       min="0" max="@Model.Assignment.MaxScore" step="0.01"
+                                       value="@(isGraded ? sub.Score?.ToString("0.##") : "")"
+                                       aria-label="Điểm của @sub.Student?.FullName"
+                                       @(isGraded ? "readonly" : "") required />
+                                <span class="assignment-score-limit">/@Model.Assignment.MaxScore</span>
+                            </div>
+
+                            <div>
+                                <label class="grade-cell-label" for="feedback-@sub.Id">Lời phê</label>
+                                <textarea id="feedback-@sub.Id"
+                                          class="feedback-input"
+                                          name="Feedback" rows="3"
+                                          aria-label="Lời phê cho @sub.Student?.FullName"
+                                          @(isGraded ? "readonly" : "")>@sub.Feedback</textarea>
+                            </div>
+
+                            <div class="assignment-grade-actions">
+                                @if (isGraded)
+                                {
+                                    <strong class="assignment-saved-score">@sub.Score?.ToString("0.##")/@Model.Assignment.MaxScore</strong>
+                                    <button type="button"
+                                            class="btn btn-cta-ghost assignment-button"
+                                            onclick="enableEdit(this)"
+                                            data-action="enable-grade-edit">Sửa</button>
+                                }
+                                else
+                                {
+                                    <button type="submit"
+                                            class="btn btn-cta-ghost assignment-button">Lưu Điểm</button>
+                                }
+                            </div>
+                        </form>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="empty-state assignment-empty">
+                    <svg class="assignment-empty-art"
+                         viewBox="0 0 80 64"
+                         aria-hidden="true" focusable="false">
+                        <path d="M19 23 L40 16 L62 23 L42 31 Z
+                                 M19 23 L21 49 L42 55 L42 31
+                                 M62 23 L60 49 L42 55
+                                 M19 23 L8 16 L29 8 L40 16
+                                 M40 16 L51 8 L73 16 L62 23
+                                 M19 23 L9 31 L31 39 L42 31
+                                 M62 23 L72 31 L52 39 L42 31" />
+                    </svg>
+                    <p>Chưa có bài nộp nào.</p>
+                </div>
+            }
+        </section>
+    }
+    @* ========== NHÁNH 2 — STUDENT CHƯA NỘP ========== *@
+    else if (Model.Submission == null)
+    {
+        <section class="assignment-work" aria-labelledby="submission-title">
+            <div class="assignment-section-heading">
+                <h2 id="submission-title">Bài làm của bạn</h2>
+                <span class="assignment-muted">Chưa nộp</span>
+            </div>
+
+            <form method="post"
+                  asp-controller="Assignment" asp-action="Submit" asp-route-id="@Model.Assignment.Id"
+                  enctype="multipart/form-data">
+                @Html.AntiForgeryToken()
+
+                <div class="upload-zone assignment-upload">
+                    <i class="bi bi-file-earmark-arrow-up assignment-upload-icon" aria-hidden="true"></i>
+                    <h3>Kéo thả bài làm vào đây</h3>
+                    <p id="submission-file-help">PDF, DOCX, PPTX, XLSX · Tối đa 10 MB</p>
+
+                    <label class="visually-hidden" for="submission-file">Chọn tệp bài làm</label>
+                    <input id="submission-file"
+                           class="assignment-file-input"
+                           type="file" name="File"
+                           accept=".pdf,.docx,.pptx,.xlsx"
+                           aria-describedby="submission-file-help"
+                           required />
+                </div>
+
+                <div class="form-group assignment-field">
+                    <label class="assignment-label" for="submission-note">Ghi chú cho giáo viên</label>
+                    <textarea id="submission-note"
+                              class="sketch-input assignment-control"
+                              name="StudentNote" rows="3"></textarea>
+                </div>
+
+                <div class="assignment-submit-actions">
+                    <button type="submit" class="btn btn-cta assignment-button assignment-primary">Nộp bài</button>
+                </div>
+            </form>
+        </section>
+    }
+    @* ========== NHÁNH 3 — ĐÃ NỘP, CHỜ CHẤM ========== *@
+    else if (Model.Submission.Score == null)
+    {
+        <section class="assignment-work" aria-labelledby="submission-title">
+            <div class="assignment-section-heading">
+                <h2 id="submission-title">Bài làm của bạn</h2>
+                <span class="assignment-muted">Đang chờ chấm</span>
+            </div>
+
+            <p class="assignment-success">
+                <i class="bi bi-check2" aria-hidden="true"></i>
+                Đã nộp thành công lúc @Model.Submission.SubmittedAt.ToString("HH:mm, dd/MM/yyyy")
+            </p>
+
+            @if (Model.Submission.FileData != null)
+            {
+                <ul class="detail-list assignment-submission-list">
+                    <li class="detail-row assignment-file-row">
+                        <i class="bi bi-paperclip" aria-hidden="true"></i>
+                        <div class="assignment-file-copy">
+                            <h3>@Model.Submission.FileName</h3>
+                        </div>
+                        <a asp-controller="Assignment" asp-action="Download" asp-route-id="@Model.Submission.Id"
+                           class="btn btn-cta-ghost assignment-button assignment-download">Xem / Tải</a>
+                    </li>
+                </ul>
+            }
+
+            <div class="assignment-submit-actions">
+                <button type="button" class="btn btn-cta-ghost assignment-button" disabled>
+                    <i class="bi bi-lock" aria-hidden="true"></i> Đã nộp
+                </button>
+            </div>
+        </section>
+    }
+    @* ========== NHÁNH 4 — ĐÃ CHẤM (WOW EFFECT) ========== *@
+    else
+    {
+        <section class="assignment-work" aria-labelledby="result-title">
+            <div class="assignment-section-heading">
+                <h2 id="result-title">Kết quả bài làm</h2>
+            </div>
+
+            <div class="score-box">
+                <svg class="assignment-score-decoration"
+                     viewBox="0 0 40 40"
+                     aria-hidden="true" focusable="false">
+                    <path d="M8 31 L31 8 M15 33 L34 14" />
+                </svg>
+
+                <p class="assignment-eyebrow">Điểm bài làm</p>
+                <p class="assignment-score" aria-label="@Model.Submission.Score trên @Model.Assignment.MaxScore điểm">
+                    <span class="assignment-score-number" aria-hidden="true">@Model.Submission.Score?.ToString("0.##")</span>
+                    <span class="assignment-score-max" aria-hidden="true">/@Model.Assignment.MaxScore</span>
+                </p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.Submission.Feedback))
+            {
+                <div class="assignment-feedback-display">
+                    <h3>Lời phê của Giáo Viên:</h3>
+                    <p class="assignment-saved-comment">@Model.Submission.Feedback</p>
+                </div>
+            }
+
+            <div class="assignment-result-actions">
+                @if (Model.Submission.FileData != null)
+                {
+                    <a asp-controller="Assignment" asp-action="Download" asp-route-id="@Model.Submission.Id"
+                       class="btn btn-cta-ghost assignment-button assignment-download">Tải lại bài đã nộp</a>
+                }
+            </div>
+        </section>
+    }
+</main>
+
+@section Scripts {
+    <script>
+        // Enable edit mode cho grading row đã chấm
+        function enableEdit(btn) {
+            var row = btn.closest('.assignment-grading-row');
+            var inputs = row.querySelectorAll('input[readonly], textarea[readonly]');
+            inputs.forEach(function(el) { el.removeAttribute('readonly'); });
+            btn.style.display = 'none';
+            var savedScore = row.querySelector('.assignment-saved-score');
+            if (savedScore) savedScore.style.display = 'none';
+            var submitBtn = document.createElement('button');
+            submitBtn.type = 'submit';
+            submitBtn.className = 'btn btn-cta-ghost assignment-button';
+            submitBtn.textContent = 'Lưu Điểm';
+            btn.parentNode.appendChild(submitBtn);
+        }
+
+        // AJAX grading
+        document.querySelectorAll('.assignment-grading-row').forEach(function(form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var formData = new FormData(form);
+                var token = form.querySelector('input[name="__RequestVerificationToken"]');
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'RequestVerificationToken': token ? token.value : ''
+                    },
+                    body: formData
+                })
+                .then(function(r) { return r.json(); })
+                .then(function(data) {
+                    if (data.ok) {
+                        alert('Đã lưu điểm: ' + data.score + ' — ' + data.status);
+                        location.reload();
+                    } else {
+                        alert('Lỗi: ' + (data.error || 'Không xác định'));
+                    }
+                })
+                .catch(function(err) {
+                    console.error(err);
+                    form.submit(); // fallback PRG
+                });
+            });
+        });
+    </script>
+}

@@ -1,102 +1,92 @@
 @* ============================================================
     File: Views/Home/Pricing.cshtml
-    Mô tả: Trang bảng giá SaaS — 3 gói: Free / Pro / Enterprise
-    CHECKPOINT: Responsive row + col-lg-4
-    SEO: ViewData["Title"], ViewData["Description"], h1 → h2
+    Mô tả: Trang bảng giá SaaS (V4)
 ============================================================ *@
 @{
     ViewData["Title"] = "Bảng giá";
-    ViewData["Description"] = "So sánh các gói dịch vụ ClassManagement — Free, Pro và Enterprise. Chọn gói phù hợp với nhu cầu giảng dạy trực tuyến của bạn.";
+    ViewData["Description"] = "So sánh các gói dịch vụ ClassManagement — Free, Pro và Enterprise.";
 }
 
-<section class="py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h1 class="fw-bold">Bảng giá dịch vụ</h1>
-            <p class="lead text-muted">Chọn gói phù hợp với nhu cầu của bạn</p>
+<main class="on-public py-5">
+    <div class="container pb-5">
+        <div class="text-center mb-5 position-relative">
+            <h1 class="fw-bold" style="font-size: 2.5rem;">Chọn gói học phù hợp với hành trình của bạn</h1>
+            <svg class="bulb-detail-wave mx-auto" viewBox="0 0 260 12" aria-hidden="true" style="fill:none; stroke:var(--cm-primary); stroke-width:3px; max-width: 260px;">
+                <use href="#bulb-detail-wave"></use>
+            </svg>
+            <p class="mt-3 fw-semibold">Đơn giản, minh bạch và đầy đủ tính năng cho giáo viên & học sinh.</p>
         </div>
 
-        <div class="row g-4 justify-content-center">
-            @* --------------------------------------------------
-               CHECKPOINT: Gói Free
-            -------------------------------------------------- *@
+        <div class="row g-4 justify-content-center align-items-center">
+            @* MẦM NON (FREE) *@
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm pricing-card">
-                    <div class="card-header text-center py-3 bg-light">
-                        <h2 class="h4 fw-bold mb-0"><i class="bi bi-gift"></i> Free</h2>
+                <div class="form-page p-4 text-center h-100 d-flex flex-column" style="border: var(--cm-hand-border); border-radius: var(--cm-hand-radius); background: var(--cm-surface); box-shadow: 4px 4px 0 var(--cm-ink);">
+                    <h2 class="h3 fw-bold mb-3" style="font-family: var(--cm-font-hand); color: var(--cm-muted); transform: rotate(-2deg);"><i class="bi bi-sprout" aria-hidden="true"></i> Mầm Non</h2>
+                    
+                    <div class="mb-4">
+                        <span class="d-block fw-bold" style="font-family: var(--cm-font-hand); font-size: 4rem; line-height: 1; color: var(--cm-ink);">Miễn phí</span>
+                        <span class="text-muted fw-semibold">Mãi mãi</span>
                     </div>
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 fw-bold text-primary mb-2">0đ</div>
-                        <p class="text-muted mb-4">/tháng</p>
-                        <ul class="list-unstyled text-start mb-4">
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Tối đa 2 khóa học</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 30 học sinh / khóa</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Giao bài tập cơ bản</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Tải tài liệu (100MB)</li>
-                            <li class="mb-2 text-muted"><i class="bi bi-x-circle text-muted"></i> Lên lịch buổi học</li>
-                            <li class="mb-2 text-muted"><i class="bi bi-x-circle text-muted"></i> Thống kê nâng cao</li>
-                        </ul>
-                        <a href="/Account/Register" class="btn btn-outline-primary w-100">
-                            Bắt đầu miễn phí
-                        </a>
-                    </div>
+
+                    <ul class="list-unstyled text-start mb-4 flex-grow-1 fw-semibold ms-3" style="font-size: 1.1rem; line-height: 1.8;">
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>2 Khóa học tối đa</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>30 Học sinh / khóa</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Bài tập & điểm số (Cơ bản)</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Lưu trữ 100MB</li>
+                    </ul>
+
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-cta-ghost fw-bold py-2 fs-5">Bắt đầu ngay</a>
                 </div>
             </div>
 
-            @* --------------------------------------------------
-               CHECKPOINT: Gói Pro — phổ biến nhất, có badge
-            -------------------------------------------------- *@
-            <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-primary border-2 shadow pricing-card pricing-featured">
-                    <div class="card-header text-center py-3 bg-primary text-white position-relative">
-                        <span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2">
-                            <i class="bi bi-fire"></i> Phổ biến
-                        </span>
-                        <h2 class="h4 fw-bold mb-0"><i class="bi bi-star-fill"></i> Pro</h2>
+            @* NGÔI SAO (PRO) *@
+            <div class="col-lg-4 col-md-6 position-relative z-3">
+                <!-- Ribbon SVG & CSS can be placed relative to this wrapper -->
+                <div class="position-absolute ribbon-pop align-items-center justify-content-center d-flex" style="top: -20px; right: -15px; width: 100px; height: 100px; border: var(--cm-hand-border); border-radius: 50%; z-index: 10; box-shadow: 2px 2px 0 var(--cm-ink);">
+                    <span class="text-center fw-bold lh-sm text-dark" style="font-size: 1.25rem;">Phổ biến<br>nhất!</span>
+                </div>
+
+                <div class="form-page p-4 text-center h-100 d-flex flex-column border-dark" style="border: 3px solid var(--cm-ink); border-radius: var(--cm-radius); background: var(--cm-postit); box-shadow: 8px 8px 0 var(--cm-ink); transform: scale(1.05);">
+                    <h2 class="h3 fw-bold mb-3" style="font-family: var(--cm-font-hand); color: var(--cm-primary); transform: rotate(-2deg);"><i class="bi bi-star-fill text-warning" aria-hidden="true"></i> Bứt Phá (Pro)</h2>
+                    
+                    <div class="mb-4">
+                        <span class="d-block fw-bold" style="font-family: var(--cm-font-hand); font-size: 4rem; line-height: 1; color: var(--cm-primary);">299.000<span style="font-size: 2rem;">đ</span></span>
+                        <span class="text-muted fw-semibold">/ tháng</span>
                     </div>
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 fw-bold text-primary mb-2">199K</div>
-                        <p class="text-muted mb-4">/tháng</p>
-                        <ul class="list-unstyled text-start mb-4">
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Không giới hạn khóa học</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 200 học sinh / khóa</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Giao bài & chấm điểm</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Tải tài liệu (5GB)</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Lên lịch buổi học</li>
-                            <li class="mb-2 text-muted"><i class="bi bi-x-circle text-muted"></i> Thống kê nâng cao</li>
-                        </ul>
-                        <a href="/Account/Register" class="btn btn-primary w-100 fw-semibold">
-                            Dùng thử 14 ngày
-                        </a>
-                    </div>
+
+                    <ul class="list-unstyled text-start mb-4 flex-grow-1 fw-semibold ms-3" style="font-size: 1.1rem; line-height: 1.8;">
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Không giới hạn khóa học</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>500 Học sinh / khóa</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Hệ thống bài tập đầy đủ</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Lớp học Video Meeting</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Lưu trữ 20GB</li>
+                    </ul>
+
+                    <a asp-controller="Account" asp-action="Register" class="btn btn-cta fw-bold py-3 fs-5">Dùng thử 14 ngày</a>
                 </div>
             </div>
 
-            @* --------------------------------------------------
-               CHECKPOINT: Gói Enterprise
-            -------------------------------------------------- *@
+            @* VÔ CỰC (ENTERPRISE) *@
             <div class="col-lg-4 col-md-6">
-                <div class="card h-100 border-0 shadow-sm pricing-card">
-                    <div class="card-header text-center py-3 bg-dark text-white">
-                        <h2 class="h4 fw-bold mb-0"><i class="bi bi-building"></i> Enterprise</h2>
+                <div class="form-page p-4 text-center h-100 d-flex flex-column" style="border: var(--cm-hand-border); border-radius: var(--cm-hand-radius-md); background: var(--cm-paper); box-shadow: 4px 4px 0 var(--cm-ink);">
+                    <h2 class="h3 fw-bold mb-3" style="font-family: var(--cm-font-hand); color: var(--cm-ink); transform: rotate(1deg);"><i class="bi bi-building"></i> Tổ Chức</h2>
+                    
+                    <div class="mb-4">
+                        <span class="d-block fw-bold" style="font-family: var(--cm-font-hand); font-size: 4rem; line-height: 1; color: var(--cm-ink);">Liên hệ</span>
+                        <span class="text-muted fw-semibold">Báo giá theo quy mô</span>
                     </div>
-                    <div class="card-body text-center p-4">
-                        <div class="display-4 fw-bold text-primary mb-2">499K</div>
-                        <p class="text-muted mb-4">/tháng</p>
-                        <ul class="list-unstyled text-start mb-4">
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Mọi tính năng Pro</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Không giới hạn học sinh</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Tải tài liệu (50GB)</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Thống kê nâng cao</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Hỗ trợ ưu tiên 24/7</li>
-                            <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Logo riêng (White-label)</li>
-                        </ul>
-                        <a href="#" class="btn btn-dark w-100">
-                            Liên hệ tư vấn
-                        </a>
-                    </div>
+
+                    <ul class="list-unstyled text-start mb-4 flex-grow-1 fw-semibold ms-3" style="font-size: 1.1rem; line-height: 1.8;">
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Mọi tính năng của Gói Pro</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Thương hiệu riêng (White-label)</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Thống kê tổng quan nâng cao</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Tích hợp API hệ thống ngoài</li>
+                        <li><i class="bi bi-check-lg text-success fs-4 align-middle me-2"></i>Hỗ trợ ưu tiên 24/7</li>
+                    </ul>
+
+                    <a href="mailto:support@bulb.edu" class="btn btn-ink fw-bold py-2 fs-5">Nhận tư vấn</a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</main>

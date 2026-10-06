@@ -213,9 +213,10 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
                 }
             }
 
-            // Load sessions + materials nếu có quyền xem nội dung
+            // Load sessions + materials + assignments nếu có quyền xem nội dung
             var sessions = new List<Models.Session>();
             var materials = new List<Models.Material>();
+            var assignments = new List<Models.Assignment>();
 
             if (isOwner || isEnrolled)
             {
@@ -230,6 +231,13 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
                     .Where(m => m.CourseId == id)
                     .OrderByDescending(m => m.UploadedAt)
                     .ToListAsync();
+
+                assignments = await _context.Assignments
+                    .AsNoTracking()
+                    .Include(a => a.Submissions)
+                    .Where(a => a.CourseId == id)
+                    .OrderByDescending(a => a.CreatedAt)
+                    .ToListAsync();
             }
 
             var model = new CourseDetailsViewModel
@@ -237,6 +245,7 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
                 Course = course,
                 Sessions = sessions,
                 Materials = materials,
+                Assignments = assignments,
                 IsEnrolled = isEnrolled,
                 IsOwner = isOwner,
                 StudentCount = await _context.Enrollments.CountAsync(e => e.CourseId == id)

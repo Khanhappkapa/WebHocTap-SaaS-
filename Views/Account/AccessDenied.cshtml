@@ -1,29 +1,33 @@
 @* ============================================================
     File: Views/Account/AccessDenied.cshtml
-    Mô tả: Trang thông báo không có quyền truy cập
+    Mô tả: Trang thông báo không có quyền truy cập (V4)
 ============================================================ *@
 @{
     ViewData["Title"] = "Truy cập bị từ chối";
 }
 
-<section class="py-5">
-    <div class="container">
+<main class="on-public py-5">
+    <div class="container pb-5">
         <div class="row justify-content-center">
-            <div class="col-md-6 text-center">
-                <div class="card shadow-sm border-0">
-                    <div class="card-body p-5">
-                        <div class="display-1 mb-3">🚫</div>
-                        <h1 class="h3 fw-bold mb-3">Truy cập bị từ chối</h1>
-                        <p class="text-muted mb-4">
-                            Bạn không có quyền truy cập trang này.
-                            Vui lòng liên hệ quản trị viên nếu bạn cho rằng đây là nhầm lẫn.
-                        </p>
-                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary">
-                            <i class="bi bi-house-door"></i> Về trang chủ
-                        </a>
+            <div class="col-md-8 col-lg-6 text-center">
+                <div class="form-page form-card p-5 position-relative">
+                    
+                    <div class="mb-4 d-flex justify-content-center">
+                        <img src="/images/Locked door ink scribble.svg" alt="Access Denied" style="width: 140px; height: auto;" aria-hidden="true" />
                     </div>
+
+                    <h1 class="fw-bold mb-3" style="font-family: var(--cm-font-hand); font-size: 3rem; transform: rotate(-2deg); color: var(--cm-danger);">Bạn không có quyền truy cập</h1>
+                    
+                    <p class="mb-4 fw-semibold" style="font-size: 1.1rem; color: var(--cm-ink);">
+                        Bạn không có quyền truy cập trang hoặc tài nguyên này. 
+                        Nếu bạn cho rằng đây là sự nhầm lẫn, vui lòng liên hệ giáo viên quản lý lớp học.
+                    </p>
+                    
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-cta-ghost fw-bold py-2 px-4 fs-5">
+                        <i class="bi bi-house-door me-2" aria-hidden="true"></i> Về trang chủ
+                    </a>
                 </div>
             </div>
         </div>
     </div>
-</section>
+</main>

@@ -54,6 +54,23 @@ namespace WebHocTap_SaaS_.Models
         public string? FileUrl { get; set; }
 
         /// <summary>
+        /// Tên file gốc (dùng để trả về header Content-Disposition khi download)
+        /// </summary>
+        [StringLength(255)]
+        public string? FileName { get; set; }
+
+        /// <summary>
+        /// MIME type thật lúc upload (ví dụ: application/pdf)
+        /// </summary>
+        [StringLength(100)]
+        public string? ContentType { get; set; }
+
+        /// <summary>
+        /// Nội dung file, lưu DB (bytea). Production thật đổi sang S3 + signed URL.
+        /// </summary>
+        public byte[]? FileData { get; set; }
+
+        /// <summary>
         /// Thời điểm nộp bài
         /// </summary>
         [Display(Name = "Ngày nộp")]
