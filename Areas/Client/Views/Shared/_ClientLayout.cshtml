@@ -8,7 +8,8 @@
 @inject UserManager<AppUser> UserManager
 @{
     var currentUser = await UserManager.GetUserAsync(User);
-    var roleBadge = currentUser?.UserRole == "Teacher" ? "bg-success" : "bg-info";
+    var currentCtrl = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAct = ViewContext.RouteData.Values["Action"]?.ToString();
 }
 <!DOCTYPE html>
 <html lang="vi">
@@ -28,114 +29,167 @@
 </head>
 <body>
 
-    <header class="sticky-top z-3">
-        <nav class="navbar navbar-light client-topbar px-3">
-            <button class="navbar-toggler d-lg-none" type="button"
-                    data-bs-toggle="offcanvas" data-bs-target="#clientSidebar"
-                    aria-controls="clientSidebar" aria-label="Mở menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand mb-0 h1 d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                <img src="~/asset/images/logo.svg" alt="Bulb Logo" style="height: 32px;" class="me-2" />
-                <span class="mt-1">Bulb.edu</span>
-            </a>
-            <div class="d-flex align-items-center">
+    <header class="sticky-top client-header-sticky">
+        <nav class="navbar navbar-light client-topbar px-2 px-sm-3">
+            <div class="d-flex align-items-center gap-2">
+                <button class="navbar-toggler d-lg-none p-1 px-2" type="button"
+                        data-bs-toggle="collapse" data-bs-target="#clientMobileNav"
+                        aria-controls="clientMobileNav" aria-expanded="false" aria-label="Mở menu điều hướng"
+                        style="border: 1.5px solid var(--cm-ink); border-radius: var(--cm-radius); box-shadow: 1.5px 1.5px 0 var(--cm-ink);">
+                    <span class="navbar-toggler-icon" style="width: 1.25em; height: 1.25em;"></span>
+                </button>
+                <a class="navbar-brand mb-0 d-flex align-items-center me-0" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/asset/images/logo.svg" alt="Bulb Logo" style="height: 30px;" class="me-1 me-sm-2" />
+                    <span class="fw-bold" style="font-family: var(--cm-font-hand); font-size: 1.45rem;">Bulb.edu</span>
+                </a>
+            </div>
+
+            <div class="d-flex align-items-center gap-2 ms-auto">
                 @* CHECKPOINT: Hiển thị FullName thật + badge role (Teacher=xanh lá, Student=xanh dương) *@
-                <span class="text-dark fw-bold me-2"><i class="bi bi-person-circle"></i> @currentUser?.FullName</span>
-                <span class="badge @roleBadge me-3 border-dark text-dark">@currentUser?.UserRole</span>
+                <span class="text-dark fw-bold d-none d-sm-inline-flex align-items-center text-truncate" style="max-width: 130px;" title="@currentUser?.FullName">
+                    <i class="bi bi-person-circle me-1"></i> @currentUser?.FullName
+                </span>
+                
+                <span class="sketch-role-badge role-@(currentUser?.UserRole?.ToLower() ?? "student")">
+                    @if (currentUser?.UserRole == "Teacher")
+                    {
+                        <i class="bi bi-mortarboard-fill" aria-hidden="true"></i>
+                        <span>Teacher</span>
+                    }
+                    else
+                    {
+                        <i class="bi bi-backpack2-fill" aria-hidden="true"></i>
+                        <span>Student</span>
+                    }
+                </span>
+
                 @* CHECKPOINT: Logout BẮT BUỘC form POST — chống CSRF *@
-                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="" class="m-0">
-                    <button type="submit" class="btn btn-outline-dark btn-sm fw-bold shadow-sm" style="border: 2px solid var(--cm-ink);">Đăng xuất</button>
+                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="" class="m-0 p-0">
+                    <button type="submit" class="btn-sketch-logout" aria-label="Đăng xuất">
+                        <i class="bi bi-box-arrow-right text-danger" aria-hidden="true"></i>
+                        <span>Đăng xuất</span>
+                    </button>
                 </form>
             </div>
         </nav>
-    </header>
 
-    <div class="d-flex">
-        @* Sidebar cho Desktop *@
-        <nav class="sidebar client-sidebar d-none d-lg-flex flex-column" id="clientSidebarDesktop">
-            <div class="sidebar-header p-3">
-                <h5 class="text-dark fw-bold mb-0"><i class="bi bi-list-ul"></i> Menu</h5>
-            </div>
-            <ul class="nav flex-column px-2">
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Dashboard" asp-action="Index">
-                        <i class="bi bi-house-door"></i> Dashboard
-                    </a>
-                </li>
-                @if (User.IsInRole("Teacher"))
-                {
+        <!-- Dropdown Menu từ trên xuống cho Mobile -->
+        <div class="collapse d-lg-none client-mobile-dropdown" id="clientMobileNav">
+            <div class="p-2 p-sm-3">
+                <ul class="nav flex-column gap-1">
                     <li class="nav-item">
-                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Manage">
-                            <i class="bi bi-gear"></i> Quản lý khóa học
-                        </a>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
-                            <i class="bi bi-journal-code"></i> Khóa học của tôi
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Index">
-                            <i class="bi bi-search"></i> Duyệt khóa học
-                        </a>
-                    </li>
-                }
-                <li class="nav-item">
-                    <a class="nav-link sidebar-link" href="#">
-                        <i class="bi bi-pencil-square"></i> Bài tập
-                    </a>
-                </li>
-            </ul>
-        </nav>
-
-        @* Offcanvas Sidebar cho Mobile *@
-        <div class="offcanvas offcanvas-start client-sidebar" tabindex="-1" id="clientSidebar" aria-labelledby="clientSidebarLabel">
-            <div class="offcanvas-header sidebar-header">
-                <h5 class="offcanvas-title text-dark fw-bold" id="clientSidebarLabel"><i class="bi bi-list-ul"></i> Menu</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Đóng"></button>
-            </div>
-            <div class="offcanvas-body p-0">
-                <ul class="nav flex-column px-2">
-                    <li class="nav-item">
-                        <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Dashboard" asp-action="Index">
-                            <i class="bi bi-house-door"></i> Dashboard
+                        <a class="nav-link sidebar-link @(currentCtrl == "Dashboard" ? "active" : "")" asp-area="Client" asp-controller="Dashboard" asp-action="Index">
+                            <span class="link-icon-box"><i class="bi bi-house-door"></i></span>
+                            <span>Dashboard</span>
                         </a>
                     </li>
                     @if (User.IsInRole("Teacher"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Manage">
-                                <i class="bi bi-gear"></i> Quản lý khóa học
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "Manage" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                                <span class="link-icon-box"><i class="bi bi-gear"></i></span>
+                                <span>Quản lý khóa học</span>
                             </a>
                         </li>
                     }
                     else
                     {
                         <li class="nav-item">
-                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
-                                <i class="bi bi-journal-code"></i> Khóa học của tôi
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "MyCourses" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
+                                <span class="link-icon-box"><i class="bi bi-journal-code"></i></span>
+                                <span>Khóa học của tôi</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link sidebar-link" asp-area="Client" asp-controller="Course" asp-action="Index">
-                                <i class="bi bi-search"></i> Duyệt khóa học
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "Index" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="Index">
+                                <span class="link-icon-box"><i class="bi bi-search"></i></span>
+                                <span>Duyệt khóa học</span>
                             </a>
                         </li>
                     }
                     <li class="nav-item">
-                        <a class="nav-link sidebar-link" href="#">
-                            <i class="bi bi-pencil-square"></i> Bài tập
+                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" href="#">
+                            <span class="link-icon-box"><i class="bi bi-pencil-square"></i></span>
+                            <span>Bài tập</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
+    </header>
 
-        <main class="main-content flex-grow-1 p-4">
+    <div class="app-layout-body d-flex">
+        @* Sidebar cho Desktop *@
+        <nav class="sidebar client-sidebar d-none d-lg-flex flex-column" id="clientSidebarDesktop">
+            <div class="sidebar-header p-3 pb-2">
+                <div class="sidebar-title-badge">
+                    <i class="bi bi-journal-bookmark-fill text-primary" aria-hidden="true"></i>
+                    <span>Mục Lục</span>
+                </div>
+            </div>
+            <div class="sidebar-menu-wrapper px-2 flex-grow-1">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link @(currentCtrl == "Dashboard" ? "active" : "")" asp-area="Client" asp-controller="Dashboard" asp-action="Index">
+                            <span class="link-icon-box"><i class="bi bi-house-door"></i></span>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    @if (User.IsInRole("Teacher"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "Manage" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                                <span class="link-icon-box"><i class="bi bi-gear"></i></span>
+                                <span>Quản lý khóa học</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "MyCourses" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
+                                <span class="link-icon-box"><i class="bi bi-journal-code"></i></span>
+                                <span>Khóa học của tôi</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link sidebar-link @(currentCtrl == "Course" && currentAct == "Index" ? "active" : "")" asp-area="Client" asp-controller="Course" asp-action="Index">
+                                <span class="link-icon-box"><i class="bi bi-search"></i></span>
+                                <span>Duyệt khóa học</span>
+                            </a>
+                        </li>
+                    }
+                    <li class="nav-item">
+                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" href="#">
+                            <span class="link-icon-box"><i class="bi bi-pencil-square"></i></span>
+                            <span>Bài tập</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            @* Mini Sketch Sticky Note Widget ở đáy Sidebar *@
+            <div class="sidebar-footer-widget p-3 mt-auto">
+                <div class="sketch-sidebar-note">
+                    <div class="sketch-note-pin" aria-hidden="true"></div>
+                    <div class="sketch-note-title">
+                        <i class="bi bi-lightbulb-fill text-warning me-1"></i> Ghi chú
+                    </div>
+                    <p class="sketch-note-text mb-0">
+                        @if (currentUser?.UserRole == "Teacher")
+                        {
+                            <span>Chúc bạn một ngày giảng dạy hiệu quả!</span>
+                        }
+                        else
+                        {
+                            <span>Khám phá khóa học &amp; hoàn thành bài tập nhé!</span>
+                        }
+                    </p>
+                </div>
+            </div>
+        </nav>
+
+        <main class="main-content flex-grow-1 p-3 p-md-4">
             @RenderBody()
         </main>
     </div>

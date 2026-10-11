@@ -27,6 +27,10 @@
 | `--cm-postit` | `#fff9c4` | Card/widget nổi bật (sticky-note) — KHÔNG dùng làm nền badge role |
 | `--cm-success` | `#2e7d32` | Badge published / on-time pill |
 | `--cm-danger` | `#c62828` | Badge lỗi |
+| `--bulb-border` | `2px solid var(--bulb-ink)` | Viền nét mực 2px cho Header Navbar |
+| `--bulb-radius` | `125px 10px 20px 185px / 25px 205px 205px 25px` | Bo góc sketch hữu cơ nút chính Đăng ký |
+| `--bulb-radius-ghost` | `255px 15px 225px 15px / 15px 225px 15px 255px` | Bo góc sketch hữu cơ nút phụ Đăng nhập |
+| `--bulb-shadow-lg` | `6px 6px 0 var(--bulb-ink)` | Bóng sticker nâng khi hover nút Đăng ký |
 | `--cm-hand-radius` | `255px 15px 225px 15px / 15px 225px 15px 255px` | Viền vẽ tay (tầng ĐẬM) |
 | `--cm-hand-radius-md` | `125px 10px 20px 185px / 25px 205px 205px 25px` | Viền tay vừa (nút) |
 | `--cm-soft-radius` | `.5rem` | Viền thẳng (tầng NHẸ) |
@@ -140,6 +144,14 @@ a { color: var(--cm-blue-pen); } a:hover { color: var(--cm-accent); }
 | `.sticky-top` / `.sidebar` (sticky) | Header & Sidebar Client/Admin | Navigation cố định khi cuộn trang, z-index 1020 |
 | `.client-topbar` / `.admin-topbar` | Layout Client & Admin | Thanh topbar header trắng (Client) hoặc đen ink (Admin) |
 | `.client-sidebar` / `.admin-sidebar` | Layout Client & Admin | Thanh sidebar điều hướng dọc cố định |
+| `.bulb-button` / `.bulb-button-primary` / `.bulb-button-ghost` | Navbar Public (`_Layout.cshtml`) | Nút Đăng nhập (ghost white + hover post-it yellow) & Đăng ký (primary red + hover lift 6px sticker) theo theme sketch tay |
+| `.sketch-role-badge` (`.role-teacher` / `.role-student` / `.role-admin`) | Topbar Client & Admin | Box Role phác thảo vẽ tay (Teacher xanh lá pastel, Student xanh dương pastel, Admin đỏ pastel), viền mực 1.5px, bóng sticker 1.5px, đạt chuẩn AAA |
+| `.btn-sketch-logout` | Topbar Client & Admin | Nút Đăng xuất sketch hữu cơ, viền mực 1.5px, bóng sticker 2px, hover nâng 3.5px + ửng đỏ cảnh báo, active nén 1px |
+| `.client-mobile-dropdown` / `.admin-mobile-dropdown` | Mobile Topbar Client & Admin | Thanh menu thả từ trên xuống (top dropdown bar) thay thế offcanvas toàn màn hình, viền mực đáy 2.5px, bóng sticker 4px |
+| `--cm-topbar-height` (64px) | Toàn hệ thống Client & Admin | Chuẩn hóa chiều cao cố định topbar (64px) giúp căn chỉnh T-junction liền mạch với Sidebar, triệt tiêu lỗi lệch khớp/chồng viền |
+| `.sidebar-title-badge` | Sidebar Client & Admin | Tiêu đề danh mục phác thảo vẽ tay FZ Caveat 1.35rem, icon sketch kèm đường đứt khúc dashed 2px tạo cảm giác sổ tay |
+| `.sidebar-link` (Sketch Tactile) | Sidebar Client & Admin | Nút điều hướng phác thảo mềm mại, icon trong hộp badge bo tròn; Hover trượt nhẹ 4px + viền mực + bóng sticker 2px; Active biến thành thẻ Sticky Note vàng post-it + chấm đỏ accent |
+| `.sketch-sidebar-note` | Đáy Sidebar Client & Admin | Widget giấy ghi chú dán ghim đỏ ở chân sidebar, bo mép hữu cơ (organic wobble), font viết tay thân thiện |
 
 ---
 
@@ -192,7 +204,7 @@ a { color: var(--cm-blue-pen); } a:hover { color: var(--cm-accent); }
 
 Header và Footer do `_Layout.cshtml` cung cấp. Toàn bộ nội dung trang chủ được bọc trong `<div class="on-public hs-home">`:
 
-1. **Khối 1 (Topbar / Navbar):** Do `_Layout` cung cấp, logo Bulb.edu + menu điều hướng + auth links.
+1. **Khối 1 (Topbar / Navbar):** Do `_Layout` cung cấp, logo Bulb.edu + menu điều hướng + 2 nút xác thực sketch handdraw: `.bulb-button.bulb-button-ghost` (Đăng nhập - nền trắng, viền ink 2px, bo góc `--bulb-radius-ghost`, hover vàng post-it + bóng 4px, active nén 1px) và `.bulb-button.bulb-button-primary` (Đăng ký - nền đỏ marker, viền ink 2px, bo góc `--bulb-radius`, sticker 4px, hover nâng 6px, active nén 1px).
 2. **Khối 2 (Hero 2 cột):** H1 + từ khóa `.handwritten hs-accent` ("dễ dàng") + 2 nút (`.btn-cta` "Bắt đầu miễn phí" và `.btn-cta-ghost` "Xem tính năng") + SVG `.sketch-arrow` + note viết tay + cột phải có `.blob`, khung rỗng `.hs-dashboard`, thumbtack `.tack`.
 3. **Khối 3 (Stats `#stats`):** 4 thẻ số liệu `.sketch-hand hs-stat`, số lớn `.handwritten hs-stat-number` ("0+"), nhãn Be Vietnam Pro.
 4. **Khối 4 (Features `#features`):** H2 + 4 thẻ tính năng `.sketch-hand hs-feature` (cột `col-md-6 col-lg-3`), trong đó có thẻ Post-it `.hs-postit tilt-1` nổi bật.
@@ -220,7 +232,7 @@ Header và Footer do `_Layout.cshtml` cung cấp. Toàn bộ nội dung trang ch
 11. Đầy đủ `ViewData["Title"]` và `ViewData["Description"]` trên mỗi view.
 12. Nhận diện thương hiệu "Bulb.edu" nhất quán trên toàn bộ giao diện người dùng.
 13. `dotnet build` đạt kết quả Build Succeeded (0 errors).
-14. Mobile responsive: Menu burger và offcanvas hoạt động mượt mà, không bị vỡ hoặc thanh cuộn ngang ngoài ý muốn.
+14. Mobile responsive: Menu burger và top dropdown bar thả từ trên xuống hoạt động mượt mà, không che kín toàn màn hình, không bị vỡ hoặc thanh cuộn ngang ngoài ý muốn.
 
 ---
 

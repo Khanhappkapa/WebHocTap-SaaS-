@@ -75,8 +75,14 @@ app.MapControllerRoute(
 | Layout | File | Khu vực | Màu sắc | Cấu trúc | Responsive |
 |--------|------|---------|---------|-----------|------------|
 | **Public** | `Views/Shared/_Layout.cshtml` | Khách vãng lai | Navbar: gradient xanh đậm (#1a237e → #0d47a1) | Navbar trên + content + footer | Navbar thu gọn thành hamburger khi < 992px |
-| **Client** | `Areas/Client/Views/Shared/_ClientLayout.cshtml` | Teacher + Student | Sidebar: gradient xanh dương (#0d47a1 → #1565c0) | Topbar + Sidebar trái (250px) + content | Sidebar ẩn thành offcanvas khi < 992px |
-| **Admin** | `Areas/Admin/Views/Shared/_AdminLayout.cshtml` | Quản trị viên | Sidebar: gradient tối (#1a1a2e → #16213e) | Topbar + Sidebar trái (250px) + content | Sidebar ẩn thành offcanvas khi < 992px |
+| **Client** | `Areas/Client/Views/Shared/_ClientLayout.cshtml` | Teacher + Student | Topbar trắng viền mực + Sidebar trái (250px) + content | Sidebar chuyển thành Dropdown Bar thả từ trên xuống khi < 992px (tối ưu không che kín màn hình) |
+| **Admin** | `Areas/Admin/Views/Shared/_AdminLayout.cshtml` | Quản trị viên | Topbar đen viền đỏ + Sidebar trái (250px) + content | Sidebar chuyển thành Dropdown Bar thả từ trên xuống khi < 992px (tối ưu không che kín màn hình) |
+
+### 2.1 Cải tiến Giao diện Handdrawn Sketch (Header & Sidebar v2)
+- **Chuẩn hóa chiều cao Topbar (--cm-topbar-height: 64px)**: Khắc phục triệt để lỗi lệch khớp/chồng viền giữa header và sidebar. Đường viền đáy topbar nối liền mạch 100% chiều ngang, khớp T-junction hoàn hảo với viền phải sidebar.
+- **Tiêu đề Sidebar (.sidebar-title-badge)**: Font viết tay FZ Caveat 1.35rem kèm nét gạch đứt đoạn dashed notebook.
+- **Nút điều hướng Sketch Tactile (.sidebar-link)**: Thẻ bo góc mềm mại, icon trong hộp badge bo góc. Hover trượt 4px có bóng mực. Active biến thành thẻ giấy ghi chú Post-it vàng (--cm-postit) nổi bật kèm chấm mực đỏ.
+- **Widget Ghi chú ở chân Sidebar (.sketch-sidebar-note)**: Thẻ giấy dán ghim đỏ (.sketch-note-pin) với viền lượn sóng tự nhiên (organic wobble), hiển thị lời nhắc/ghi chú thân thiện cho Giáo viên và Học viên.
 
 ### Tại sao Client và Admin khác màu?
 - **Client (xanh dương)**: truyền cảm giác thân thiện, phù hợp cho học sinh/giáo viên
@@ -141,7 +147,7 @@ Bootstrap 5 sử dụng hệ thống breakpoints:
 - **Navbar** (`navbar-expand-lg`): < 992px thu gọn thành hamburger, ≥ 992px hiển thị đầy đủ
 - **Sidebar** (`d-none d-lg-flex`): < 992px ẩn sidebar, hiện nút burger → mở offcanvas
 - **Cards** (`col-lg-4 col-md-6`): 3 cột desktop, 2 cột tablet, 1 cột mobile
-- **Offcanvas** (`offcanvas-start`): sidebar trượt từ trái khi bấm nút burger trên mobile
+- **Mobile Top Dropdown Bar** (`.client-mobile-dropdown` / `.admin-mobile-dropdown`): menu thả từ trên xuống gắn liền dưới navbar khi bấm nút burger trên mobile, chiếm đúng chiều cao danh sách mục, không che kín toàn màn hình.
 
 ---
 

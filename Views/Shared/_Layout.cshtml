@@ -163,14 +163,12 @@
                         }
                         else
                         {
-                            <a class="nav-link fw-bold me-3 text-dark px-3"
-                               asp-controller="Account" asp-action="Login"
-                               style="border: 2px solid var(--cm-ink); border-radius: var(--cm-radius); background-color: var(--cm-surface);">
+                            <a class="bulb-button bulb-button-ghost"
+                               asp-controller="Account" asp-action="Login">
                                 Đăng nhập
                             </a>
-                            <a class="btn fw-bold"
-                               asp-controller="Account" asp-action="Register" 
-                               style="background-color: var(--cm-accent); color: var(--cm-ink); border: 2px solid var(--cm-ink); border-radius: var(--cm-radius); box-shadow: 4px 4px 0 var(--cm-ink); padding: 0.4rem 1.25rem; transition: transform 0.1s;">
+                            <a class="bulb-button bulb-button-primary"
+                               asp-controller="Account" asp-action="Register">
                                 Đăng ký
                             </a>
                         }

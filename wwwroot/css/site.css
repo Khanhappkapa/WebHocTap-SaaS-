@@ -90,6 +90,7 @@ strong {
     --cm-touch-target: 48px;
     --cm-tail-edge: 2px solid var(--cm-ink);
     --cm-cta-font-size: max(1.2rem, 19px);
+    --cm-topbar-height: 64px;
 }
 
 /* --------------------------------------------------
@@ -294,27 +295,50 @@ body {
 }
 
 /* =============================================
-   SIDEBAR + TOPBAR (Client & Admin Layouts)
+   SIDEBAR + TOPBAR SKETCH SYSTEM (Client & Admin)
    ============================================= */
 
-/* --- Topbar chung --- */
-.admin-topbar {
-    background: var(--cm-ink) !important;
-    border-bottom: 3px solid var(--cm-accent);
-    padding: .6rem 1.2rem;
-    min-height: 56px;
+/* --- Topbar Layout & Sticky Navigation --- */
+.client-header-sticky,
+.admin-header-sticky,
+header.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 1030 !important;
+    background-color: transparent;
 }
 
 .client-topbar {
-    background: #ffffff !important;
-    border-bottom: 2px solid var(--cm-ink);
-    padding: .6rem 1.2rem;
-    min-height: 56px;
+    background-color: #ffffff !important;
+    border-bottom: 2px solid var(--cm-ink) !important;
+    min-height: var(--cm-topbar-height);
+    height: var(--cm-topbar-height);
+    max-height: var(--cm-topbar-height);
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1030;
+}
+
+.admin-topbar {
+    background-color: var(--cm-ink) !important;
+    border-bottom: 2px solid #ffffff !important;
+    min-height: var(--cm-topbar-height);
+    height: var(--cm-topbar-height);
+    max-height: var(--cm-topbar-height);
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    position: relative;
+    z-index: 1030;
 }
 
 .admin-topbar .navbar-brand {
     font-family: var(--cm-font-hand);
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: var(--cm-surface) !important;
     letter-spacing: .5px;
@@ -322,7 +346,7 @@ body {
 
 .client-topbar .navbar-brand {
     font-family: var(--cm-font-hand);
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     font-weight: 700;
     color: var(--cm-ink) !important;
     letter-spacing: .5px;
@@ -334,109 +358,248 @@ body {
     margin-right: .35rem;
 }
 
-/* --- Sidebar chung --- */
+/* --- Layout Body Container --- */
+.app-layout-body {
+    position: relative;
+    min-height: calc(100vh - var(--cm-topbar-height));
+    background-color: var(--cm-bg);
+    display: flex;
+}
+
+/* --- Sidebar System (Sticky, Pixel-aligned with Topbar) --- */
 .sidebar {
     width: 250px;
-    height: calc(100vh - 56px);
+    flex-shrink: 0;
     position: -webkit-sticky;
     position: sticky;
-    top: 56px;
+    top: var(--cm-topbar-height);
+    height: calc(100vh - var(--cm-topbar-height));
     overflow-y: auto;
-    flex-shrink: 0;
-    padding-top: .5rem;
     z-index: 1020;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Client Sidebar: Handdrawn paper surface */
 .client-sidebar {
-    background: #ffffff !important;
-    border-right: 2px solid var(--cm-ink);
+    background-color: var(--cm-surface) !important;
+    border-right: 2px solid var(--cm-ink) !important;
 }
 
+/* Admin Sidebar: Dark ink notebook */
 .admin-sidebar {
-    background: #1e1a17 !important;
+    background-color: #1e1a17 !important;
+    border-right: 2px solid var(--cm-ink) !important;
 }
 
-.sidebar .sidebar-header {
-    border-bottom: 1px solid rgba(255, 255, 255, .15);
-    margin-bottom: .5rem;
+/* --- Sidebar Header --- */
+.sidebar-header {
+    border-bottom: 2px dashed rgba(45, 45, 45, 0.22);
+    margin-bottom: 0.65rem;
+    padding: 1rem 1rem 0.65rem 1rem;
 }
 
-.client-sidebar .sidebar-header {
-    border-bottom: 1px solid var(--cm-ink);
+.admin-sidebar .sidebar-header {
+    border-bottom: 2px dashed rgba(255, 255, 255, 0.22);
 }
 
-.sidebar .sidebar-header h5 {
+.sidebar-title-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     font-family: var(--cm-font-hand);
+    font-size: 1.35rem;
     font-weight: 700;
-    font-size: 1.15rem;
+    color: var(--cm-ink);
+    letter-spacing: 0.3px;
 }
 
-.client-sidebar .sidebar-header h5 {
-    color: var(--cm-ink) !important;
+.admin-sidebar .sidebar-title-badge {
+    color: #ffffff;
 }
 
-.sidebar .sidebar-link {
-    color: rgba(255, 255, 255, .8);
-    padding: .65rem 1rem;
+/* --- Sidebar Tactile Sketch Links --- */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.62rem 0.85rem;
+    margin-bottom: 0.4rem;
     border-radius: var(--cm-soft-radius);
-    margin-bottom: 2px;
-    transition: background .2s, color .2s, transform .15s;
-    font-weight: 500;
-    font-size: .92rem;
-}
-
-.client-sidebar .sidebar-link {
+    border: 1.5px solid transparent;
     color: var(--cm-ink) !important;
+    font-family: var(--cm-font-body);
     font-weight: 600;
-    border: 2px solid transparent;
+    font-size: 0.92rem;
+    text-decoration: none !important;
+    transition: all 0.16s cubic-bezier(0.2, 0, 0, 1);
+    position: relative;
+    background: transparent;
 }
 
-.sidebar .sidebar-link:hover {
-    background: rgba(255, 255, 255, .12);
-    color: #fff;
-    transform: translateX(3px);
+.sidebar-link .link-icon-box {
+    width: 28px;
+    height: 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: rgba(45, 93, 161, 0.08);
+    color: var(--cm-blue-pen);
+    font-size: 1.05rem;
+    transition: all 0.16s ease;
+    flex-shrink: 0;
 }
 
-.client-sidebar .sidebar-link:hover {
-    background: var(--cm-bg) !important;
-    color: var(--cm-primary) !important;
-    border: 2px solid var(--cm-ink);
+/* Client Hover */
+.client-sidebar .sidebar-link:hover,
+.client-mobile-dropdown .sidebar-link:hover {
+    background-color: #ffffff !important;
+    border: 1.5px solid var(--cm-ink) !important;
     box-shadow: 2px 2px 0 var(--cm-ink);
-    transform: translateX(0);
+    transform: translateX(4px);
+    color: var(--cm-blue-pen) !important;
 }
 
-.sidebar .sidebar-link.active,
-.sidebar .sidebar-link:focus {
-    background: var(--cm-accent) !important;
+.client-sidebar .sidebar-link:hover .link-icon-box,
+.client-mobile-dropdown .sidebar-link:hover .link-icon-box {
+    background: var(--cm-blue-pen);
+    color: #ffffff;
+}
+
+/* Client Active (Sticky Note Pill) */
+.client-sidebar .sidebar-link.active,
+.client-mobile-dropdown .sidebar-link.active {
+    background-color: var(--cm-postit) !important;
+    border: 2px solid var(--cm-ink) !important;
+    box-shadow: 2.5px 2.5px 0 var(--cm-ink) !important;
+    transform: translateX(3px);
     color: var(--cm-ink) !important;
     font-weight: 700;
 }
 
-.client-sidebar .sidebar-link.active,
-.client-sidebar .sidebar-link:focus {
-    background: var(--cm-accent) !important;
-    color: var(--cm-ink) !important;
-    border: 2px solid var(--cm-ink);
+.client-sidebar .sidebar-link.active .link-icon-box,
+.client-mobile-dropdown .sidebar-link.active .link-icon-box {
+    background: var(--cm-ink);
+    color: #ffffff;
+}
+
+.client-sidebar .sidebar-link.active::after,
+.client-mobile-dropdown .sidebar-link.active::after {
+    content: "•";
+    position: absolute;
+    right: 12px;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--cm-accent);
+}
+
+/* Admin Sidebar Links */
+.admin-sidebar .sidebar-link {
+    color: rgba(255, 255, 255, 0.85) !important;
+}
+
+.admin-sidebar .sidebar-link .link-icon-box {
+    background: rgba(255, 255, 255, 0.1);
+    color: #ff9999;
+}
+
+.admin-sidebar .sidebar-link:hover,
+.admin-mobile-dropdown .sidebar-link:hover {
+    background-color: #2b2520 !important;
+    border: 1.5px solid #ffffff !important;
+    box-shadow: 2px 2px 0 #ffffff;
+    transform: translateX(4px);
+    color: #ffffff !important;
+}
+
+.admin-sidebar .sidebar-link:hover .link-icon-box,
+.admin-mobile-dropdown .sidebar-link:hover .link-icon-box {
+    background: #b71c1c;
+    color: #ffffff;
+}
+
+.admin-sidebar .sidebar-link.active,
+.admin-mobile-dropdown .sidebar-link.active {
+    background-color: #3b1d1d !important;
+    border: 2px solid #ff4d4d !important;
+    box-shadow: 2.5px 2.5px 0 #ff4d4d !important;
+    transform: translateX(3px);
+    color: #ffffff !important;
+    font-weight: 700;
+}
+
+.admin-sidebar .sidebar-link.active .link-icon-box,
+.admin-mobile-dropdown .sidebar-link.active .link-icon-box {
+    background: #ff4d4d;
+    color: #ffffff;
+}
+
+/* --- Mini Sketch Sticky Note Widget (Sidebar Bottom) --- */
+.sketch-sidebar-note {
+    position: relative;
+    background-color: var(--cm-postit);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 125px 15px 225px 15px / 15px 225px 15px 255px;
     box-shadow: 2px 2px 0 var(--cm-ink);
+    padding: 0.75rem 0.85rem;
+    font-family: var(--cm-font-body);
 }
 
-.sidebar .sidebar-link i {
-    width: 22px;
-    margin-right: .6rem;
-    text-align: center;
+.sketch-sidebar-note .sketch-note-pin {
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: var(--cm-accent);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 50%;
+    box-shadow: 1px 1px 0 var(--cm-ink);
+}
+
+.sketch-sidebar-note .sketch-note-title {
+    font-family: var(--cm-font-hand);
     font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cm-ink);
+    margin-bottom: 0.2rem;
 }
 
-/* Offcanvas sidebar cho mobile */
-.offcanvas.client-sidebar,
-.offcanvas.admin-sidebar {
-    border-right: 3px solid var(--cm-accent);
+.sketch-sidebar-note .sketch-note-text {
+    font-size: 0.78rem;
+    color: #4a4a4a;
+    line-height: 1.35;
 }
 
-/* --- Main content --- */
+.admin-sidebar .sketch-sidebar-note {
+    background-color: #2b2520;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 2px 2px 0 rgba(255, 255, 255, 0.25);
+}
+
+.admin-sidebar .sketch-sidebar-note .sketch-note-pin {
+    background-color: #ff4d4d;
+    border-color: #ffffff;
+    box-shadow: 1px 1px 0 #ffffff;
+}
+
+.admin-sidebar .sketch-sidebar-note .sketch-note-title {
+    color: #ffffff;
+}
+
+.admin-sidebar .sketch-sidebar-note .sketch-note-text {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* --- Main Content Area --- */
 .main-content {
-    background: var(--cm-bg);
-    min-height: calc(100vh - 56px);
+    background-color: var(--cm-bg);
+    min-height: calc(100vh - var(--cm-topbar-height));
+    box-sizing: border-box;
+    margin-left: 0 !important;
 }
 
 /* --- User badge trên topbar --- */
@@ -636,71 +799,7 @@ body {
 }
 
 /* --------------------------------------------------
-   SIDEBAR (dùng chung cho Admin & Client)
--------------------------------------------------- */
-.sidebar {
-    width: 250px;
-    min-height: 100vh;
-    position: fixed;
-    top: 56px;
-    left: 0;
-    z-index: 100;
-    overflow-y: auto;
-}
-
-/* Admin sidebar */
-.admin-sidebar {
-    background: linear-gradient(180deg, var(--cm-admin-dark) 0%, var(--cm-admin-light) 100%);
-}
-
-.admin-topbar {
-    background: linear-gradient(90deg, var(--cm-admin-dark) 0%, var(--cm-admin-light) 100%);
-    height: 56px;
-}
-
-/* Client sidebar */
-.client-sidebar {
-    background: linear-gradient(180deg, var(--cm-primary) 0%, var(--cm-primary-light) 100%);
-}
-
-.client-topbar {
-    background: linear-gradient(90deg, var(--cm-primary) 0%, var(--cm-primary-light) 100%);
-    height: 56px;
-}
-
-/* --------------------------------------------------
-   SIDEBAR LINKS
--------------------------------------------------- */
-.sidebar-link {
-    color: rgba(255, 255, 255, 0.8) !important;
-    padding: 10px 16px;
-    border-radius: 8px;
-    margin-bottom: 4px;
-    transition: background-color 0.2s, color 0.2s;
-    font-weight: 500;
-}
-
-.sidebar-link:hover {
-    background-color: rgba(255, 255, 255, 0.15);
-    color: #ffffff !important;
-}
-
-.sidebar-link.active {
-    background-color: rgba(255, 255, 255, 0.2);
-    color: #ffffff !important;
-}
-
-/* --------------------------------------------------
-   MAIN CONTENT AREA
--------------------------------------------------- */
-.main-content {
-    margin-left: 250px;
-    min-height: calc(100vh - 56px);
-    padding-top: 20px;
-}
-
-/* --------------------------------------------------
-   RESPONSIVE — < 992px
+   RESPONSIVE SIDEBAR & MAIN CONTENT — < 992px
 -------------------------------------------------- */
 @media (max-width: 991.98px) {
     .sidebar {
@@ -708,14 +807,10 @@ body {
     }
 
     .main-content {
-        margin-left: 0;
-    }
-
-    .offcanvas.admin-sidebar,
-    .offcanvas.client-sidebar {
-        top: 0;
+        margin-left: 0 !important;
     }
 }
+
 
 /* --------------------------------------------------
    Dashboard & general card hover
@@ -1424,28 +1519,30 @@ a:hover {
     --bulb-brand-font-size: 27px;
     --bulb-footer-brand-size: 32px;
     --bulb-footer-text-size: 14px;
-    --bulb-button-font-size: max(1.2rem, 19px);
+    --bulb-button-font-size: 0.95rem;
 
     /* Kích thước */
     --bulb-header-height: 72px;
     --bulb-footer-height: 160px;
     --bulb-container-width: 1248px;
     --bulb-container-padding: 24px;
-    --bulb-touch-target: 48px;
+    --bulb-touch-target: 40px;
     --bulb-logo-width: 44px;
     --bulb-logo-height: 52px;
     --bulb-nav-gap: 2.5rem;
     --bulb-action-gap: 12px;
-    --bulb-button-padding: .5rem 1.125rem;
+    --bulb-button-padding: .45rem 1.15rem;
     --bulb-footer-line-width: 260px;
     --bulb-footer-line-height: 12px;
 
     /* Viền, radius và bóng */
-    --bulb-border: 1.5px solid var(--bulb-ink);
+    --bulb-border: 2px solid var(--bulb-ink);
     --bulb-radius: 125px 10px 20px 185px / 25px 205px 205px 25px;
+    --bulb-radius-ghost: 255px 15px 225px 15px / 15px 225px 15px 255px;
     --bulb-shadow-none: none;
     --bulb-shadow-sm: 2px 2px 0 var(--bulb-ink);
     --bulb-shadow: 4px 4px 0 var(--bulb-ink);
+    --bulb-shadow-lg: 6px 6px 0 var(--bulb-ink);
     --bulb-focus-ring: 3px solid var(--bulb-blue);
 
     /* Nét SVG */
@@ -1603,12 +1700,12 @@ a:hover {
     padding-left: 1rem;
 }
 
+.bulb-button,
 .bulb-header .bulb-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: var(--bulb-touch-target);
-    min-height: var(--bulb-touch-target);
+    min-height: 40px;
     padding: var(--bulb-button-padding);
     border: var(--bulb-border);
     border-radius: var(--bulb-radius);
@@ -1616,43 +1713,65 @@ a:hover {
     font-family: var(--bulb-font-body);
     font-size: var(--bulb-button-font-size);
     font-weight: 700;
-    line-height: 1.5;
+    line-height: 1.4;
     white-space: nowrap;
     text-decoration: none;
-    transition: transform .12s, box-shadow .12s;
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease;
 }
 
+.bulb-button-primary,
 .bulb-header .bulb-button-primary {
     background: var(--bulb-accent);
+    color: var(--bulb-ink);
+    border: var(--bulb-border);
+    border-radius: var(--bulb-radius);
+    box-shadow: var(--bulb-shadow);
+}
+
+.bulb-button-ghost,
+.bulb-header .bulb-button-ghost {
+    background: var(--cm-surface);
+    color: var(--bulb-ink);
+    border: var(--bulb-border);
+    border-radius: var(--bulb-radius-ghost);
     box-shadow: var(--bulb-shadow-sm);
 }
 
-.bulb-header .bulb-button-ghost {
-    background: var(--bulb-paper);
-    box-shadow: var(--bulb-shadow-none);
-}
-
+.bulb-button-primary:hover,
 .bulb-header .bulb-button-primary:hover {
     background: var(--bulb-accent);
+    color: var(--bulb-ink);
+    border-color: var(--bulb-ink);
+    box-shadow: var(--bulb-shadow-lg);
+    transform: translate(-2px, -2px);
+}
+
+.bulb-button-ghost:hover,
+.bulb-header .bulb-button-ghost:hover {
+    background: var(--bulb-postit);
     color: var(--bulb-ink);
     border-color: var(--bulb-ink);
     box-shadow: var(--bulb-shadow);
     transform: translate(-2px, -2px);
 }
 
-.bulb-header .bulb-button-ghost:hover {
-    background: var(--bulb-postit);
+.bulb-button:active,
+.bulb-header .bulb-button:active,
+.bulb-button-primary:active,
+.bulb-header .bulb-button-primary:active,
+.bulb-button-ghost:active,
+.bulb-header .bulb-button-ghost:active {
     color: var(--bulb-ink);
     border-color: var(--bulb-ink);
-    box-shadow: var(--bulb-shadow-sm);
-    transform: translate(-1px, -1px);
+    box-shadow: 1px 1px 0 var(--bulb-ink);
+    transform: translate(2px, 2px);
 }
 
-.bulb-header .bulb-button:active {
-    color: var(--bulb-ink);
-    border-color: var(--bulb-ink);
-    box-shadow: var(--bulb-shadow-none);
-    transform: translate(1px, 1px);
+.bulb-button:focus-visible,
+.bulb-header .bulb-button:focus-visible {
+    outline: var(--bulb-focus-ring);
+    outline-offset: 3px;
 }
 
 /* ===== Mobile toggle ===== */
@@ -3807,4 +3926,207 @@ a:hover {
         transition: none !important;
         scroll-behavior: auto !important;
     }
+}
+
+/* ============================================================
+   TOPBAR SKETCH COMPONENTS (Client / Admin)
+============================================================ */
+
+/* --- Handdrawn Sketch Role Badge --- */
+.sketch-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    padding: .22rem .65rem;
+    font-family: var(--cm-font-body);
+    font-size: .78rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 125px 10px 20px 185px / 25px 205px 205px 25px;
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    letter-spacing: .2px;
+}
+
+.sketch-role-badge.role-teacher {
+    background-color: #e8f5e9;
+    color: #1b5e20;
+    border-color: var(--cm-ink);
+}
+
+.sketch-role-badge.role-student {
+    background-color: #e3f2fd;
+    color: #0d47a1;
+    border-color: var(--cm-ink);
+}
+
+.sketch-role-badge.role-admin {
+    background-color: #ffebee;
+    color: #b71c1c;
+    border-color: var(--cm-ink);
+}
+
+/* Biến thể role badge trên nền tối của admin-topbar */
+.admin-topbar .sketch-role-badge.role-admin {
+    background-color: #ffcdd2;
+    color: #b71c1c;
+    border-color: #ffffff;
+    box-shadow: 1.5px 1.5px 0 #ffffff;
+}
+
+/* --- Handdrawn Sketch Logout Button --- */
+.btn-sketch-logout {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .35rem;
+    padding: .3rem .75rem;
+    font-family: var(--cm-font-body);
+    font-size: .84rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+    text-decoration: none;
+    background-color: var(--cm-surface);
+    color: var(--cm-ink);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease, border-color .15s ease;
+}
+
+.btn-sketch-logout:hover {
+    transform: translate(-1.5px, -1.5px);
+    box-shadow: 3.5px 3.5px 0 var(--cm-ink);
+    background-color: #fff0f0;
+    color: var(--cm-danger);
+    border-color: var(--cm-ink);
+}
+
+.btn-sketch-logout:active {
+    transform: translate(1.5px, 1.5px);
+    box-shadow: 1px 1px 0 var(--cm-ink);
+    background-color: #ffebee;
+}
+
+.btn-sketch-logout:focus-visible {
+    outline: 3px solid var(--cm-blue-pen);
+    outline-offset: 2px;
+}
+
+/* Biến thể logout trên Admin Topbar (nền tối) */
+.admin-topbar .btn-sketch-logout {
+    background-color: #262626;
+    color: #ffffff;
+    border: 1.5px solid #ffffff;
+    box-shadow: 2px 2px 0 #ffffff;
+}
+
+.admin-topbar .btn-sketch-logout:hover {
+    transform: translate(-1.5px, -1.5px);
+    box-shadow: 3.5px 3.5px 0 #ffffff;
+    background-color: #3b1d1d;
+    color: #ff9999;
+    border-color: #ffffff;
+}
+
+.admin-topbar .btn-sketch-logout:active {
+    transform: translate(1.5px, 1.5px);
+    box-shadow: 1px 1px 0 #ffffff;
+}
+
+/* Mobile responsive fine-tuning for topbar */
+@media (max-width: 575.98px) {
+    .client-topbar,
+    .admin-topbar {
+        padding: .4rem .65rem;
+    }
+    .client-topbar .navbar-brand,
+    .admin-topbar .navbar-brand {
+        font-size: 1.25rem !important;
+    }
+    .client-topbar .navbar-brand img {
+        height: 26px !important;
+    }
+    .btn-sketch-logout {
+        padding: .26rem .55rem;
+        font-size: .8rem;
+    }
+    .sketch-role-badge {
+        padding: .18rem .48rem;
+        font-size: .74rem;
+    }
+}
+
+/* ============================================================
+   MOBILE TOP DROPDOWN BAR (Thay thế Offcanvas toàn màn hình)
+============================================================ */
+.client-mobile-dropdown {
+    background-color: var(--cm-surface);
+    border-bottom: 2.5px solid var(--cm-ink);
+    box-shadow: 0 4px 0 var(--cm-ink);
+    transition: height .25s ease;
+}
+
+.client-mobile-dropdown .nav-link {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .65rem .85rem;
+    font-family: var(--cm-font-body);
+    font-weight: 600;
+    font-size: .95rem;
+    color: var(--cm-ink) !important;
+    border-radius: var(--cm-soft-radius);
+    border: 1.5px solid transparent;
+    transition: all .15s ease;
+}
+
+.client-mobile-dropdown .nav-link:hover,
+.client-mobile-dropdown .nav-link.active {
+    background-color: var(--cm-postit);
+    border-color: var(--cm-ink);
+    transform: translateX(4px);
+    color: var(--cm-ink) !important;
+}
+
+.client-mobile-dropdown .nav-link i {
+    font-size: 1.15rem;
+    color: var(--cm-blue-pen);
+}
+
+.admin-mobile-dropdown {
+    background-color: var(--cm-ink);
+    border-bottom: 3px solid var(--cm-accent);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, .4);
+    transition: height .25s ease;
+}
+
+.admin-mobile-dropdown .nav-link {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .65rem .85rem;
+    font-family: var(--cm-font-body);
+    font-weight: 600;
+    font-size: .95rem;
+    color: rgba(255, 255, 255, .9) !important;
+    border-radius: var(--cm-soft-radius);
+    border: 1.5px solid transparent;
+    transition: all .15s ease;
+}
+
+.admin-mobile-dropdown .nav-link:hover,
+.admin-mobile-dropdown .nav-link.active {
+    background-color: #262626;
+    border-color: rgba(255, 255, 255, .3);
+    color: var(--cm-accent) !important;
+    transform: translateX(4px);
+}
+
+.admin-mobile-dropdown .nav-link i {
+    font-size: 1.15rem;
+    color: var(--cm-accent);
 }
