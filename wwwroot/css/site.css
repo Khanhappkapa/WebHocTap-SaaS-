@@ -298,7 +298,6 @@ body {
    ============================================= */
 
 /* --- Topbar chung --- */
-.client-topbar,
 .admin-topbar {
     background: var(--cm-ink) !important;
     border-bottom: 3px solid var(--cm-accent);
@@ -306,12 +305,26 @@ body {
     min-height: 56px;
 }
 
-.client-topbar .navbar-brand,
+.client-topbar {
+    background: #ffffff !important;
+    border-bottom: 2px solid var(--cm-ink);
+    padding: .6rem 1.2rem;
+    min-height: 56px;
+}
+
 .admin-topbar .navbar-brand {
     font-family: var(--cm-font-hand);
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--cm-surface) !important;
+    letter-spacing: .5px;
+}
+
+.client-topbar .navbar-brand {
+    font-family: var(--cm-font-hand);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cm-ink) !important;
     letter-spacing: .5px;
 }
 
@@ -324,13 +337,19 @@ body {
 /* --- Sidebar chung --- */
 .sidebar {
     width: 250px;
-    min-height: calc(100vh - 56px);
+    height: calc(100vh - 56px);
+    position: -webkit-sticky;
+    position: sticky;
+    top: 56px;
+    overflow-y: auto;
     flex-shrink: 0;
     padding-top: .5rem;
+    z-index: 1020;
 }
 
 .client-sidebar {
-    background: #2c2420 !important;
+    background: #ffffff !important;
+    border-right: 2px solid var(--cm-ink);
 }
 
 .admin-sidebar {
@@ -342,10 +361,18 @@ body {
     margin-bottom: .5rem;
 }
 
+.client-sidebar .sidebar-header {
+    border-bottom: 1px solid var(--cm-ink);
+}
+
 .sidebar .sidebar-header h5 {
     font-family: var(--cm-font-hand);
     font-weight: 700;
     font-size: 1.15rem;
+}
+
+.client-sidebar .sidebar-header h5 {
+    color: var(--cm-ink) !important;
 }
 
 .sidebar .sidebar-link {
@@ -358,17 +385,39 @@ body {
     font-size: .92rem;
 }
 
+.client-sidebar .sidebar-link {
+    color: var(--cm-ink) !important;
+    font-weight: 600;
+    border: 2px solid transparent;
+}
+
 .sidebar .sidebar-link:hover {
     background: rgba(255, 255, 255, .12);
     color: #fff;
     transform: translateX(3px);
 }
 
+.client-sidebar .sidebar-link:hover {
+    background: var(--cm-bg) !important;
+    color: var(--cm-primary) !important;
+    border: 2px solid var(--cm-ink);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transform: translateX(0);
+}
+
 .sidebar .sidebar-link.active,
 .sidebar .sidebar-link:focus {
-    background: var(--cm-accent);
-    color: var(--cm-ink);
+    background: var(--cm-accent) !important;
+    color: var(--cm-ink) !important;
     font-weight: 700;
+}
+
+.client-sidebar .sidebar-link.active,
+.client-sidebar .sidebar-link:focus {
+    background: var(--cm-accent) !important;
+    color: var(--cm-ink) !important;
+    border: 2px solid var(--cm-ink);
+    box-shadow: 2px 2px 0 var(--cm-ink);
 }
 
 .sidebar .sidebar-link i {

@@ -4,64 +4,81 @@
     ViewData["Title"] = isEdit ? "Sửa buổi học" : "Thêm buổi học";
 }
 
-<div class="container-fluid">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow border-0 mt-4">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center p-3">
-                    <h4 class="mb-0">@(isEdit ? "✏️ Sửa buổi học" : "➕ Thêm buổi học") — @ViewBag.CourseTitle</h4>
-                    <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
-                       class="btn btn-light btn-sm">Quay lại</a>
-                </div>
-                <div class="card-body p-4">
-                    <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
-                        @if (isEdit)
-                        {
-                            <input type="hidden" asp-for="Id" />
-                        }
-                        <input type="hidden" asp-for="CourseId" />
+<div class="container pb-5">
+    <div class="row pt-4 justify-content-center">
+        <div class="col-md-9 col-lg-7">
+            
+            <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@Model.CourseId"
+               class="breadcrumb-back d-inline-flex align-items-center mb-3 text-decoration-none fw-bold" 
+               style="color: var(--cm-primary); border-bottom: 2px solid transparent;">
+                <i class="bi bi-arrow-left me-2"></i> Quay lại chi tiết khóa học
+            </a>
 
-                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <div class="sketch-card p-4 p-md-5 mb-4 position-relative" 
+                 style="background-color: #fffaf0; border: 2px solid var(--cm-ink); border-radius: var(--cm-hand-radius); box-shadow: 6px 6px 0 var(--cm-ink);">
+                
+                <!-- Kẹp ghim trang trí (ẩn trên điện thoại) -->
+                <img src="~/asset/images/paperclip.svg" alt="Kẹp ghim" class="position-absolute d-none d-md-block" style="top: -18px; right: 20px; height: 42px; z-index: 5; transform: rotate(15deg);" />
 
-                        <div class="mb-3">
-                            <label asp-for="Title" class="form-label fw-bold"></label>
-                            <input asp-for="Title" class="form-control" placeholder="VD: Buổi 1 - Giới thiệu" />
-                            <span asp-validation-for="Title" class="text-danger small"></span>
+                <h2 class="mb-4" style="font-family: var(--cm-font-hand); color: var(--cm-ink); font-weight: 700; text-decoration: underline wavy var(--cm-accent); text-underline-offset: 6px;">
+                    @(isEdit ? "Sửa buổi học" : "Thêm buổi học") — <span style="color: var(--cm-primary);">@ViewBag.CourseTitle</span>
+                </h2>
+
+                <form asp-action="@(isEdit ? "Edit" : "Create")" method="post">
+                    @if (isEdit)
+                    {
+                        <input type="hidden" asp-for="Id" />
+                    }
+                    <input type="hidden" asp-for="CourseId" />
+
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" style="border: 2px solid var(--cm-ink); border-radius: var(--cm-soft-radius);"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Title" class="form-label fw-bold" style="color: var(--cm-ink);">Tiêu đề</label>
+                        <input asp-for="Title" class="form-control sketch-input" placeholder="VD: Buổi 1 - Giới thiệu" />
+                        <span asp-validation-for="Title" class="d-block text-danger mt-1 fw-bold fs-sm"></span>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3 mb-md-0">
+                            <label asp-for="StartTime" class="form-label fw-bold" style="color: var(--cm-ink);">Bắt đầu</label>
+                            <input asp-for="StartTime" type="datetime-local" class="form-control sketch-input" />
+                            <span asp-validation-for="StartTime" class="d-block text-danger mt-1 fw-bold fs-sm"></span>
                         </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="StartTime" class="form-label fw-bold"></label>
-                                <input asp-for="StartTime" type="datetime-local" class="form-control" />
-                                <span asp-validation-for="StartTime" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="EndTime" class="form-label fw-bold"></label>
-                                <input asp-for="EndTime" type="datetime-local" class="form-control" />
-                                <span asp-validation-for="EndTime" class="text-danger small"></span>
-                            </div>
+                        <div class="col-md-6">
+                            <label asp-for="EndTime" class="form-label fw-bold" style="color: var(--cm-ink);">Kết thúc</label>
+                            <input asp-for="EndTime" type="datetime-local" class="form-control sketch-input" />
+                            <span asp-validation-for="EndTime" class="d-block text-danger mt-1 fw-bold fs-sm"></span>
                         </div>
+                    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="MeetingUrl" class="form-label fw-bold"></label>
-                            <input asp-for="MeetingUrl" class="form-control" placeholder="https://meet.google.com/..." />
-                            <span asp-validation-for="MeetingUrl" class="text-danger small"></span>
-                        </div>
+                    <div class="mb-4">
+                        <label asp-for="MeetingUrl" class="form-label fw-bold" style="color: var(--cm-ink);">Link họp (Zoom/Meet)</label>
+                        <input asp-for="MeetingUrl" class="form-control sketch-input" placeholder="https://meet.google.com/..." />
+                        <span asp-validation-for="MeetingUrl" class="d-block text-danger mt-1 fw-bold fs-sm"></span>
+                    </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-bold"></label>
-                            <textarea asp-for="Description" class="form-control" rows="4" placeholder="Nội dung buổi học..."></textarea>
-                            <span asp-validation-for="Description" class="text-danger small"></span>
-                        </div>
+                    <div class="mb-4">
+                        <label asp-for="Description" class="form-label fw-bold" style="color: var(--cm-ink);">Mô tả</label>
+                        <textarea asp-for="Description" class="form-control sketch-input" rows="4" placeholder="Nội dung buổi học..."></textarea>
+                        <span asp-validation-for="Description" class="d-block text-danger mt-1 fw-bold fs-sm"></span>
+                    </div>
 
-                        <div class="mt-4 text-end">
-                            <button type="submit" class="btn btn-primary px-4">
-                                @(isEdit ? "<i class=\"bi bi-save\"></i> Lưu thay đổi" : "<i class=\"bi bi-plus-circle\"></i> Tạo buổi học")
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="mt-4 text-end">
+                        <button type="submit" class="btn btn-cta px-4 fw-bold">
+                            @if (isEdit)
+                            {
+                                <i class="bi bi-save me-1"></i> <span>Lưu thay đổi</span>
+                            }
+                            else
+                            {
+                                <i class="bi bi-plus-circle me-1"></i> <span>Tạo buổi học</span>
+                            }
+                        </button>
+                    </div>
+                </form>
             </div>
+
         </div>
     </div>
 </div>

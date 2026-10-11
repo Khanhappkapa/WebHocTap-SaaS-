@@ -28,21 +28,24 @@
 </head>
 <body>
 
-    <header>
-        <nav class="navbar navbar-dark client-topbar px-3">
+    <header class="sticky-top z-3">
+        <nav class="navbar navbar-light client-topbar px-3">
             <button class="navbar-toggler d-lg-none" type="button"
                     data-bs-toggle="offcanvas" data-bs-target="#clientSidebar"
                     aria-controls="clientSidebar" aria-label="Mở menu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <span class="navbar-brand mb-0 h1"><i class="bi bi-mortarboard-fill"></i> Bulb.edu</span>
+            <a class="navbar-brand mb-0 h1 d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/asset/images/logo.svg" alt="Bulb Logo" style="height: 32px;" class="me-2" />
+                <span class="mt-1">Bulb.edu</span>
+            </a>
             <div class="d-flex align-items-center">
                 @* CHECKPOINT: Hiển thị FullName thật + badge role (Teacher=xanh lá, Student=xanh dương) *@
-                <span class="text-light me-2"><i class="bi bi-person-circle"></i> @currentUser?.FullName</span>
-                <span class="badge @roleBadge me-3">@currentUser?.UserRole</span>
+                <span class="text-dark fw-bold me-2"><i class="bi bi-person-circle"></i> @currentUser?.FullName</span>
+                <span class="badge @roleBadge me-3 border-dark text-dark">@currentUser?.UserRole</span>
                 @* CHECKPOINT: Logout BẮT BUỘC form POST — chống CSRF *@
-                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="">
-                    <button type="submit" class="btn btn-outline-light btn-sm">Đăng xuất</button>
+                <form asp-controller="Account" asp-action="Logout" method="post" asp-area="" class="m-0">
+                    <button type="submit" class="btn btn-outline-dark btn-sm fw-bold shadow-sm" style="border: 2px solid var(--cm-ink);">Đăng xuất</button>
                 </form>
             </div>
         </nav>
@@ -52,7 +55,7 @@
         @* Sidebar cho Desktop *@
         <nav class="sidebar client-sidebar d-none d-lg-flex flex-column" id="clientSidebarDesktop">
             <div class="sidebar-header p-3">
-                <h5 class="text-white mb-0"><i class="bi bi-list-ul"></i> Menu</h5>
+                <h5 class="text-dark fw-bold mb-0"><i class="bi bi-list-ul"></i> Menu</h5>
             </div>
             <ul class="nav flex-column px-2">
                 <li class="nav-item">
@@ -90,12 +93,10 @@
         </nav>
 
         @* Offcanvas Sidebar cho Mobile *@
-        <div class="offcanvas offcanvas-start client-sidebar" tabindex="-1"
-             id="clientSidebar" aria-labelledby="clientSidebarLabel"
-             style="width: 250px;">
-            <div class="offcanvas-header">
-                <h5 class="text-white" id="clientSidebarLabel"><i class="bi bi-list-ul"></i> Menu</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Đóng"></button>
+        <div class="offcanvas offcanvas-start client-sidebar" tabindex="-1" id="clientSidebar" aria-labelledby="clientSidebarLabel">
+            <div class="offcanvas-header sidebar-header">
+                <h5 class="offcanvas-title text-dark fw-bold" id="clientSidebarLabel"><i class="bi bi-list-ul"></i> Menu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Đóng"></button>
             </div>
             <div class="offcanvas-body p-0">
                 <ul class="nav flex-column px-2">
