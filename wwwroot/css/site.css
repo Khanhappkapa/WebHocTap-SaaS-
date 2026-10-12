@@ -9,6 +9,7 @@
     src: url('../asset/Fz-Caveat-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -16,18 +17,37 @@
     src: url('../asset/Fz-Caveat-Regular.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
+    font-display: swap;
 }
 
-/* Faux bold simulation for FZ Caveat since we only have one regular TTF file */
-h1,
-h2,
-h3,
-h4,
-.fw-bold,
-.bold,
-b,
-strong {
-    -webkit-text-stroke: 0.5px currentColor;
+/* ============================================================
+   FZ CAVEAT: FAUX BOLD SIMULATION
+   Giả lập độ dày tự nhiên (bold) cho font viết tay FZ Caveat
+   Áp dụng chuẩn xác cho các phần tử FZ Caveat có thuộc tính đậm (700/bold)
+   KHÔNG làm nhòe nét chữ chuẩn của font Be Vietnam Pro
+============================================================ */
+.handwritten,
+.handwritten b,
+.handwritten strong,
+.handwritten .fw-bold,
+.bulb-wordmark,
+.bulb-footer-brand,
+.brand-text,
+.sidebar-title-badge,
+.dash-user-name,
+.assignment-eyebrow,
+.assignment-score-number,
+.assignment-saved-comment,
+.assignment-ungraded-count,
+.assignment-title-prompt,
+.course-detail .section-title h2,
+.sketch-sidebar-note .sketch-note-title,
+.error-msg,
+.font-hand-bold,
+[style*="--cm-font-hand"],
+[style*="FZ Caveat"] {
+    -webkit-text-stroke: 0.45px currentColor;
+    paint-order: stroke fill;
 }
 
 /* ============================================================
@@ -1514,7 +1534,7 @@ a:hover {
 
     /* Typography */
     --bulb-font-body: "Be Vietnam Pro", system-ui, sans-serif;
-    --bulb-font-hand: "Caveat", cursive;
+    --bulb-font-hand: var(--cm-font-hand, "FZ Caveat", cursive);
     --bulb-nav-font-size: 15px;
     --bulb-brand-font-size: 27px;
     --bulb-footer-brand-size: 32px;
@@ -1936,7 +1956,7 @@ a:hover {
 
     /* Typography */
     --dash-font-body: "Be Vietnam Pro", system-ui, sans-serif;
-    --dash-font-hand: "Caveat", cursive;
+    --dash-font-hand: var(--cm-font-hand, "FZ Caveat", cursive);
     --dash-h1-size: clamp(1.5rem, 2.2vw, 2rem);
     --dash-name-size: clamp(1.8rem, 2.6vw, 2.4rem);
     --dash-h2-size: 24px;
@@ -2654,7 +2674,7 @@ a:hover {
 .course-detail .section-title h2 {
     margin: 0;
     color: var(--cm-text);
-    font: 700 34px/1.2 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 34px; line-height: 1.2;
 }
 
 .detail-underline {
@@ -3283,7 +3303,7 @@ a:hover {
     display: inline-block;
     margin: .65rem 0 0;
     color: var(--cm-accent);
-    font: 700 30px/1.3 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 30px; line-height: 1.3;
     transform: rotate(-1deg);
 }
 
@@ -3397,7 +3417,7 @@ a:hover {
 .assignment-eyebrow {
     margin: 0 0 .25rem;
     color: var(--cm-primary);
-    font: 700 28px/1.2 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 28px; line-height: 1.2;
 }
 
 .assignment-meta {
@@ -3656,7 +3676,7 @@ a:hover {
 
 .assignment-score-number {
     color: var(--cm-accent);
-    font: 700 112px/1 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 112px; line-height: 1;
 }
 
 .assignment-score-max {
@@ -3677,7 +3697,7 @@ a:hover {
 .assignment-saved-comment {
     margin: 0;
     color: var(--cm-primary);
-    font: 700 32px/1.45 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 32px; line-height: 1.45;
     transform: rotate(-1deg);
 }
 
@@ -3716,7 +3736,7 @@ a:hover {
 
 .assignment-ungraded-count {
     color: var(--cm-accent);
-    font: 700 48px/1 "Caveat", cursive;
+    font-family: var(--cm-font-hand); font-weight: 700; font-size: 48px; line-height: 1;
 }
 
 .assignment-grading-heading {

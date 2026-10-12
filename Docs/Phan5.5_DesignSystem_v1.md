@@ -1,9 +1,17 @@
 # PHẦN 5.5: DESIGN SYSTEM v1 — NỀN MÓNG CSS & MIGRATE GIAO DIỆN
 
 > **Dự án**: Website SaaS Quản Lý Lớp Học Trực Tuyến  
-> **Ngày tạo**: 02/10/2026  
-> **Phần trước**: Phần 5 (Sessions & Materials)  
-> **Phần sau**: Phần 6 (Assignments & Submissions)
+> **Ngày tạo**: 02/10/2026 (Cập nhật chuẩn hóa: 12/10/2026)  
+> **Phần trước**: [Phần 5 (Sessions & Materials)](Phan5_Sessions_Materials.md)  
+> **Phần sau**: [Phần 6 (Assignments & Submissions)](Phan6_Assignments_Submissions.md)  
+> **Nguồn sự thật hiện tại (SSOT)**: [Docs/Design_Spec.md](Design_Spec.md) (Design Spec v2 — Sketch Học Đường 2 Tông)
+
+---
+
+> [!NOTE]
+> **VAI TRÒ CỦA TÀI LIỆU NÀY**:  
+> File này ghi lại mốc lịch sử **Phase 5.5**: Thiết lập nền móng CSS token trong `site.css` và chiến dịch quét sạch Unicode Emoji sang Bootstrap Icons trên toàn bộ ~20 view từ P2–P5.  
+> Hiện tại, hệ thống đã nâng cấp lên **Design System v2 (Sketch Học Đường 2 Tông)** được quy định chi tiết tại **[Design_Spec.md](Design_Spec.md)**. Toàn bộ 15 token v1 trong file này được giữ nguyên tên thông qua cơ chế **Alias v1 → v2** trong `site.css` để đảm bảo DRY và giúp các view P2–P5 tự động tương thích giao diện mới mà không bị gãy vỡ.
 
 ---
 
@@ -16,13 +24,16 @@ Từ P2–P5, giao diện dùng **màu hardcode** rải rác và **emoji Unicode
 | **A. Đặt nền** | Khai báo 15 token trong `:root` + đúc 6 class component + thêm font Be Vietnam Pro + Bootstrap Icons | `site.css` + 3 layout `<head>` |
 | **B. Quét migrate** | Thay emoji → Bootstrap Icons + hardcode hex → `var(--cm-...)` ở **tất cả view P2–P5** | ~20 file `.cshtml` |
 
-> ⚠️ Từ **P6 trở đi**, mọi view mới sinh ra **đã dùng sẵn class** → không phải migrate nữa.
+> ⚠️ Từ **P6 trở đi**, mọi view mới sinh ra **đã dùng sẵn class** → không phải migrate emoji nữa.
 
 ---
 
-## 1. Bảng Design Token (`:root` trong `site.css`)
+## 1. Bảng Design Token v1 & Cơ Chế Ánh Xạ Sang v2
 
-| Token | Giá trị | Vai trò |
+### 1.1. Bảng 15 Token Gốc (v1)
+Được định nghĩa ban đầu ở Phase 5.5 để chuẩn hóa màu sắc và khoảng cách:
+
+| Token | Giá trị gốc (v1) | Vai trò ban đầu |
 |---|---|---|
 | `--cm-primary` | `#0d47a1` | Nút chính, sidebar Client, link |
 | `--cm-primary-dark` | `#1a237e` | Gradient navbar Public, footer |
@@ -40,10 +51,34 @@ Từ P2–P5, giao diện dùng **màu hardcode** rải rác và **emoji Unicode
 | `--cm-shadow` | `0 .25rem .75rem rgba(...)` | Bóng card |
 | `--cm-shadow-hover` | `0 .5rem 1rem rgba(...)` | Bóng khi hover |
 
+### 1.2. Cơ chế Alias v1 → v2 (Đang áp dụng trong `site.css`)
+Khi nâng cấp lên **Design Spec v2 (Sketch Học Đường 2 Tông)**, để không phải sửa lại hàng chục file `.cshtml` cũ, 15 token v1 được ánh xạ trực tiếp sang token v2:
+
+| Tên v1 | Ánh xạ sang Token v2 | Lý do & Hiệu ứng |
+|---|---|---|
+| `--cm-text` | `var(--cm-ink)` (`#2d2d2d`) | Màu nét chì đậm pencil black |
+| `--cm-bg` | `var(--cm-paper)` (`#fdfbf7`) | Nền giấy ấm áp |
+| `--cm-radius` | `var(--cm-soft-radius)` (`.5rem`) | Bo góc mềm phác thảo |
+| `--cm-primary` | `var(--cm-blue-pen)` (`#2d5da1`) | Mực bút bi xanh cho link và điểm nhấn Client |
+| `--cm-primary-dark` | `var(--cm-blue-pen-dark)` (`#1f4275`) | Màu xanh mực đậm |
+| `--cm-primary-light` | `var(--cm-blue-pen)` | Xanh bút bi |
+| `--cm-admin-dark` | `#1f1f1f` | Nền tối sổ tay Admin |
+| `--cm-admin-light` | `#2d2d2d` | Nét mực tối Admin |
+| `--cm-accent` | `var(--cm-accent)` (`#ff4d4d`) | Bút dạ đỏ chấm bài / điểm nhấn |
+| `--cm-surface` | `var(--cm-surface)` (`#ffffff`) | Nền trắng thẻ bài tập/card |
+| `--cm-muted` | `var(--cm-muted)` (`#6b6b6b`) | Chữ phụ xám nhẹ |
+| `--cm-success` | `var(--cm-success)` (`#2e7d32`) | Xanh lá bài nộp / published |
+| `--cm-danger` | `var(--cm-danger)` (`#c62828`) | Đỏ cảnh báo / lỗi |
+| `--cm-shadow` | `var(--cm-sticker-sm)` (`2px 2px 0 var(--cm-ink)`) | Bóng sticker vẽ tay 2px |
+| `--cm-shadow-hover` | `var(--cm-sticker)` (`4px 4px 0 var(--cm-ink)`) | Bóng sticker nổi 4px khi hover |
+
+> Chi tiết toàn bộ hệ thống token v2 đầy đủ xem tại [Docs/Design_Spec.md](Design_Spec.md).
+
 ---
 
-## 2. Kho Component (6 class)
+## 2. Kho Component (Kế thừa & mở rộng)
 
+### 2.1. 6 Class Component nền móng từ P5.5:
 | Component | Class | Dùng ở |
 |---|---|---|
 | Card khóa học | `.card-course` | Catalog, MyCourses, Details |
@@ -53,21 +88,47 @@ Từ P2–P5, giao diện dùng **màu hardcode** rải rác và **emoji Unicode
 | Empty state | `.empty-state` + `i` | Catalog rỗng, MyCourses trống |
 | Khung form | `.form-page` | Login, Register, Tạo/Sửa |
 
+### 2.2. Các Component phác thảo nâng cấp ở v2 (Xem chi tiết tại Design_Spec.md):
+- `.sketch-role-badge`: Huy hiệu phân quyền vẽ tay cho Teacher / Student / Admin (đạt chuẩn tương phản AAA).
+- `.btn-sketch-logout`: Nút đăng xuất sketch hữu cơ chống CSRF.
+- `.client-mobile-dropdown` / `.admin-mobile-dropdown`: Menu thả từ trên xuống cho mobile.
+- `.sidebar-title-badge` & `.sidebar-link`: Thanh điều hướng desktop kiểu sổ tay kèm active Post-it note.
+- `.sketch-sidebar-note`: Thẻ ghi chú dán ghim đỏ (`.sketch-note-pin`) ở chân sidebar.
+- `.bulb-button` (`.bulb-button-primary` / `.bulb-button-ghost`): Cặp nút Đăng ký & Đăng nhập sketch trên Header.
+
 ---
 
 ## 3. Font & Icon
 
+Hệ thống sử dụng kết hợp 2 font và 1 thư viện icon:
+
 ```html
-<!-- Thêm vào <head> CẢ 3 layout -->
-<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- 1. Font chữ nội dung: Be Vietnam Pro (Google Fonts) -->
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<!-- 2. Hệ thống icon: Bootstrap Icons 1.11.3 (CDN) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 ```
 
-Bootstrap Icons là **CSS riêng cho icon**, không xung đột với Bootstrap 5 đã có trong `wwwroot/lib`.
+```css
+/* 3. Font viết tay phác thảo: FZ Caveat (Khai báo nội bộ trong site.css) */
+@font-face {
+    font-family: 'FZ Caveat';
+    src: url('../asset/Fz-Caveat-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+```
+
+- **Be Vietnam Pro (`--cm-font-body`)**: Dùng cho toàn bộ văn bản nội dung, form input, bảng dữ liệu cần độ đọc chuẩn xác và thẳng hàng.
+- **FZ Caveat (`--cm-font-hand`)**: Dùng cho logo `Bulb.edu`, tiêu đề H1/H2, Mục lục, điểm số, lời phê và các mẩu giấy ghi chú vẽ tay.
+- **Bootstrap Icons**: Thay thế toàn bộ Unicode emoji, tương thích mượt mà với Bootstrap 5 nội bộ.
 
 ---
 
 ## 4. Bảng Emoji → Icon đã thay
+
+Bảng tra cứu các emoji được thay thế bằng Bootstrap Icons ở Phase 5.5 (chuẩn xác 100%):
 
 | Emoji | Icon Bootstrap | Ngữ cảnh |
 |---|---|---|
@@ -104,7 +165,7 @@ Bootstrap Icons là **CSS riêng cho icon**, không xung đột với Bootstrap 
 
 ---
 
-## 5. Danh sách file tạo/sửa
+## 5. Danh sách file tạo/sửa trong Phase 5.5
 
 | STT | File | Thao tác | Mô tả |
 |---|---|---|---|
@@ -132,10 +193,8 @@ Bootstrap Icons là **CSS riêng cho icon**, không xung đột với Bootstrap 
 
 ## 6. Kết quả nghiệm thu
 
-- [x] `:root` có đủ 15 token; `body` dùng `var(--cm-bg/text)` + font Be Vietnam Pro
-- [x] 6 class component tồn tại trong `site.css`
-- [x] 3 layout đều có link font + bootstrap-icons
-- [x] Grep emoji (`📚📝🎥🏠📊🚀💰🔐`) trong `*.cshtml` = **0 kết quả**
-- [x] Dashboard cards dùng `.card-stat` + `.stat-icon`
-- [x] Landing CTA dùng `.btn-cta`
-- [x] `dotnet build` = **Build succeeded**
+- [x] `:root` có đủ 15 token alias tương thích ngược v1 + hệ thống token v2 sketch
+- [x] 6 class component cơ bản hoạt động chuẩn xác qua cơ chế biến CSS
+- [x] 3 layout đều tích hợp đầy đủ font Be Vietnam Pro, FZ Caveat và Bootstrap Icons
+- [x] Toàn bộ emoji Unicode (`📚📝🎥🏠📊🚀💰🔐`) trong các view P2–P5 đã được dọn sạch về 0
+- [x] `dotnet build` đạt **Build succeeded** (0 lỗi, 0 cảnh báo)
