@@ -1,0 +1,134 @@
+@* ============================================================
+    File: Areas/Client/Views/Profile/Index.cshtml
+    Mô tả: Hồ sơ của tôi (P7) - Chuẩn theo mockup Client — Hồ sơ — Desktop.png & Mobile.png
+    Áp dụng 16 mẫu nét: 2 Container phác nét (#sketch-clean) + Nút CTA đỏ rực (#ff4d4f) + Font viết tay FZ Caveat
+============================================================ *@
+@model WebHocTap_SaaS_.Models.ViewModels.ProfileViewModel
+@{
+    ViewData["Title"] = "Hồ sơ của tôi";
+    var hasPasswordMismatch = ViewData["PasswordMismatch"] is true;
+}
+
+<div class="container-fluid px-0 px-md-3 py-3" style="max-width: 1100px;">
+    @* ── Back Link ── *@
+    <div class="mb-3">
+        <a asp-area="Client" asp-controller="Dashboard" asp-action="Index"
+           class="text-decoration-none fw-medium d-inline-flex align-items-center"
+           style="color: var(--cm-primary, #2563eb); font-size: 0.95rem;">
+            ← Về bảng điều khiển
+        </a>
+    </div>
+
+    @* ── Header Title & Flash Toast (Desktop right-aligned) ── *@
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <h1 class="h2 fw-bold text-dark mb-0" style="font-family: var(--cm-font-body);">Hồ sơ của tôi</h1>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="sketch-toast-badge">
+                <i class="bi bi-check-circle text-success fs-5"></i>
+                <span>@TempData["Success"]</span>
+            </div>
+        }
+        else if (TempData["Error"] != null)
+        {
+            <div class="sketch-toast-badge text-danger" style="border-color: var(--cm-danger, #ef4444);">
+                <i class="bi bi-exclamation-circle text-danger fs-5"></i>
+                <span>@TempData["Error"]</span>
+            </div>
+        }
+    </div>
+
+    @* ── 2 Columns Layout (Desktop) / Stacking (Mobile) ── *@
+    <div class="row g-4">
+        @* ── Box 1: Thông tin cá nhân ── *@
+        <div class="col-lg-6">
+            <div class="sketch-surface sketch-profile-box">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content sketch-profile-content">
+                    <h2 class="h4 fw-bold mb-3" style="font-family: var(--cm-font-body);">Thông tin cá nhân</h2>
+                    <hr class="border-top my-3" style="border-color: var(--cm-line, #e4e4e7);" />
+
+                    @* Avatar + Role *@
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <div class="sketch-avatar-circle-lg">
+                            @Model.Initials
+                        </div>
+                        <div>
+                            <div class="text-muted small mb-1 fw-bold">Vai trò</div>
+                            <span class="sketch-pill @(Model.UserRole == "Teacher" ? "sketch-pill-teacher" : (Model.UserRole == "Admin" ? "sketch-pill-admin" : "sketch-pill-student"))">
+                                @(Model.UserRole == "Teacher" ? "Giảng viên" : (Model.UserRole == "Admin" ? "Quản trị viên" : "Học viên"))
+                            </span>
+                        </div>
+                    </div>
+
+                    @* Form Cập nhật họ tên *@
+                    <form asp-area="Client" asp-controller="Profile" asp-action="UpdateProfile" method="post">
+                        <div class="mb-3">
+                            <label asp-for="FullName" class="form-label fw-bold small text-dark">Họ tên</label>
+                            <input asp-for="FullName" class="form-control sketch-filter-input w-100" />
+                            <span asp-validation-for="FullName" class="sketch-hand-error"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-dark">Email</label>
+                            <div class="position-relative">
+                                <input type="text" class="form-control sketch-filter-input sketch-readonly-input w-100 pe-5"
+                                       value="@Model.Email" readonly disabled />
+                                <i class="bi bi-lock text-muted position-absolute" style="right: 14px; top: 50%; transform: translateY(-50%); font-size: 1.15rem;"></i>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-sketch-cta-red">
+                            Lưu thay đổi
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        @* ── Box 2: Đổi mật khẩu ── *@
+        <div class="col-lg-6">
+            <div class="sketch-surface sketch-profile-box">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content sketch-profile-content">
+                    <h2 class="h4 fw-bold mb-3" style="font-family: var(--cm-font-body);">Đổi mật khẩu</h2>
+                    <hr class="border-top my-3" style="border-color: var(--cm-line, #e4e4e7);" />
+
+                    <form asp-area="Client" asp-controller="Profile" asp-action="ChangePassword" method="post">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-dark">Mật khẩu hiện tại</label>
+                            <input type="password" name="CurrentPassword" class="form-control sketch-filter-input w-100"
+                                   placeholder="Nhập mật khẩu hiện tại" required />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-dark">Mật khẩu mới</label>
+                            <input type="password" name="NewPassword" class="form-control sketch-filter-input w-100"
+                                   placeholder="Nhập mật khẩu mới" required minlength="6" />
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-dark">Nhập lại mật khẩu mới</label>
+                            <input type="password" name="ConfirmNewPassword"
+                                   class="form-control sketch-filter-input w-100 @(hasPasswordMismatch ? "border-danger" : "")"
+                                   placeholder="Nhập lại mật khẩu mới" required minlength="6" />
+                            @if (hasPasswordMismatch)
+                            {
+                                <span class="sketch-hand-error">Mật khẩu nhập lại không khớp</span>
+                            }
+                        </div>
+
+                        <button type="submit" class="btn btn-sketch-action px-4 py-2">
+                            Đổi mật khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

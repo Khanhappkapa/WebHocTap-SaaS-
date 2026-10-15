@@ -2714,6 +2714,42 @@ a:hover {
     transform: none;
 }
 
+
+/* ============================================================
+   SKETCH ICONS (Streamline Freehand SVG: Date & Grid)
+============================================================ */
+.sketch-icon-img {
+    display: inline-block;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+.sketch-icon-sm {
+    display: inline-block;
+    vertical-align: -2px;
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.sketch-icon-xs {
+    display: inline-block;
+    vertical-align: -2px;
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+img.detail-row-icon,
+.detail-row-icon.sketch-icon-img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+    align-self: center;
+}
+
 .detail-row-icon {
     flex: 0 0 auto;
     color: var(--cm-text);
@@ -4149,4 +4185,1496 @@ a:hover {
 .admin-mobile-dropdown .nav-link i {
     font-size: 1.15rem;
     color: var(--cm-accent);
+}
+
+
+/* ============================================================
+   PHẦN 5.6: THƯ VIỆN COMPONENT SKETCH MỞ RỘNG (16 MẪU SVG DÙNG CHUNG)
+   Gồm: 4 Box + 4 Bar + 4 Container + 4 Button
+   HTML/CSS thuần, inline SVG symbols, Acme tokens
+============================================================ */
+/* Acme V2 tokens, Bootstrap 5, Icons và font phải đã có. */
+
+.sketch-definitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.sketch-board {
+  max-width: 1824px;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3.5vw, 4rem);
+  background: var(--cm-bg);
+  color: var(--cm-text);
+  font: 16px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.sketch-board,
+.sketch-board *,
+.sketch-surface,
+.sketch-surface * {
+  box-sizing: border-box;
+}
+
+.sketch-board-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--cm-line);
+}
+
+.sketch-board-header > div:first-child {
+  flex: 1 1 600px;
+}
+
+.sketch-eyebrow {
+  margin: 0 0 .25rem;
+  color: var(--cm-primary);
+  font: 32px/1.3 "FZ Caveat", cursive;
+}
+
+.sketch-board h1 {
+  margin: 0 0 .5rem;
+  color: var(--cm-text);
+  font: 700 clamp(1.8rem, 3vw, 3rem)/1.2
+    "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-intro {
+  margin: 0;
+  color: var(--cm-muted);
+}
+
+.sketch-palette h2 {
+  margin: 0 0 .75rem;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sketch-palette ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sketch-palette li {
+  width: 54px;
+  color: var(--cm-muted);
+  font-size: 11px;
+}
+
+.sketch-swatch {
+  display: block;
+  height: 26px;
+  margin-bottom: .35rem;
+  border: 1px solid var(--cm-line);
+  border-radius: var(--cm-radius);
+}
+
+.swatch-paper { background: var(--cm-bg); }
+.swatch-surface { background: var(--cm-surface); }
+.swatch-ink { background: var(--cm-text); }
+.swatch-blue { background: var(--cm-primary); }
+.swatch-red { background: var(--cm-accent); }
+.swatch-note { background: var(--cm-postit); }
+
+.sketch-section {
+  margin-bottom: 2.75rem;
+}
+
+.sketch-section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  margin-bottom: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--cm-line);
+}
+
+.sketch-section-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.sketch-section-header p {
+  margin: 0;
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-example {
+  height: 100%;
+  margin: 0;
+  padding: .25rem .25rem .5rem;
+}
+
+.sketch-example figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  margin-top: 1rem;
+  font: 16px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-example figcaption strong {
+  color: var(--cm-text);
+  font-weight: 600;
+}
+
+.sketch-example figcaption span {
+  color: var(--cm-muted);
+  font-size: 13px;
+}
+
+/* Nội dung dùng layout thông thường.
+   Chỉ lớp SVG trang trí mới đặt absolute. */
+.sketch-surface {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  background: transparent;
+  color: var(--cm-text);
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-outline,
+.sketch-inner-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sketch-outline {
+  z-index: -2;
+  fill: var(--cm-surface);
+  stroke: var(--cm-text);
+  stroke-width: 1.5px;
+  filter: drop-shadow(var(--cm-shadow));
+}
+
+.sketch-inner-outline {
+  z-index: -1;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  fill: none;
+  stroke: var(--cm-text);
+  stroke-width: 1px;
+}
+
+/* Paint được kế thừa vào nội dung của SVG <use>. */
+.sketch-contour {
+  fill: inherit;
+  stroke: inherit;
+  stroke-width: inherit;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sketch-heavy > .sketch-outline {
+  stroke-width: 2px;
+  filter: drop-shadow(var(--cm-shadow-hover));
+}
+
+.sketch-postit > .sketch-outline {
+  fill: var(--cm-postit);
+}
+
+.sketch-content {
+  position: relative;
+  min-width: 0;
+  padding: 24px;
+}
+
+.sketch-content h3 {
+  margin: 0 0 .55rem;
+  color: inherit;
+  font: 700 21px/1.4 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-content p {
+  margin: 0 0 .75rem;
+  font: 16px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-content p.sketch-meta {
+  margin: .65rem 0 0;
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-box {
+  min-height: 186px;
+}
+
+.sketch-divider {
+  height: 1px;
+  margin-block: .75rem;
+  background: var(--cm-line);
+}
+
+.sketch-divider-ink {
+  background: var(--cm-text);
+}
+
+.sketch-blue-rule {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin-block: .25rem;
+}
+
+.sketch-rule-path {
+  fill: none;
+  stroke: var(--cm-primary);
+  stroke-width: 1px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Bars */
+.sketch-bar {
+  min-height: 84px;
+}
+
+.sketch-bar-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  padding: 16px 24px;
+}
+
+.sketch-bar-content h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sketch-bar-heading {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sketch-text-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  min-width: 48px;
+  padding: .5rem;
+  border: 0;
+  background: transparent;
+  color: var(--cm-primary);
+  font: 600 14px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sketch-action-separated {
+  border-left: 1px solid var(--cm-text);
+  padding-left: 1rem;
+}
+
+/* Containers */
+.sketch-container {
+  min-height: 330px;
+}
+
+.sketch-container label {
+  display: block;
+  margin: .9rem 0 .35rem;
+  color: var(--cm-text);
+  font: 600 14px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-title-rule {
+  width: 70%;
+}
+
+.sketch-demo-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: .7rem .8rem;
+  border: 1.5px solid var(--cm-text);
+  border-radius:
+    var(--cm-radius)
+    calc(var(--cm-radius) * 1.1)
+    var(--cm-radius)
+    calc(var(--cm-radius) * .9);
+  background: var(--cm-surface);
+  color: var(--cm-text);
+  font: 15px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+textarea.sketch-demo-input {
+  min-height: 82px;
+  resize: vertical;
+}
+
+/* Buttons */
+.sketch-button-stage {
+  display: grid;
+  place-items: center;
+  min-height: 104px;
+  padding: 12px;
+}
+
+.sketch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 260px);
+  min-width: 48px;
+  min-height: 64px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sketch-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  padding: 14px 24px;
+  color: inherit;
+  font: 700 24px/1.4 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-primary > .sketch-outline {
+  fill: var(--cm-accent);
+}
+
+.sketch-ink {
+  color: var(--cm-bg);
+}
+
+.sketch-ink > .sketch-outline {
+  fill: var(--cm-text);
+}
+
+.sketch-ink > .sketch-inner-outline {
+  stroke: var(--cm-bg);
+}
+
+.sketch-blue-outline > .sketch-outline {
+  stroke: var(--cm-primary);
+}
+
+/* Chỉ dùng để trưng bày trạng thái Focus.
+   Bỏ class này khi dùng nút trong trang thật. */
+.sketch-focus-preview {
+  outline: 2px dashed var(--cm-primary);
+  outline-offset: 6px;
+  border-radius: var(--cm-radius);
+}
+
+.sketch-button:hover > .sketch-outline {
+  filter: drop-shadow(var(--cm-shadow-hover));
+}
+
+.sketch-button:active > .sketch-outline {
+  filter: none;
+}
+
+.sketch-button:disabled {
+  cursor: not-allowed;
+  color: var(--cm-muted);
+}
+
+.sketch-button:disabled > .sketch-outline {
+  filter: none;
+  fill: var(--cm-surface);
+  stroke: var(--cm-muted);
+}
+
+.sketch-button:disabled > .sketch-inner-outline {
+  stroke: var(--cm-muted);
+}
+
+.sketch-button:focus-visible,
+.sketch-text-action:focus-visible,
+.sketch-demo-input:focus-visible {
+  outline: 3px solid var(--cm-primary);
+  outline-offset: 5px;
+}
+
+.sketch-board-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cm-line);
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-board-footer p {
+  margin: 0;
+}
+
+@media (max-width: 575.98px) {
+  .sketch-content { padding: 20px; }
+  .sketch-bar-content { padding: 14px 20px; }
+  .sketch-box,
+  .sketch-container { min-height: auto; }
+  .sketch-palette ul { gap: .75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sketch-board *,
+  .sketch-surface *,
+  .sketch-button {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   ÁP DỤNG 4 TẦNG PHÂN CẤP THIẾT KẾ CHO DASHBOARD GIÁO VIÊN
+   1. Nét mực gọn (Clean) -> Baseline ~70% (Card thường, row, nút phụ)
+   2. Phác nét đôi (Double) -> Khung chứa phụ (Todo widget viền đôi, không tốn bóng)
+   3. Giấy ghi chú (Post-it) -> 1 phần tử nổi bật giữa đám đông (Khóa học active / task gấp)
+   4. Sticker nổi (Heavy) -> Nút CTA chính duy nhất (Bóng offset 4px nhảy ra)
+============================================================ */
+
+/* 1. Nét mực gọn (Baseline ~70%): Card thường êm dịu, không mỏi mắt */
+.dash-page .card-course {
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--dash-radius);
+    background: var(--cm-surface);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dash-page .card-course:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 3px 3px 0 var(--cm-ink);
+}
+
+/* 2. Phác nét đôi: Khung chứa tách khỏi nền nhưng KHÔNG tốn bóng cứng, giữ app thoáng */
+.dash-page .todo-widget.widget-double-line {
+    background: var(--cm-surface);
+    color: var(--cm-ink);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--dash-radius);
+    outline: 1.5px solid var(--cm-ink);
+    outline-offset: -5px;
+    box-shadow: none; /* Không bóng ngoài */
+    padding: var(--dash-widget-padding);
+}
+
+.dash-page .todo-widget.widget-double-line h2 {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--cm-ink);
+}
+
+/* 3. Giấy ghi chú: 1 cái vàng giữa đám đông trắng -> Mắt tự tìm tới */
+.dash-page .card-course.card-course-highlight {
+    background: var(--cm-postit) !important;
+    border: 1.5px solid var(--cm-ink);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+}
+
+.dash-page .card-course.card-course-highlight .dash-card-image {
+    background: rgba(255, 255, 255, 0.55);
+    border-bottom: 1.5px solid var(--cm-ink);
+}
+
+.todo-item.todo-item-urgent {
+    background: var(--cm-postit);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-soft-radius);
+    padding: 8px 12px;
+    margin-bottom: 8px;
+}
+
+/* 4. Sticker nổi: Cổng vào / Hành động chính CTA duy nhất -> Bóng offset nhảy ra */
+.btn-cta.btn-cta-sticker {
+    background: var(--cm-accent);
+    color: #ffffff !important;
+    border: 2px solid var(--cm-ink);
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: 4px 4px 0 var(--cm-ink);
+    font-weight: 700;
+    padding: 10px 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-cta.btn-cta-sticker:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--cm-ink);
+    background: #ff3333;
+    color: #ffffff !important;
+}
+
+.btn-cta.btn-cta-sticker:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 var(--cm-ink);
+}
+
+/* ===== Card Course dùng SVG Sketch Nét Mực Gọn (#sketch-clean) ===== */
+.dash-page .card-course.sketch-surface {
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    min-height: var(--dash-card-height);
+    height: 100%;
+    position: relative;
+    isolation: isolate;
+    transition: transform 0.15s ease;
+}
+
+.dash-page .card-course.sketch-surface:hover {
+    transform: translate(-1px, -1px);
+}
+
+.dash-page .card-course.sketch-surface > .sketch-outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    fill: var(--cm-surface);
+    stroke: var(--cm-text);
+    stroke-width: 1.5px;
+    filter: drop-shadow(var(--cm-shadow));
+    transition: filter 0.15s ease;
+}
+
+.dash-page .card-course.sketch-surface:hover > .sketch-outline {
+    filter: drop-shadow(var(--cm-shadow-hover));
+}
+
+.dash-page .card-course.sketch-surface .dash-card-image {
+    position: relative;
+    width: 100%;
+    height: var(--dash-image-height);
+    border: 1px solid var(--cm-line);
+    border-bottom: 1.5px solid var(--cm-ink);
+    border-radius: 6px 6px 0 0;
+    background: #f7f4ee;
+}
+
+.dash-page .card-course.sketch-surface .dash-card-body {
+    padding: 12px 2px 0;
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.dash-page .card-course.sketch-surface .dash-card-actions {
+    margin-top: auto;
+    padding-top: 14px;
+    text-align: right;
+}
+
+/* ============================================================
+   PIN ĐỎ NỔI (3D THUMBTACK) & VIỆC CẦN LÀM (GIẤY GHI CHÚ)
+============================================================ */
+
+/* Pin đỏ nổi 3D cho box khóa học */
+.dash-page .dash-card-pin {
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    background: radial-gradient(circle at 35% 35%, #ff8080 0%, #ff3b30 55%, #b71c1c 100%);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 50%;
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 3;
+    display: inline-block;
+    font-size: 0 !important;
+    line-height: 0;
+}
+
+/* Khung Việc cần làm dùng Giấy ghi chú (Post-it SVG #sketch-note) */
+.dash-page .todo-widget.sketch-postit {
+    position: relative;
+    isolation: isolate;
+    border: 0 !important;
+    outline: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    min-height: auto;
+    padding: 0;
+}
+
+.dash-page .todo-widget.sketch-postit > .sketch-outline {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    pointer-events: none;
+    fill: var(--cm-postit);
+    stroke: var(--cm-text);
+    stroke-width: 1.5px;
+    filter: drop-shadow(var(--cm-shadow));
+}
+
+.dash-page .todo-widget.sketch-postit .sketch-content {
+    position: relative;
+    padding: 22px 24px;
+}
+
+.dash-page .todo-widget.sketch-postit h2 {
+    font-size: 21px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--cm-ink);
+}
+
+.dash-page .todo-widget.sketch-postit .sketch-blue-rule {
+    display: block;
+    width: 100%;
+    height: 12px;
+    margin-block: 0.5rem 0.75rem;
+}
+
+/* ============================================================
+   P7: ADMIN MODULE & PROFILE — sketch CSS (var() only, 0 hex)
+   CHECKPOINT: Nét mực gọn (t1), viền đôi (t2), giấy ghi chú (postit)
+   ============================================================ */
+
+/* ── Sketch Box Tier 1 — Nét mực gọn ── */
+.sketch-box-t1 {
+    background: var(--cm-surface);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transition: box-shadow 0.18s;
+}
+.sketch-box-t1:hover {
+    box-shadow: 3px 3px 0 var(--cm-ink);
+}
+
+/* ── Sketch Box Tier 2 — Viền đôi ── */
+.sketch-box-t2 {
+    background: var(--cm-surface);
+    border: 2.5px double var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transition: box-shadow 0.18s;
+}
+.sketch-box-t2:hover {
+    box-shadow: 3px 3px 0 var(--cm-ink);
+}
+
+/* ── Sketch Postit Box (Tier 3 — Giấy ghi chú) ── */
+.sketch-postit-box {
+    position: relative;
+    background: var(--cm-postit);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 3px 3px 0 var(--cm-ink);
+    transition: box-shadow 0.18s, transform 0.18s;
+}
+.sketch-postit-box:hover {
+    box-shadow: 4px 4px 0 var(--cm-ink);
+    transform: translateY(-1px);
+}
+
+/* Pin nhỏ cho postit */
+.sketch-postit-pin {
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: var(--cm-danger, #e74c3c);
+    border: 2px solid var(--cm-ink);
+    border-radius: 50%;
+    box-shadow: 1px 1px 0 var(--cm-ink), inset 0 1px 2px rgba(255,255,255,0.4);
+    z-index: 2;
+}
+
+/* ── Sketch Table ── */
+.sketch-table {
+    font-family: var(--cm-font-body);
+    font-size: 0.9rem;
+}
+.sketch-table thead th {
+    background: var(--cm-surface);
+    border-bottom: 2px solid var(--cm-ink);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--cm-ink);
+    padding: 0.75rem;
+    white-space: nowrap;
+}
+.sketch-table tbody td {
+    padding: 0.7rem 0.75rem;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--cm-ink-light, rgba(0,0,0,0.1));
+}
+.sketch-table tbody tr:hover {
+    background: var(--cm-hover, rgba(0,0,0,0.03));
+}
+.sketch-table tbody tr.table-row-disabled {
+    opacity: 0.55;
+    background: var(--cm-surface-dim, rgba(0,0,0,0.04));
+}
+.sketch-table tbody tr.table-row-hidden {
+    opacity: 0.6;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 8px,
+        rgba(0,0,0,0.02) 8px,
+        rgba(0,0,0,0.02) 16px
+    );
+}
+
+/* ── Sketch Buttons ── */
+.btn-sketch-primary {
+    background: var(--cm-primary, #4a6cf7);
+    color: var(--cm-surface);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    font-weight: 600;
+    font-family: var(--cm-font-body);
+    padding: 0.45rem 1rem;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+.btn-sketch-primary:hover {
+    box-shadow: 3px 3px 0 var(--cm-ink);
+    transform: translateY(-1px);
+    color: var(--cm-surface);
+}
+.btn-sketch-primary:active {
+    box-shadow: 1px 1px 0 var(--cm-ink);
+    transform: translateY(0);
+}
+
+.btn-sketch-danger {
+    background: var(--cm-danger, #e74c3c);
+    color: var(--cm-surface);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    font-weight: 600;
+    font-family: var(--cm-font-body);
+    padding: 0.3rem 0.6rem;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+.btn-sketch-danger:hover {
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transform: translateY(-1px);
+    color: var(--cm-surface);
+}
+
+.btn-sketch-success {
+    background: var(--cm-success, #27ae60);
+    color: var(--cm-surface);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    font-weight: 600;
+    font-family: var(--cm-font-body);
+    padding: 0.3rem 0.6rem;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+.btn-sketch-success:hover {
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transform: translateY(-1px);
+    color: var(--cm-surface);
+}
+
+.btn-sketch-warning {
+    background: var(--cm-warning, #f39c12);
+    color: var(--cm-ink);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    font-weight: 600;
+    font-family: var(--cm-font-body);
+    padding: 0.3rem 0.6rem;
+    transition: all 0.15s;
+    cursor: pointer;
+}
+.btn-sketch-warning:hover {
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transform: translateY(-1px);
+}
+
+.btn-sketch-outline {
+    background: transparent;
+    color: var(--cm-ink);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 1.5px 1.5px 0 var(--cm-ink);
+    font-weight: 600;
+    font-family: var(--cm-font-body);
+    padding: 0.45rem 0.75rem;
+    transition: all 0.15s;
+    cursor: pointer;
+    text-decoration: none;
+}
+.btn-sketch-outline:hover {
+    background: var(--cm-ink);
+    color: var(--cm-surface);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    transform: translateY(-1px);
+}
+
+/* ── Sketch Avatars ── */
+.sketch-avatar-sm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 1.4rem;
+    color: var(--cm-ink);
+    border: 1.5px solid var(--cm-ink);
+    border-radius: 50%;
+    background: var(--cm-surface);
+    flex-shrink: 0;
+}
+
+.sketch-avatar-lg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    font-size: 2.8rem;
+    color: var(--cm-ink);
+    border: 2px solid var(--cm-ink);
+    border-radius: 50%;
+    background: var(--cm-surface);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    flex-shrink: 0;
+}
+
+/* ── Sketch Alert ── */
+.sketch-alert {
+    border-radius: var(--cm-radius);
+    border: 1.5px solid var(--cm-ink);
+    box-shadow: 2px 2px 0 var(--cm-ink);
+    font-family: var(--cm-font-body);
+}
+
+/* ── Sketch Input (P7 refinement) ── */
+.sketch-box-t1 .sketch-input,
+.sketch-box-t2 .sketch-input,
+.sketch-postit-box .sketch-input {
+    border: 1.5px solid var(--cm-ink);
+    border-radius: var(--cm-radius);
+    box-shadow: 1px 1px 0 var(--cm-ink);
+    font-family: var(--cm-font-body);
+    padding: 0.45rem 0.75rem;
+    transition: box-shadow 0.15s, border-color 0.15s;
+}
+.sketch-box-t1 .sketch-input:focus,
+.sketch-box-t2 .sketch-input:focus,
+.sketch-postit-box .sketch-input:focus {
+    border-color: var(--cm-primary, #4a6cf7);
+    box-shadow: 2px 2px 0 var(--cm-primary, #4a6cf7);
+    outline: none;
+}
+
+/* ============================================================
+   P7: Admin Module & User Profile Styles (Refined for 8png Mockups)
+   ============================================================ */
+
+/* Row Card Layout (tier-1: sketch-clean outline) */
+.sketch-row-card {
+  position: relative;
+  background: var(--cm-surface, #ffffff);
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sketch-row-card > .sketch-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sketch-row-card .sketch-contour {
+  stroke: var(--cm-ink, #2d2d2d);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.sketch-row-card .sketch-row-content {
+  position: relative;
+  z-index: 2;
+  padding: 0.95rem 1.25rem;
+}
+
+.sketch-row-card.row-disabled {
+  opacity: 0.65;
+  background: var(--cm-surface-dim, #fbfbfb);
+}
+
+.sketch-row-card.row-hidden {
+  opacity: 0.85;
+}
+
+/* Avatar Circles with Initials */
+.sketch-avatar-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  background: var(--cm-surface, #ffffff);
+  color: var(--cm-text, #1a1a1a);
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-weight: 700;
+  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  letter-spacing: -0.5px;
+}
+
+.sketch-avatar-circle-lg {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid var(--cm-ink, #2d2d2d);
+  background: var(--cm-surface, #ffffff);
+  color: var(--cm-text, #1a1a1a);
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-weight: 700;
+  font-size: 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Badges / Pills */
+.sketch-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.9rem;
+  border-radius: 6px;
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.sketch-pill-admin {
+  background: #222222;
+  color: #ffffff;
+}
+
+.sketch-pill-teacher {
+  background: #1d4ed8;
+  color: #ffffff;
+}
+
+.sketch-pill-student {
+  background: #4b5563;
+  color: #ffffff;
+}
+
+.sketch-pill-active {
+  background: #15803d;
+  color: #ffffff;
+}
+
+.sketch-pill-locked {
+  background: #4b5563;
+  color: #ffffff;
+}
+
+.sketch-pill-outline {
+  background: #ffffff;
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  color: var(--cm-ink, #2d2d2d);
+}
+
+.badge-dot-red {
+  display: inline-block;
+  color: #ef4444;
+  font-size: 0.75rem;
+  line-height: 1;
+}
+
+/* Sketch Action Buttons */
+.btn-sketch-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.15rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  background: var(--cm-surface, #ffffff);
+  color: var(--cm-text, #1a1a1a);
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-sketch-action:hover:not(:disabled) {
+  background: var(--cm-hover, #f3f4f6);
+  border-color: var(--cm-ink, #2d2d2d);
+  color: var(--cm-text, #1a1a1a);
+  transform: translateY(-1px);
+}
+
+.btn-sketch-action:disabled,
+.btn-sketch-action.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* CTA Red Button (tier-4: as seen in Profile "Lưu thay đổi") */
+.btn-sketch-cta-red {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.7rem 1.75rem;
+  border-radius: 8px;
+  border: 2px solid var(--cm-ink, #222222);
+  background: #ff4d4f;
+  color: #1a1a1a;
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 2px 2px 0 var(--cm-ink, #222222);
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn-sketch-cta-red:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 var(--cm-ink, #222222);
+  color: #1a1a1a;
+}
+
+.btn-sketch-cta-red:active {
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 var(--cm-ink, #222222);
+}
+
+/* Dark Modal/Action Button */
+.btn-sketch-dark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.5rem;
+  border-radius: 6px;
+  border: 2px solid #2d2d2d;
+  background: #2d2d2d;
+  color: #ffffff;
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-sketch-dark:hover {
+  background: #111111;
+  color: #ffffff;
+}
+
+/* Filter Bar Container & Elements */
+.sketch-filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+
+.sketch-filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.sketch-filter-item label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--cm-text, #1a1a1a);
+  margin-bottom: 0.35rem;
+}
+
+.sketch-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.sketch-input-group i {
+  position: absolute;
+  left: 0.85rem;
+  color: var(--cm-muted, #71717a);
+  pointer-events: none;
+  font-size: 0.95rem;
+}
+
+.sketch-input-group .form-control {
+  padding-left: 2.25rem;
+}
+
+.sketch-filter-input {
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.9rem;
+  font-family: var(--cm-font-body, "Be Vietnam Pro", sans-serif);
+  background: var(--cm-surface, #ffffff);
+  color: var(--cm-text, #1a1a1a);
+  transition: border-color 0.15s ease;
+}
+
+.sketch-filter-input:focus {
+  outline: none;
+  border-color: var(--cm-primary, #3b82f6);
+  box-shadow: 0 0 0 1px var(--cm-primary, #3b82f6);
+}
+
+.sketch-readonly-input {
+  background: #fbf9f4 !important;
+  color: var(--cm-text, #333333);
+  border: 1.5px solid var(--cm-ink, #2d2d2d) !important;
+}
+
+/* Empty State Container */
+.sketch-empty-box {
+  border: 1.5px dashed var(--cm-ink, #2d2d2d);
+  border-radius: 10px;
+  background: var(--cm-surface, #ffffff);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 1.5rem 0;
+}
+
+.sketch-empty-box h4 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--cm-text, #2d2d2d);
+  margin-top: 1rem;
+}
+
+/* Toast Badge (Profile Header) */
+.sketch-toast-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  background: var(--cm-surface, #ffffff);
+  box-shadow: 1px 1px 0 rgba(0,0,0,0.05);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cm-text, #1a1a1a);
+}
+
+/* Cursive Error (FZ Caveat) */
+.sketch-hand-error {
+  font-family: var(--cm-font-hand, "FZ Caveat", cursive);
+  color: var(--cm-danger, #ff4d4f);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.35rem;
+  display: block;
+}
+
+/* Profile Form Boxes (sketch-surface + sketch-clean) */
+.sketch-profile-box {
+  position: relative;
+  background: var(--cm-surface, #ffffff);
+  border-radius: 10px;
+  height: 100%;
+}
+
+.sketch-profile-box > .sketch-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sketch-profile-box .sketch-contour {
+  stroke: var(--cm-ink, #2d2d2d);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.sketch-profile-box .sketch-profile-content {
+  position: relative;
+  z-index: 2;
+  padding: 1.75rem 2rem;
+}
+
+/* Pagination Row */
+.sketch-pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.75rem;
+  border-radius: 6px;
+  border: 1.5px solid var(--cm-ink, #2d2d2d);
+  background: #ffffff;
+  color: var(--cm-text, #1a1a1a);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.sketch-pagination-btn.active {
+  background: #222222;
+  color: #ffffff;
+  border-color: #222222;
+}
+
+.sketch-pagination-btn:hover:not(.active) {
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+/* ============================================================
+   PHẦN 8: DASHBOARD THỐNG KÊ & TO-DO WIDGET (TẦNG NHẸ)
+   Tất cả dùng var(), 0 hex cứng ngoài :root
+   ============================================================ */
+.dash-stat-row {
+  margin-bottom: 2rem;
+}
+
+.card-stat {
+  background: var(--cm-surface);
+  border: 1.5px solid var(--cm-ink);
+  border-radius: var(--cm-radius);
+  box-shadow: var(--cm-shadow-sm, 2px 2px 0 var(--cm-ink));
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
+}
+
+.card-stat:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--cm-shadow, 3px 3px 0 var(--cm-ink));
+}
+
+.card-stat .stat-icon {
+  font-size: 1.75rem;
+  color: var(--cm-primary);
+  margin-bottom: 0.25rem;
+}
+
+.card-stat .stat-number {
+  font-family: var(--cm-font-hand, "FZ Caveat", cursive);
+  font-size: 2.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--cm-ink);
+  margin: 0;
+}
+
+.card-stat .stat-label {
+  font-family: var(--cm-font-sans, "Be Vietnam Pro", sans-serif);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--cm-muted);
+  margin-top: 0.35rem;
+  margin-bottom: 0;
+}
+
+/* Post-it to-do widget (viền mảnh, không tilt) */
+.todo-widget {
+  background: var(--dash-postit, var(--cm-postit, #fffbe6));
+  border: 1.5px solid var(--cm-ink);
+  border-radius: var(--cm-radius);
+  box-shadow: var(--cm-shadow-sm, 2px 2px 0 var(--cm-ink));
+  padding: 1.25rem;
+  transform: none !important;
+}
+
+.todo-widget h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cm-ink);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dash-todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.todo-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed var(--cm-ink);
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item .todo-icon {
+  font-size: 1.25rem;
+  color: var(--cm-primary);
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.todo-item .todo-body {
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.todo-item .todo-title {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--cm-ink);
+  text-decoration: none;
+  display: block;
+  line-height: 1.35;
+}
+
+.todo-item .todo-title:hover {
+  color: var(--cm-primary);
+  text-decoration: underline;
+}
+
+.todo-item .todo-meta {
+  font-size: 0.8125rem;
+  color: var(--cm-muted);
+  margin-top: 0.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+/* Overdue Soon Pill: ink border + red dot (không chữ đỏ nhỏ) */
+.pill-overdue {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1px 7px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--cm-ink);
+  background: var(--cm-surface);
+  border: 1px solid var(--cm-ink);
+  border-radius: 999px;
+  line-height: 1.4;
+}
+
+.pill-overdue-dot {
+  width: 7px;
+  height: 7px;
+  background-color: var(--cm-accent);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* Empty todo state */
+.todo-empty {
+  text-align: center;
+  padding: 1.5rem 0.5rem;
+  color: var(--cm-muted);
+}
+
+.todo-empty-icon {
+  font-size: 2.25rem;
+  color: var(--cm-muted);
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+/* Admin Dashboard Specific */
+.admin-dash-section {
+  margin-top: 2rem;
+}
+
+.admin-dash-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--cm-ink);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.admin-quick-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: var(--cm-surface);
+  border: 1.5px solid var(--cm-ink);
+  border-radius: var(--cm-radius);
+  box-shadow: var(--cm-shadow-sm, 2px 2px 0 var(--cm-ink));
+  align-items: center;
 }

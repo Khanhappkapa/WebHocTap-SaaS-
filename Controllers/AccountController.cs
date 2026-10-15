@@ -166,9 +166,16 @@ namespace WebHocTap_SaaS_.Controllers
         // BẮT BUỘC [HttpPost] + [ValidateAntiForgeryToken]
         // Logout bằng <a href> là lỗi bảo mật CSRF nghiêm trọng
         // --------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> Logout(string? returnUrl = null)
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Logout()
+        public async Task<IActionResult> LogoutPost()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");

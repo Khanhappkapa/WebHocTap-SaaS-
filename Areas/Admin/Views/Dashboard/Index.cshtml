@@ -1,60 +1,160 @@
 @* ============================================================
     File: Areas/Admin/Views/Dashboard/Index.cshtml
-    Mô tả: Trang Dashboard Admin — dữ liệu thật từ ViewBag
+    Mô tả: Trang Dashboard Admin — Dữ liệu thật từ AdminDashboardViewModel
+    CHECKPOINT: 0 migration, DB-side counts, 0 hardcode, 1 h1/trang
 ============================================================ *@
+@model WebHocTap_SaaS_.Models.ViewModels.AdminDashboardViewModel
+
 @{
-    ViewData["Title"] = "Admin Dashboard";
+    ViewData["Title"] = "Bảng điều khiển quản trị";
+    ViewData["Description"] = "Trung tâm quản trị hệ thống Bulb.edu";
 }
 
-<div class="container-fluid">
-    <h1 class="h3 mb-4 fw-bold"><i class="bi bi-speedometer2" aria-hidden="true"></i> Admin Dashboard</h1>
+<div class="dash-page dash-page-admin">
+    <!-- .dash-banner: 1 h1/trang -->
+    <section class="dash-banner" aria-labelledby="admin-dash-title">
+        <div class="dash-banner-inner d-flex flex-wrap align-items-center justify-content-between">
+            <h1 id="admin-dash-title" class="dash-greeting mb-0">
+                Bảng điều khiển quản trị
+            </h1>
+            <span class="text-muted fs-6">
+                <i class="bi bi-shield-check me-1" aria-hidden="true"></i> Quyền hệ thống: Quản trị viên
+            </span>
+        </div>
+    </section>
 
-    <div class="row g-4">
-        <div class="col-lg-3 col-md-6">
-            <div class="card card-stat border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
-                    <h5 class="mt-2">Người dùng</h5>
-                    <p class="stat-number">@ViewBag.UserCount</p>
-                </div>
+    <div class="container-fluid dash-content pt-4 pb-5">
+        @if (Model.TotalUsers == 0 && Model.TotalCourses == 0)
+        {
+            <div class="empty-state my-5">
+                <i class="bi bi-database-exclamation" aria-hidden="true"></i>
+                <h2>Hệ thống chưa có dữ liệu</h2>
+                <p>Chưa có người dùng hoặc khóa học nào trong cơ sở dữ liệu.</p>
             </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="card card-stat border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="stat-icon text-success"><i class="bi bi-journal-code"></i></div>
-                    <h5 class="mt-2">Khóa học</h5>
-                    <p class="stat-number">@ViewBag.CourseCount</p>
+        }
+        else
+        {
+            <!-- Thống kê Người dùng -->
+            <section class="admin-dash-section" aria-labelledby="sec-users-title">
+                <h2 id="sec-users-title">
+                    <i class="bi bi-people" aria-hidden="true"></i> Người dùng
+                </h2>
+                <div class="row g-3 row-cols-2 row-cols-md-4">
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.TotalUsers</p>
+                            <p class="stat-label">Tổng người dùng</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-person-check-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.ActiveUsers</p>
+                            <p class="stat-label">Đang hoạt động</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-person-x-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.InactiveUsers</p>
+                            <p class="stat-label">Ngừng hoạt động</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-lock-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.LockedUsers</p>
+                            <p class="stat-label">Đang bị khóa</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="card card-stat border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="stat-icon" style="color: var(--cm-accent)"><i class="bi bi-pencil-square"></i></div>
-                    <h5 class="mt-2">Bài tập</h5>
-                    <p class="stat-number">@ViewBag.AssignmentCount</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6">
-            <div class="card card-stat border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <div class="stat-icon text-info"><i class="bi bi-file-earmark-text"></i></div>
-                    <h5 class="mt-2">Bài nộp</h5>
-                    <p class="stat-number">@ViewBag.SubmissionCount</p>
-                </div>
-            </div>
-        </div>
-    </div>
+            </section>
 
-    <div class="card border-0 shadow-sm mt-4">
-        <div class="card-body">
-            <h5 class="card-title">Chào mừng đến Admin Panel</h5>
-            <p class="text-muted">
-                Đây là trang quản trị hệ thống Bulb.edu.
-                Bạn có thể quản lý người dùng, khóa học, xem thống kê từ sidebar bên trái.
-            </p>
-        </div>
+            <!-- Thống kê Khóa học -->
+            <section class="admin-dash-section" aria-labelledby="sec-courses-title">
+                <h2 id="sec-courses-title">
+                    <i class="bi bi-journal-code" aria-hidden="true"></i> Khóa học
+                </h2>
+                <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-xl-5">
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-collection-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.TotalCourses</p>
+                            <p class="stat-label">Tổng số khóa</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-check-circle-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.PublishedCourses</p>
+                            <p class="stat-label">Đã xuất bản</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-file-earmark-text" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.DraftCourses</p>
+                            <p class="stat-label">Bản nháp</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-archive-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.ClosedCourses</p>
+                            <p class="stat-label">Đã đóng</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-eye-slash-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.HiddenCourses</p>
+                            <p class="stat-label">Đã ẩn</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Thống kê Hoạt động -->
+            <section class="admin-dash-section" aria-labelledby="sec-activity-title">
+                <h2 id="sec-activity-title">
+                    <i class="bi bi-activity" aria-hidden="true"></i> Hoạt động học tập
+                </h2>
+                <div class="row g-3 row-cols-1 row-cols-md-3">
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-mortarboard-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.TotalEnrollments</p>
+                            <p class="stat-label">Lượt đăng ký học</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-file-earmark-arrow-up-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.TotalSubmissions</p>
+                            <p class="stat-label">Tổng bài đã nộp</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-hourglass-split" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.UngradedSubmissions</p>
+                            <p class="stat-label">Bài chờ chấm điểm</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Links -->
+            <section class="admin-quick-links" aria-label="Lối tắt quản lý">
+                <span class="fw-bold"><i class="bi bi-lightning-charge me-1" aria-hidden="true"></i> Thao tác nhanh:</span>
+                <a asp-area="Admin" asp-controller="User" asp-action="Index" class="btn btn-cta-ghost">
+                    <i class="bi bi-people me-1" aria-hidden="true"></i> Quản lý người dùng
+                </a>
+                <a asp-area="Admin" asp-controller="Course" asp-action="Index" class="btn btn-cta-ghost">
+                    <i class="bi bi-journal-text me-1" aria-hidden="true"></i> Quản lý khóa học
+                </a>
+            </section>
+        }
     </div>
 </div>

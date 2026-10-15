@@ -65,7 +65,7 @@
                     @foreach (var s in Model.Sessions)
                     {
                         <li class="detail-row">
-                            <i class="bi bi-calendar-event detail-row-icon" aria-hidden="true"></i>
+                            <img src="~/asset/images/calendar-date.svg" alt="Buổi học" class="detail-row-icon sketch-icon-img" width="26" height="26" />
                             <div class="detail-row-copy">
                                 <h3>@s.Title</h3>
                                 <p>@s.StartTime.ToString("HH:mm")–@s.EndTime.ToString("HH:mm") · @s.StartTime.ToString("dd/MM/yyyy")</p>
@@ -237,7 +237,7 @@
                             <i class="bi bi-file-earmark-text detail-row-icon" aria-hidden="true"></i>
                             <div class="detail-row-copy">
                                 <h3>@a.Title</h3>
-                                <p>Hạn nộp: @a.Deadline.ToString("dd/MM/yyyy, HH:mm")</p>
+                                <p><img src="~/asset/images/calendar-date.svg" alt="" class="sketch-icon-xs me-1" width="14" height="14" />Hạn nộp: @a.Deadline.ToString("dd/MM/yyyy, HH:mm")</p>
                             </div>
                             <span class="detail-submission-count">@a.Submissions.Count/@Model.StudentCount đã nộp</span>
                             <a asp-controller="Assignment" asp-action="Details" asp-route-id="@a.Id"
@@ -294,7 +294,7 @@ else if (Model.IsEnrolled)
                     @foreach (var s in Model.Sessions)
                     {
                         <li class="detail-row">
-                            <i class="bi bi-calendar-event detail-row-icon" aria-hidden="true"></i>
+                            <img src="~/asset/images/calendar-date.svg" alt="Buổi học" class="detail-row-icon sketch-icon-img" width="26" height="26" />
                             <div class="detail-row-copy">
                                 <h3>@s.Title</h3>
                                 <p>@s.StartTime.ToString("HH:mm")–@s.EndTime.ToString("HH:mm") · @s.StartTime.ToString("dd/MM/yyyy")</p>
@@ -381,7 +381,7 @@ else if (Model.IsEnrolled)
                             <i class="bi bi-file-earmark-text detail-row-icon" aria-hidden="true"></i>
                             <div class="detail-row-copy">
                                 <h3>@a.Title</h3>
-                                <p>Hạn nộp: @a.Deadline.ToString("dd/MM/yyyy, HH:mm")</p>
+                                <p><img src="~/asset/images/calendar-date.svg" alt="" class="sketch-icon-xs me-1" width="14" height="14" />Hạn nộp: @a.Deadline.ToString("dd/MM/yyyy, HH:mm")</p>
                             </div>
                             @if (mySubmission == null)
                             {

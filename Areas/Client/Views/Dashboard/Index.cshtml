@@ -1,214 +1,247 @@
 @* ============================================================
     File: Areas/Client/Views/Dashboard/Index.cshtml
-    Mô tả: Trang Dashboard Client (Teacher / Student) kiểu Bulb
-    CHECKPOINT: Dữ liệu thật từ DashboardViewModel — không hardcode HTML
+    Mô tả: Trang Dashboard Client (Teacher / Student) Bulb.edu
+    CHECKPOINT: Dữ liệu thật từ ClientDashboardViewModel — 0 hardcode
 ============================================================ *@
-@model WebHocTap_SaaS_.Models.ViewModels.DashboardViewModel
+@using WebHocTap_SaaS_.Models.ViewModels
+@model WebHocTap_SaaS_.Models.ViewModels.ClientDashboardViewModel
 
 @{
-    ViewData["Title"] = "Dashboard";
-    // Không override Layout — dùng _ClientLayout từ _ViewStart.cshtml
+    ViewData["Title"] = "Bảng điều khiển";
+    ViewData["Description"] = "Bảng điều khiển học tập và giảng dạy Bulb.edu";
 }
 
-@if (Model.IsTeacher)
-{
-    <div class="dash-page dash-page-teacher">
-        <!-- .dash-banner: greeting + CTA -->
-        <section class="dash-banner" aria-labelledby="teacher-greeting">
-            <div class="dash-banner-inner d-flex flex-wrap align-items-center justify-content-between">
-                <h1 id="teacher-greeting">
-                    Xin chào, <span class="dash-user-name">@Model.FullName</span>
-                </h1>
+<div class="dash-page @(Model.IsTeacher ? "dash-page-teacher" : "dash-page-student")">
+    <!-- .dash-banner: 1 h1/trang + greeting + CTA (1 đỏ/trang cho Teacher) -->
+    <section class="dash-banner" aria-labelledby="dash-main-title">
+        <div class="dash-banner-inner d-flex flex-wrap align-items-center justify-content-between">
+            <h1 id="dash-main-title" class="dash-greeting mb-0">
+                Bảng điều khiển &middot; <span class="dash-user-name">@Model.FullName</span>
+            </h1>
 
+            @if (Model.IsTeacher)
+            {
                 <a asp-area="Client" asp-controller="Course" asp-action="Create" class="btn btn-cta">
-                    + Tạo khóa học mới
+                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i> Tạo khóa học mới
                 </a>
-            </div>
+            }
+            else
+            {
+                <a asp-area="Client" asp-controller="Course" asp-action="Index" class="btn btn-cta-ghost">
+                    <i class="bi bi-search me-1" aria-hidden="true"></i> Khám phá khóa học
+                </a>
+            }
+        </div>
+    </section>
+
+    <div class="container-fluid dash-content pt-4 pb-5">
+        <!-- Row thống kê số liệu (bind ViewModel, 0 hardcode) -->
+        <section class="dash-stat-row" aria-label="Thống kê tổng quan">
+            @if (Model.IsTeacher)
+            {
+                <div class="row g-3 row-cols-2 row-cols-md-3 row-cols-xl-5">
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-journal-code" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.CourseCount</p>
+                            <p class="stat-label">Khóa học</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-people-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.StudentCount</p>
+                            <p class="stat-label">Học viên</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-pencil-square" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.AssignmentCount</p>
+                            <p class="stat-label">Bài tập</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-inbox-fill" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.UngradedCount</p>
+                            <p class="stat-label">Chờ chấm điểm</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-calendar-event" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.UpcomingSessionCount</p>
+                            <p class="stat-label">Buổi học sắp tới</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row g-3 row-cols-2 row-cols-md-4">
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-journal-check" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.EnrolledCount</p>
+                            <p class="stat-label">Khóa đang học</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-clock-history" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.PendingSubmissionCount</p>
+                            <p class="stat-label">Bài tập cần nộp</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-check2-circle" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.GradedCount</p>
+                            <p class="stat-label">Bài đã chấm</p>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card-stat">
+                            <div class="stat-icon"><i class="bi bi-award" aria-hidden="true"></i></div>
+                            <p class="stat-number">@Model.AverageScore.ToString("0.0")</p>
+                            <p class="stat-label">Điểm trung bình</p>
+                        </div>
+                    </div>
+                </div>
+            }
         </section>
 
-        <div class="container-fluid dash-content">
-            <div class="row g-4 align-items-start">
-                <section class="col-12 col-lg-8" aria-labelledby="teacher-classes-title">
-                    <div class="dash-section-heading">
-                        <h2 id="teacher-classes-title">Lớp học của bạn</h2>
-                        <svg class="dash-heading-underline" viewBox="0 0 220 12" aria-hidden="true" focusable="false">
-                            <path d="M3 7 C18 2 30 10 46 5 S74 9 91 5 S120 9 137 5 S169 9 184 5 S206 8 217 5" />
-                        </svg>
-                    </div>
+        <!-- 2 cột: Trái list khóa học gần đây, Phải To-Do widget -->
+        <div class="row g-4 align-items-start mt-1">
+            <!-- Cột trái: Khóa học gần đây -->
+            <section class="col-12 col-lg-8" aria-labelledby="courses-section-title">
+                <div class="dash-section-heading mb-3">
+                    <h2 id="courses-section-title">
+                        @(Model.IsTeacher ? "Khóa học do bạn giảng dạy" : "Lớp học bạn tham gia")
+                    </h2>
+                </div>
 
-                    @if (Model.Courses.Any())
-                    {
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 dash-course-grid">
-                            @foreach (var course in Model.Courses)
-                            {
-                                <div class="col">
-                                    <article class="card-course">
-                                        <div class="dash-card-image" role="img" aria-label="Hình đại diện khóa @course.Title">
-                                            <i class="bi bi-circle-fill dash-card-pin" aria-hidden="true"></i>
+                @if (Model.Courses.Any())
+                {
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 dash-course-grid">
+                        @foreach (var course in Model.Courses)
+                        {
+                            <div class="col">
+                                <article class="card-course">
+                                    <div class="dash-card-image" role="img" aria-label="Hình đại diện khóa @course.Title">
+                                        <i class="bi bi-circle-fill dash-card-pin" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="dash-card-body">
+                                        @if (course.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
+                                        {
+                                            <span class="badge badge-status-published">Đã công khai</span>
+                                        }
+                                        else if (course.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
+                                        {
+                                            <span class="badge badge-status-closed">Đã đóng</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-status-draft">Bản nháp</span>
+                                        }
+
+                                        <h3 class="mt-2">@course.Title</h3>
+                                        <p class="dash-course-stats">
+                                            <span><i class="bi bi-people" aria-hidden="true"></i> @course.StudentCount học viên</span>
+                                            <span aria-hidden="true">&middot;</span>
+                                            <span><i class="bi bi-person" aria-hidden="true"></i> @course.TeacherName</span>
+                                        </p>
+                                        <div class="dash-card-actions">
+                                            <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@course.Id"
+                                               class="btn btn-cta-ghost" aria-label="Vào lớp @course.Title">Vào lớp</a>
                                         </div>
-                                        <div class="dash-card-body">
-                                            @if (course.Status == WebHocTap_SaaS_.Models.CourseStatus.Published)
-                                            {
-                                                <span class="badge badge-status-published">Đã công khai</span>
-                                            }
-                                            else if (course.Status == WebHocTap_SaaS_.Models.CourseStatus.Closed)
-                                            {
-                                                <span class="badge badge-status-closed">Đã đóng</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge badge-status-draft">Bản nháp</span>
-                                            }
-                                            <h3>@course.Title</h3>
-                                            <p class="dash-course-stats">
-                                                <span><i class="bi bi-people" aria-hidden="true"></i> @course.StudentCount học viên</span>
-                                                <span aria-hidden="true">·</span>
-                                                <span><i class="bi bi-calendar3" aria-hidden="true"></i> @course.CreatedAt.ToString("dd/MM/yyyy")</span>
-                                            </p>
-                                            <div class="dash-card-actions">
-                                                <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@course.Id"
-                                                   class="btn btn-cta-ghost" aria-label="Vào lớp @course.Title">Vào lớp</a>
-                                            </div>
-                                        </div>
-                                    </article>
-                                </div>
-                            }
-                        </div>
-                    }
-                    else
+                                    </div>
+                                </article>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    @if (Model.IsTeacher)
                     {
                         <div class="empty-state">
                             <i class="bi bi-journal-plus" aria-hidden="true"></i>
-                            <p>Bạn chưa tạo khóa học nào.</p>
+                            <h3>Chưa có khóa học nào</h3>
+                            <p>Bắt đầu giảng dạy bằng cách tạo khóa học đầu tiên của bạn.</p>
                             <a asp-area="Client" asp-controller="Course" asp-action="Create" class="btn btn-cta">
-                                Tạo khóa học đầu tiên
+                                <i class="bi bi-plus-circle me-1" aria-hidden="true"></i> Tạo khóa học đầu tiên
                             </a>
-                        </div>
-                    }
-                </section>
-
-                <aside class="col-12 col-lg-4" aria-labelledby="teacher-todo-title">
-                    <section class="todo-widget">
-                        <h2 id="teacher-todo-title">Việc cần làm</h2>
-                        @if (Model.TodoItems.Any())
-                        {
-                            <ul class="dash-todo-list">
-                                @foreach (var todo in Model.TodoItems)
-                                {
-                                    <li class="todo-item">
-                                        <i class="bi @todo.Icon dash-todo-icon" aria-hidden="true"></i>
-                                        <div>
-                                            <p class="dash-todo-title">@todo.Title</p>
-                                            <p class="dash-todo-meta">@todo.Meta</p>
-                                        </div>
-                                        <svg class="dash-todo-divider" viewBox="0 0 360 12" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                                            <path d="M2 6 C24 2 44 10 65 5 S105 9 130 5 S172 9 194 5 S240 9 265 5 S315 9 358 5" />
-                                        </svg>
-                                    </li>
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <p class="text-muted">Không có việc cần làm.</p>
-                        }
-                    </section>
-                </aside>
-            </div>
-        </div>
-    </div>
-}
-else
-{
-    <div class="dash-page dash-page-student">
-        <section class="dash-banner" aria-labelledby="student-greeting">
-            <div class="dash-banner-inner d-flex flex-wrap align-items-center justify-content-between">
-                <h1 id="student-greeting">
-                    Xin chào, <span class="dash-user-name">@Model.FullName</span>
-                </h1>
-                <a asp-area="Client" asp-controller="Course" asp-action="Index" class="btn btn-cta-ghost">
-                    <i class="bi bi-search me-1" aria-hidden="true"></i> Duyệt khóa học
-                </a>
-            </div>
-        </section>
-
-        <div class="container-fluid dash-content">
-            <div class="row g-4 align-items-start">
-                <section class="col-12 col-lg-8" aria-labelledby="student-classes-title">
-                    <div class="dash-section-heading">
-                        <h2 id="student-classes-title">Lớp học của bạn</h2>
-                        <svg class="dash-heading-underline" viewBox="0 0 220 12" aria-hidden="true" focusable="false">
-                            <path d="M3 7 C18 2 30 10 46 5 S74 9 91 5 S120 9 137 5 S169 9 184 5 S206 8 217 5" />
-                        </svg>
-                    </div>
-
-                    @if (Model.Courses.Any())
-                    {
-                        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 dash-course-grid">
-                            @foreach (var course in Model.Courses)
-                            {
-                                <div class="col">
-                                    <article class="card-course">
-                                        <div class="dash-card-image" role="img">
-                                            <i class="bi bi-circle-fill dash-card-pin" aria-hidden="true"></i>
-                                        </div>
-                                        <div class="dash-card-body">
-                                            <h3>@course.Title</h3>
-                                            <p class="dash-course-stats">
-                                                <span><i class="bi bi-people" aria-hidden="true"></i> @course.StudentCount học viên</span>
-                                                <span aria-hidden="true">·</span>
-                                                <span><i class="bi bi-person" aria-hidden="true"></i> @course.TeacherName</span>
-                                            </p>
-                                            <div class="dash-card-actions">
-                                                <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@course.Id"
-                                                   class="btn btn-cta-ghost" aria-label="Vào lớp @course.Title">Vào lớp</a>
-                                            </div>
-                                        </div>
-                                    </article>
-                                </div>
-                            }
                         </div>
                     }
                     else
                     {
                         <div class="empty-state">
-                            <i class="bi bi-journal-code" aria-hidden="true"></i>
-                            <p>Bạn chưa đăng ký khóa học nào.</p>
-                            <a asp-area="Client" asp-controller="Course" asp-action="Index" class="btn btn-cta">
-                                Duyệt khóa học
+                            <i class="bi bi-journal-x" aria-hidden="true"></i>
+                            <h3>Chưa đăng ký khóa nào</h3>
+                            <p>Khám phá danh mục và đăng ký tham gia lớp học bạn yêu thích.</p>
+                            <a asp-area="Client" asp-controller="Course" asp-action="Index" class="btn btn-cta-ghost">
+                                <i class="bi bi-search me-1" aria-hidden="true"></i> Duyệt danh mục khóa học
                             </a>
                         </div>
                     }
-                </section>
+                }
+            </section>
 
-                <aside class="col-12 col-lg-4" aria-labelledby="student-todo-title">
-                    <section class="todo-widget">
-                        <h2 id="student-todo-title">Việc cần làm</h2>
-                        @if (Model.TodoItems.Any())
-                        {
-                            <ul class="dash-todo-list">
-                                @foreach (var todo in Model.TodoItems)
-                                {
-                                    <li class="todo-item">
-                                        <i class="bi @todo.Icon dash-todo-icon" aria-hidden="true"></i>
-                                        <div>
-                                            <p class="dash-todo-title">@todo.Title</p>
-                                            <p class="dash-todo-meta">@todo.Meta</p>
+            <!-- Cột phải: To-Do widget cross-course -->
+            <aside class="col-12 col-lg-4" aria-labelledby="todo-section-title">
+                <section class="todo-widget">
+                    <h2 id="todo-section-title">
+                        <i class="bi bi-check2-square" aria-hidden="true"></i> Việc cần làm
+                    </h2>
+
+                    @if (Model.ToDo.Any())
+                    {
+                        <ul class="dash-todo-list">
+                            @foreach (var item in Model.ToDo)
+                            {
+                                <li class="todo-item">
+                                    @if (item.Kind == ToDoKind.Session)
+                                    {
+                                        <i class="bi bi-calendar-event todo-icon" aria-hidden="true"></i>
+                                    }
+                                    else if (item.Kind == ToDoKind.SubmissionToGrade)
+                                    {
+                                        <i class="bi bi-pencil-square todo-icon" aria-hidden="true"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-clock-history todo-icon" aria-hidden="true"></i>
+                                    }
+
+                                    <div class="todo-body">
+                                        <a href="@item.ActionUrl" class="todo-title">@item.Title</a>
+                                        <div class="todo-meta">
+                                            <span><i class="bi bi-book me-1" aria-hidden="true"></i>@item.CourseTitle</span>
+                                            <span><i class="bi bi-clock me-1" aria-hidden="true"></i>@item.WhenUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</span>
+                                            @if (item.IsOverdueSoon)
+                                            {
+                                                <span class="pill-overdue">
+                                                    <span class="pill-overdue-dot" aria-hidden="true"></span>
+                                                    Sắp hết hạn
+                                                </span>
+                                            }
                                         </div>
-                                        <svg class="dash-todo-divider" viewBox="0 0 360 12" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-                                            <path d="M2 6 C24 2 44 10 65 5 S105 9 130 5 S172 9 194 5 S240 9 265 5 S315 9 358 5" />
-                                        </svg>
-                                    </li>
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <p class="text-muted">Không có việc cần làm sắp tới.</p>
-                        }
-                    </section>
-                </aside>
-            </div>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <div class="todo-empty">
+                            <i class="bi bi-check2-circle todo-empty-icon" aria-hidden="true"></i>
+                            <p class="mb-0">Tuyệt vời! Không có việc nào cần làm ngay.</p>
+                        </div>
+                    }
+                </section>
+            </aside>
         </div>
     </div>
-}
+</div>

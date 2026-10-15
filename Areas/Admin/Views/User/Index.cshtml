@@ -1,0 +1,212 @@
+@* ============================================================
+    File: Areas/Admin/Views/User/Index.cshtml
+    Mô tả: Admin Quản lý người dùng (P7) - Chuẩn theo mockup Admin — Quản lý người dùng.png
+    Áp dụng 16 mẫu nét: Row Card nét mực gọn (#sketch-clean)
+============================================================ *@
+@model WebHocTap_SaaS_.Models.ViewModels.AdminUserIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý người dùng";
+}
+
+<div class="container-fluid px-0 px-md-3 py-3" style="max-width: 1200px;">
+    @* ── Page Title & Subtitle ── *@
+    <div class="mb-4">
+        <h1 class="h2 fw-bold text-dark mb-1" style="font-family: var(--cm-font-body);">Quản lý người dùng</h1>
+        <p class="text-muted mb-0" style="font-size: 0.95rem;">Theo dõi tài khoản, vai trò và quyền truy cập trên hệ thống.</p>
+    </div>
+
+    @* ── Alerts ── *@
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show sketch-alert mb-3" role="alert">
+            <i class="bi bi-check-circle-fill me-1"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show sketch-alert mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+
+    @* ── Search & Filter Bar ── *@
+    <form method="get" asp-action="Index" class="sketch-filter-bar mb-4">
+        <div class="sketch-filter-item flex-grow-1" style="min-width: 260px;">
+            <label for="qInput">Tìm kiếm</label>
+            <div class="sketch-input-group">
+                <i class="bi bi-search"></i>
+                <input type="text" id="qInput" name="q" class="form-control sketch-filter-input"
+                       value="@Model.SearchQuery" placeholder="Tìm theo tên hoặc email..." />
+            </div>
+        </div>
+
+        <div class="sketch-filter-item" style="min-width: 170px;">
+            <label for="roleSelect">Vai trò</label>
+            <select id="roleSelect" name="role" class="form-select sketch-filter-input">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.RoleFilter))">Tất cả</option>
+                <option value="Admin" selected="@(Model.RoleFilter == "Admin")">Quản trị viên</option>
+                <option value="Teacher" selected="@(Model.RoleFilter == "Teacher")">Giảng viên</option>
+                <option value="Student" selected="@(Model.RoleFilter == "Student")">Học viên</option>
+            </select>
+        </div>
+
+        <div class="sketch-filter-item" style="min-width: 170px;">
+            <label for="statusSelect">Trạng thái</label>
+            <select id="statusSelect" name="status" class="form-select sketch-filter-input">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.StatusFilter))">Tất cả</option>
+                <option value="Active" selected="@(Model.StatusFilter == "Active")">Đang hoạt động</option>
+                <option value="Locked" selected="@(Model.StatusFilter == "Locked")">Bị khóa</option>
+                <option value="Lockout" selected="@(Model.StatusFilter == "Lockout")">Bị tạm khóa</option>
+            </select>
+        </div>
+
+        <div class="sketch-filter-item">
+            <button type="submit" class="btn btn-sketch-action px-3 py-2">
+                <i class="bi bi-sliders me-1"></i> Lọc
+            </button>
+        </div>
+    </form>
+
+    @* ── Summary Stats ── *@
+    <div class="text-muted fw-medium mb-3" style="font-size: 0.925rem;">
+        Tổng @Model.TotalCount người dùng · @Model.ActiveCount hoạt động · @Model.LockedCount bị khóa · @Model.LockoutCount bị tạm khóa
+    </div>
+
+    @* ── Column Headers (Desktop) ── *@
+    <div class="d-none d-md-flex justify-content-between px-3 mb-2 text-muted small fw-semibold" style="letter-spacing: 0.2px;">
+        <div style="flex: 1 1 35%;">Tài khoản</div>
+        <div style="flex: 0 0 16%;">Vai trò</div>
+        <div style="flex: 0 0 20%;">Trạng thái</div>
+        <div style="flex: 0 0 20%;" class="text-end pe-2">Thao tác</div>
+    </div>
+
+    @* ── User Cards List ── *@
+    @if (Model.Users.Count == 0)
+    {
+        @* Empty State: Dashed box + loose empty box scribble *@
+        <div class="sketch-empty-box">
+            <img src="~/asset/images/empty-box.svg" alt="Rỗng" style="width: 64px; height: 50px;" class="mb-3" />
+            <h4 class="mb-0">Không tìm thấy người dùng nào</h4>
+        </div>
+    }
+    else
+    {
+        @foreach (var user in Model.Users)
+        {
+            <div class="sketch-surface sketch-row-card @(!user.IsActive ? "row-disabled" : "")">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content sketch-row-content d-flex align-items-center justify-content-between gap-3 flex-wrap flex-md-nowrap">
+                    @* 1. Account info (Avatar + Name + Email) *@
+                    <div class="d-flex align-items-center gap-3" style="flex: 1 1 35%; min-width: 240px;">
+                        <div class="sketch-avatar-circle">
+                            @user.Initials
+                        </div>
+                        <div class="text-truncate">
+                            <div class="fw-bold text-dark" style="font-size: 0.95rem;">
+                                @user.FullName
+                                @if (user.IsCurrentUser)
+                                {
+                                    <span class="text-muted fw-normal small ms-1">(bạn)</span>
+                                }
+                            </div>
+                            <div class="text-muted small text-truncate">@user.Email</div>
+                        </div>
+                    </div>
+
+                    @* 2. Role *@
+                    <div style="flex: 0 0 16%; min-width: 120px;">
+                        @if (user.UserRole == "Admin")
+                        {
+                            <span class="sketch-pill sketch-pill-admin">Quản trị viên</span>
+                        }
+                        else if (user.UserRole == "Teacher")
+                        {
+                            <span class="sketch-pill sketch-pill-teacher">Giảng viên</span>
+                        }
+                        else
+                        {
+                            <span class="sketch-pill sketch-pill-student">Học viên</span>
+                        }
+                    </div>
+
+                    @* 3. Status *@
+                    <div style="flex: 0 0 20%; min-width: 140px;">
+                        @if (user.IsLockedOut)
+                        {
+                            <span class="sketch-pill sketch-pill-outline">
+                                <i class="bi bi-clock"></i> Bị tạm khóa
+                            </span>
+                        }
+                        else if (user.IsActive)
+                        {
+                            <span class="sketch-pill sketch-pill-active">Đang hoạt động</span>
+                        }
+                        else
+                        {
+                            <span class="sketch-pill sketch-pill-locked">
+                                <i class="bi bi-lock-fill"></i> Bị khóa
+                            </span>
+                        }
+                    </div>
+
+                    @* 4. Actions *@
+                    <div class="d-flex align-items-center justify-content-md-end gap-2" style="flex: 0 0 20%; min-width: 160px;">
+                        @if (user.IsCurrentUser)
+                        {
+                            <button type="button" class="btn btn-sketch-action disabled" disabled title="Không thể tự khóa tài khoản của chính mình">
+                                Khóa
+                            </button>
+                        }
+                        else if (user.IsLockedOut)
+                        {
+                            <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sketch-action" onclick="return confirm('Bạn chắc chắn muốn khóa tài khoản @user.FullName?')">
+                                    Khóa
+                                </button>
+                            </form>
+                            <form asp-action="Unlock" asp-route-id="@user.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sketch-action">
+                                    Mở khóa tạm thời
+                                </button>
+                            </form>
+                        }
+                        else if (user.IsActive)
+                        {
+                            <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sketch-action" onclick="return confirm('Bạn chắc chắn muốn khóa tài khoản @user.FullName?')">
+                                    Khóa
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form asp-action="ToggleActive" asp-route-id="@user.Id" method="post" class="d-inline">
+                                <button type="submit" class="btn btn-sketch-action">
+                                    Mở khóa
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* ── Pagination Footer ── *@
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-4 pt-2">
+            <span class="text-muted small">
+                Hiển thị 1–@Model.Users.Count trên @Model.TotalCount người dùng
+            </span>
+            <div class="d-flex gap-2">
+                <a href="#" class="sketch-pagination-btn disabled" tabindex="-1">Trước</a>
+                <a href="#" class="sketch-pagination-btn active">1</a>
+                <a href="#" class="sketch-pagination-btn">2</a>
+                <a href="#" class="sketch-pagination-btn">3</a>
+                <a href="#" class="sketch-pagination-btn">Sau</a>
+            </div>
+        </div>
+    }
+</div>

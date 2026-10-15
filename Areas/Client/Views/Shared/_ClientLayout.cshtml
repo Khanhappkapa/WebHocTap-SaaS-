@@ -1,4 +1,4 @@
-@* ============================================================
+﻿@* ============================================================
     File: Areas/Client/Views/Shared/_ClientLayout.cshtml
     Mô tả: Layout cho khu vực Client (Teacher + Student)
     CHECKPOINT: @inject UserManager — hiển thị FullName thật + badge role + form POST logout
@@ -159,6 +159,12 @@
                             </a>
                         </li>
                     }
+                                        <li class="nav-item">
+                        <a class="nav-link sidebar-link @(currentCtrl == "Profile" ? "active" : "")" asp-area="Client" asp-controller="Profile" asp-action="Index">
+                            <span class="link-icon-box"><i class="bi bi-person-circle"></i></span>
+                            <span>Hồ sơ</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" href="#">
                             <span class="link-icon-box"><i class="bi bi-pencil-square"></i></span>
@@ -198,5 +204,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await Html.PartialAsync("_SketchSymbols")
 </body>
 </html>

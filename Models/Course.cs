@@ -1,7 +1,7 @@
-// ============================================================
+﻿// ============================================================
 // File: Models/Course.cs
-// Mô tả: Model khóa học (lớp học trực tuyến)
-// CHECKPOINT: Quan hệ 1-nhiều với Teacher(AppUser), Enrollments, Sessions, Materials, Assignments
+// MÃ´ táº£: Model khÃ³a há»c (lá»›p há»c trá»±c tuyáº¿n)
+// CHECKPOINT: Quan há»‡ 1-nhiá»u vá»›i Teacher(AppUser), Enrollments, Sessions, Materials, Assignments
 // ============================================================
 
 using System.ComponentModel.DataAnnotations;
@@ -10,93 +10,100 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace WebHocTap_SaaS_.Models
 {
     /// <summary>
-    /// Khóa học / Lớp học trực tuyến
-    /// Mỗi khóa học thuộc về một Teacher (AppUser)
+    /// KhÃ³a há»c / Lá»›p há»c trá»±c tuyáº¿n
+    /// Má»—i khÃ³a há»c thuá»™c vá» má»™t Teacher (AppUser)
     /// </summary>
     public class Course
     {
         // --------------------------------------------------
-        // CHECKPOINT: Thuộc tính cơ bản
+        // CHECKPOINT: Thuá»™c tÃ­nh cÆ¡ báº£n
         // --------------------------------------------------
 
         /// <summary>
-        /// Khóa chính, tự tăng
+        /// KhÃ³a chÃ­nh, tá»± tÄƒng
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         /// <summary>
-        /// Tên khóa học
+        /// TÃªn khÃ³a há»c
         /// </summary>
-        [Required(ErrorMessage = "Tên khóa học là bắt buộc")]
-        [StringLength(200, ErrorMessage = "Tên khóa học tối đa 200 ký tự")]
-        [Display(Name = "Tên khóa học")]
+        [Required(ErrorMessage = "TÃªn khÃ³a há»c lÃ  báº¯t buá»™c")]
+        [StringLength(200, ErrorMessage = "TÃªn khÃ³a há»c tá»‘i Ä‘a 200 kÃ½ tá»±")]
+        [Display(Name = "TÃªn khÃ³a há»c")]
         public string Title { get; set; } = string.Empty;
 
         /// <summary>
-        /// Mô tả khóa học (không bắt buộc)
+        /// MÃ´ táº£ khÃ³a há»c (khÃ´ng báº¯t buá»™c)
         /// </summary>
-        [StringLength(2000, ErrorMessage = "Mô tả tối đa 2000 ký tự")]
-        [Display(Name = "Mô tả")]
+        [StringLength(2000, ErrorMessage = "MÃ´ táº£ tá»‘i Ä‘a 2000 kÃ½ tá»±")]
+        [Display(Name = "MÃ´ táº£")]
         public string? Description { get; set; }
 
         /// <summary>
-        /// ID của giáo viên (Foreign Key tới AppUser)
-        /// Kiểu string vì IdentityUser.Id là string (GUID)
+        /// ID cá»§a giÃ¡o viÃªn (Foreign Key tá»›i AppUser)
+        /// Kiá»ƒu string vÃ¬ IdentityUser.Id lÃ  string (GUID)
         /// </summary>
-        [Required(ErrorMessage = "Giáo viên là bắt buộc")]
+        [Required(ErrorMessage = "GiÃ¡o viÃªn lÃ  báº¯t buá»™c")]
         [ForeignKey("Teacher")]
         public string TeacherId { get; set; } = string.Empty;
 
         /// <summary>
-        /// Trạng thái khóa học: Draft / Published / Closed
-        /// CHECKPOINT: Sử dụng enum CourseStatus thay vì string để type-safe
+        /// Tráº¡ng thÃ¡i khÃ³a há»c: Draft / Published / Closed
+        /// CHECKPOINT: Sá»­ dá»¥ng enum CourseStatus thay vÃ¬ string Ä‘á»ƒ type-safe
         /// </summary>
         [Required]
-        [Display(Name = "Trạng thái")]
+        [Display(Name = "Tráº¡ng thÃ¡i")]
         public CourseStatus Status { get; set; } = CourseStatus.Draft;
 
         /// <summary>
-        /// Ngày tạo khóa học
+        /// NgÃ y táº¡o khÃ³a há»c
         /// </summary>
-        [Display(Name = "Ngày tạo")]
+        [Display(Name = "NgÃ y táº¡o")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
         /// <summary>
-        /// Ngày cập nhật gần nhất (null nếu chưa cập nhật)
+        /// NgÃ y cáº­p nháº­t gáº§n nháº¥t (null náº¿u chÆ°a cáº­p nháº­t)
         /// </summary>
-        [Display(Name = "Ngày cập nhật")]
+        [Display(Name = "NgÃ y cáº­p nháº­t")]
         public DateTime? UpdatedAt { get; set; }
+
+        /// <summary>
+        /// Ẩn khóa học khỏi danh sách công khai (soft-hide bởi Admin)
+        /// </summary>
+        [Display(Name = "Ẩn khóa học")]
+        public bool IsHidden { get; set; } = false;
 
         // --------------------------------------------------
         // CHECKPOINT: Navigation Properties
         // --------------------------------------------------
 
         /// <summary>
-        /// Giáo viên phụ trách khóa học
-        /// Quan hệ: Nhiều Course → 1 Teacher (AppUser)
+        /// GiÃ¡o viÃªn phá»¥ trÃ¡ch khÃ³a há»c
+        /// Quan há»‡: Nhiá»u Course â†’ 1 Teacher (AppUser)
         /// </summary>
         public virtual AppUser Teacher { get; set; } = null!;
 
         /// <summary>
-        /// Danh sách học sinh đăng ký khóa học
+        /// Danh sÃ¡ch há»c sinh Ä‘Äƒng kÃ½ khÃ³a há»c
         /// </summary>
         public virtual ICollection<Enrollment> Enrollments { get; set; } = new List<Enrollment>();
 
         /// <summary>
-        /// Danh sách buổi học trực tuyến
+        /// Danh sÃ¡ch buá»•i há»c trá»±c tuyáº¿n
         /// </summary>
         public virtual ICollection<Session> Sessions { get; set; } = new List<Session>();
 
         /// <summary>
-        /// Danh sách tài liệu học tập
+        /// Danh sÃ¡ch tÃ i liá»‡u há»c táº­p
         /// </summary>
         public virtual ICollection<Material> Materials { get; set; } = new List<Material>();
 
         /// <summary>
-        /// Danh sách bài tập
+        /// Danh sÃ¡ch bÃ i táº­p
         /// </summary>
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
     }
 }
+

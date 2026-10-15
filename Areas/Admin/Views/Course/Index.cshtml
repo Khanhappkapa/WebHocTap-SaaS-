@@ -1,0 +1,243 @@
+@* ============================================================
+    File: Areas/Admin/Views/Course/Index.cshtml
+    Mô tả: Admin Giám sát khóa học (P7) - Chuẩn theo mockup Admin — Giám sát khóa học.png
+    Áp dụng 16 mẫu nét: Row Card nét mực gọn (#sketch-clean)
+============================================================ *@
+@model WebHocTap_SaaS_.Models.ViewModels.AdminCourseIndexViewModel
+@{
+    ViewData["Title"] = "Giám sát khóa học";
+}
+
+<div class="container-fluid px-0 px-md-3 py-3" style="max-width: 1200px;">
+    @* ── Page Title & Subtitle ── *@
+    <div class="mb-4">
+        <h1 class="h2 fw-bold text-dark mb-1" style="font-family: var(--cm-font-body);">Giám sát khóa học</h1>
+        <p class="text-muted mb-0" style="font-size: 0.95rem;">Theo dõi trạng thái và kiểm soát hiển thị khóa học.</p>
+    </div>
+
+    @* ── Alerts ── *@
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show sketch-alert mb-3" role="alert">
+            <i class="bi bi-check-circle-fill me-1"></i> @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show sketch-alert mb-3" role="alert">
+            <i class="bi bi-exclamation-triangle-fill me-1"></i> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+        </div>
+    }
+
+    @* ── Search & Filter Bar ── *@
+    <form method="get" asp-action="Index" class="sketch-filter-bar mb-4">
+        <div class="sketch-filter-item flex-grow-1" style="min-width: 260px;">
+            <label for="qInput">Tìm kiếm</label>
+            <div class="sketch-input-group">
+                <i class="bi bi-search"></i>
+                <input type="text" id="qInput" name="q" class="form-control sketch-filter-input"
+                       value="@Model.SearchQuery" placeholder="Tìm theo tên khóa học..." />
+            </div>
+        </div>
+
+        <div class="sketch-filter-item" style="min-width: 170px;">
+            <label for="statusSelect">Trạng thái</label>
+            <select id="statusSelect" name="status" class="form-select sketch-filter-input">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.StatusFilter))">Tất cả</option>
+                <option value="Published" selected="@(Model.StatusFilter == "Published")">Công khai</option>
+                <option value="Draft" selected="@(Model.StatusFilter == "Draft")">Nháp</option>
+                <option value="Closed" selected="@(Model.StatusFilter == "Closed")">Đã đóng</option>
+            </select>
+        </div>
+
+        <div class="sketch-filter-item" style="min-width: 170px;">
+            <label for="teacherSelect">Giáo viên</label>
+            <select id="teacherSelect" name="teacher" class="form-select sketch-filter-input">
+                <option value="" selected="@(string.IsNullOrEmpty(Model.TeacherFilter))">Tất cả</option>
+                @foreach (var t in Model.Teachers)
+                {
+                    <option value="@t" selected="@(Model.TeacherFilter == t)">@t</option>
+                }
+            </select>
+        </div>
+
+        <div class="sketch-filter-item">
+            <button type="submit" class="btn btn-sketch-action px-3 py-2">
+                <i class="bi bi-sliders me-1"></i> Lọc
+            </button>
+        </div>
+    </form>
+
+    @* ── Summary Stats ── *@
+    <div class="text-muted fw-medium mb-3" style="font-size: 0.925rem;">
+        Tổng @Model.TotalCount khóa học · @Model.HiddenCount đang ẩn
+    </div>
+
+    @* ── Column Headers (Desktop) ── *@
+    <div class="d-none d-md-flex justify-content-between px-3 mb-2 text-muted small fw-semibold" style="letter-spacing: 0.2px;">
+        <div style="flex: 1 1 35%;">Khóa học / Giáo viên</div>
+        <div style="flex: 0 0 14%;">Trạng thái</div>
+        <div style="flex: 0 0 14%;">Hiển thị</div>
+        <div style="flex: 0 0 15%;">Đã ghi danh</div>
+        <div style="flex: 0 0 18%;" class="text-end pe-2">Thao tác</div>
+    </div>
+
+    @* ── Course Cards List ── *@
+    @if (Model.Courses.Count == 0)
+    {
+        @* Empty State: Dashed box + loose empty box scribble *@
+        <div class="sketch-empty-box">
+            <img src="~/asset/images/empty-box.svg" alt="Rỗng" style="width: 64px; height: 50px;" class="mb-3" />
+            <h4 class="mb-0">Chưa có khóa học nào</h4>
+        </div>
+    }
+    else
+    {
+        @foreach (var course in Model.Courses)
+        {
+            <div class="sketch-surface sketch-row-card @(course.IsHidden ? "row-hidden" : "")">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content sketch-row-content d-flex align-items-center justify-content-between gap-3 flex-wrap flex-md-nowrap">
+                    @* 1. Course title & Teacher *@
+                    <div class="d-flex align-items-center gap-2" style="flex: 1 1 35%; min-width: 240px;">
+                        @if (course.IsHidden)
+                        {
+                            <i class="bi bi-eye-slash text-dark fs-5" title="Đang ẩn" style="flex-shrink: 0;"></i>
+                        }
+                        <div class="text-truncate">
+                            <div class="fw-bold text-dark" style="font-size: 0.95rem;">
+                                @course.Title
+                            </div>
+                            <div class="text-muted small">Giáo viên: @course.TeacherName</div>
+                        </div>
+                    </div>
+
+                    @* 2. Status badge *@
+                    <div style="flex: 0 0 14%; min-width: 100px;">
+                        @if (course.Status == CourseStatus.Published)
+                        {
+                            <span class="sketch-pill sketch-pill-active">Công khai</span>
+                        }
+                        else if (course.Status == CourseStatus.Draft)
+                        {
+                            <span class="sketch-pill sketch-pill-locked">Nháp</span>
+                        }
+                        else
+                        {
+                            <span class="sketch-pill sketch-pill-admin">Đã đóng</span>
+                        }
+                    </div>
+
+                    @* 3. Visibility badge *@
+                    <div style="flex: 0 0 14%; min-width: 110px;">
+                        @if (course.IsHidden)
+                        {
+                            <span class="sketch-pill sketch-pill-outline">
+                                <span class="badge-dot-red">●</span> Đã ẩn
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="sketch-pill sketch-pill-outline">Đang hiện</span>
+                        }
+                    </div>
+
+                    @* 4. Enrollment count *@
+                    <div class="text-dark small fw-medium" style="flex: 0 0 15%; min-width: 100px;">
+                        @course.EnrollmentCount học viên
+                    </div>
+
+                    @* 5. Actions *@
+                    <div class="d-flex align-items-center justify-content-md-end gap-2" style="flex: 0 0 18%; min-width: 150px;">
+                        @* Close Button *@
+                        @if (course.Status == CourseStatus.Closed)
+                        {
+                            <button type="button" class="btn btn-sketch-action disabled" disabled>
+                                Đóng khóa
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-sketch-action btn-open-close-modal"
+                                    data-course-id="@course.Id"
+                                    data-course-title="@course.Title">
+                                Đóng khóa
+                            </button>
+                        }
+
+                        @* Hide / Show Button *@
+                        <form asp-action="ToggleHidden" asp-route-id="@course.Id" method="post" class="d-inline">
+                            <button type="submit" class="btn btn-sketch-action">
+                                @(course.IsHidden ? "Hiện" : "Ẩn")
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @* ── Pagination Footer ── *@
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mt-4 pt-2">
+            <span class="text-muted small">
+                Hiển thị 1–@Model.Courses.Count trên @Model.TotalCount khóa học
+            </span>
+            <div class="d-flex gap-2">
+                <a href="#" class="sketch-pagination-btn disabled" tabindex="-1">Trước</a>
+                <a href="#" class="sketch-pagination-btn active">1</a>
+                <a href="#" class="sketch-pagination-btn">2</a>
+                <a href="#" class="sketch-pagination-btn">3</a>
+                <a href="#" class="sketch-pagination-btn">Sau</a>
+            </div>
+        </div>
+    }
+</div>
+
+@* ── Confirmation Modal: Chuẩn theo Admin — Xác nhận thao tác khóa học.png ── *@
+<div class="modal fade" id="confirmCloseModal" tabindex="-1" aria-labelledby="confirmCloseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
+        <div class="modal-content" style="border: 2px solid var(--cm-ink, #2d2d2d); border-radius: 10px; background: #ffffff; box-shadow: 4px 4px 0 rgba(0,0,0,0.12);">
+            <div class="modal-header border-bottom py-3 px-4">
+                <h5 class="modal-title fw-bold text-dark" id="confirmCloseModalLabel" style="font-family: var(--cm-font-body);">Xác nhận thao tác</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <form id="closeCourseForm" method="post" asp-action="Close">
+                <div class="modal-body px-4 py-3">
+                    <p class="fw-bold mb-2 text-dark" style="font-size: 1.05rem;" id="modalQuestionText">
+                        Bạn chắc chắn muốn đóng khóa này?
+                    </p>
+                    <p class="text-muted small mb-0">Khóa học sẽ chuyển sang trạng thái Đã đóng.</p>
+                </div>
+                <div class="modal-footer border-0 px-4 pb-4 pt-2 d-flex justify-content-end gap-2">
+                    <button type="button" class="btn btn-sketch-action px-4" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-sketch-dark px-4">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var modalEl = document.getElementById('confirmCloseModal');
+            if (!modalEl) return;
+            var bsModal = new bootstrap.Modal(modalEl);
+            var form = document.getElementById('closeCourseForm');
+            var question = document.getElementById('modalQuestionText');
+
+            document.querySelectorAll('.btn-open-close-modal').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var id = this.getAttribute('data-course-id');
+                    var title = this.getAttribute('data-course-title');
+                    form.action = '/Admin/Course/Close/' + id;
+                    question.textContent = 'Bạn chắc chắn muốn đóng khóa “' + title + '”?';
+                    bsModal.show();
+                });
+            });
+        });
+    </script>
+}

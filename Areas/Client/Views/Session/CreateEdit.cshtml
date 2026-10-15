@@ -20,7 +20,8 @@
                 <!-- Kẹp ghim trang trí (ẩn trên điện thoại) -->
                 <img src="~/asset/images/paperclip.svg" alt="Kẹp ghim" class="position-absolute d-none d-md-block" style="top: -18px; right: 20px; height: 42px; z-index: 5; transform: rotate(15deg);" />
 
-                <h2 class="mb-4" style="font-family: var(--cm-font-hand); color: var(--cm-ink); font-weight: 700; text-decoration: underline wavy var(--cm-accent); text-underline-offset: 6px;">
+                <h2 class="mb-4 d-flex align-items-center" style="font-family: var(--cm-font-hand); color: var(--cm-ink); font-weight: 700; text-decoration: underline wavy var(--cm-accent); text-underline-offset: 6px;">
+                    <img src="~/asset/images/calendar-date.svg" alt="" class="sketch-icon-img me-2" width="30" height="30" />
                     @(isEdit ? "Sửa buổi học" : "Thêm buổi học") — <span style="color: var(--cm-primary);">@ViewBag.CourseTitle</span>
                 </h2>
 

@@ -1,0 +1,531 @@
+<!-- SVG dùng chung: đặt một lần trong mỗi document -->
+<svg class="sketch-definitions"
+     xmlns="http://www.w3.org/2000/svg"
+     aria-hidden="true"
+     focusable="false">
+  <defs>
+    <symbol id="sketch-clean" viewBox="0 0 400 186">
+      <path class="sketch-contour"
+            d="M8 .3 C131 -.3 260 0 395 1.3
+               C398 1.3 400 3.4 400 7.4
+               L399 179 C399 183.3 396.7 185.3 392 184.7
+               C264 186 135 186.3 6 185.7
+               C2 185.7 .4 183.3 1.1 179
+               L.1 8.4 C-.6 3 2.1 .3 8 .3 Z" />
+    </symbol>
+
+    <symbol id="sketch-double" viewBox="0 0 400 186">
+      <path class="sketch-contour"
+            d="M6 2 C68 0 139 -.3 220 1 L393 0
+               C398 0 400 2.7 399.2 8.1
+               C400.5 65 400.2 122.5 398.2 181
+               C397.5 184.8 394.5 186.5 389 185.9
+               L8.2 184.8 C2.1 186.9 -.6 184.5 .1 177.7
+               L1.1 10.2 C-.2 4.7 1.4 2 6 2 Z" />
+    </symbol>
+
+    <symbol id="sketch-note" viewBox="0 0 400 186">
+      <path class="sketch-contour"
+            d="M19 .8 C140 -.5 260 -.2 379 1.8
+               C392.6 1.8 399.3 7.9 399.3 20.1
+               C400.7 68.7 400 118.3 397.3 169
+               C396 180.5 389 185.9 376 185.2
+               C258.5 186.5 139.5 186.2 19 184.2
+               C6.4 184.2 .4 177.8 1.1 165
+               L.05 21.1 C-.6 8.2 5.8 1.5 19 .8 Z" />
+    </symbol>
+
+    <symbol id="sketch-sticker" viewBox="0 0 400 186">
+      <path class="sketch-contour"
+            d="M10 1 C107 -1 172 4 240 1
+               C300 -.3 350 -.3 391 1
+               C397 .3 399.6 3.7 398.9 11.1
+               C400.3 47 400.3 80.6 398.9 112
+               L399.9 175.3 C400.6 182 396.9 185 388.8 184.4
+               C281 188.4 200 183.4 119.2 185.4
+               L9.2 185.4 C2.4 186.1 -.6 182.4 .1 174.2
+               C1.4 132.8 1.4 93.2 .1 55.5
+               L.1 11.1 C-.6 4.4 2.8 1 10 1 Z" />
+    </symbol>
+
+    <symbol id="sketch-rule" viewBox="0 0 320 12">
+      <path class="sketch-rule-path"
+            d="M3 7 C24 2 43 10 64 5
+               S105 9 129 5 S175 9 199 5
+               S249 9 274 5 S299 8 317 5" />
+    </symbol>
+  </defs>
+</svg>
+
+<main class="sketch-board">
+  <header class="sketch-board-header">
+    <div>
+      <p class="sketch-eyebrow">Thử nét, chọn dáng</p>
+      <h1>Bulb.edu — Sketch UI</h1>
+      <p class="sketch-intro">
+        Bốn dáng nét, cùng một nội dung.
+        Khám phá chất giấy và nhịp bút cho giao diện học tập.
+      </p>
+    </div>
+
+    <div class="sketch-palette" aria-label="Bảng màu Bulb.edu">
+      <h2>BẢNG MÀU BULB.EDU</h2>
+      <ul>
+        <li><span class="sketch-swatch swatch-paper" aria-hidden="true"></span>Giấy</li>
+        <li><span class="sketch-swatch swatch-surface" aria-hidden="true"></span>Bề mặt</li>
+        <li><span class="sketch-swatch swatch-ink" aria-hidden="true"></span>Mực</li>
+        <li><span class="sketch-swatch swatch-blue" aria-hidden="true"></span>Bút xanh</li>
+        <li><span class="sketch-swatch swatch-red" aria-hidden="true"></span>Nhấn đỏ</li>
+        <li><span class="sketch-swatch swatch-note" aria-hidden="true"></span>Ghi chú</li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- ==================== 4 BOX ==================== -->
+  <section class="sketch-section" aria-labelledby="sketch-box-title">
+    <div class="sketch-section-header">
+      <h2 id="sketch-box-title">Box / Thẻ nội dung</h2>
+      <p>Thông tin ngắn, đọc nhanh · 4 biến thể</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 g-4">
+      <!-- Box 1: Nét mực gọn -->
+      <div class="col">
+        <figure class="sketch-example">
+          <article class="sketch-surface sketch-box">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-clean"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3>Bài tập sắp tới</h3>
+              <p>Ôn tập hàm số và đồ thị</p>
+              <div class="sketch-divider"></div>
+              <p class="sketch-meta">Hạn nộp: ngày mai</p>
+            </div>
+          </article>
+          <figcaption>
+            <strong>Nét mực gọn</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Box 2: Phác nét đôi -->
+      <div class="col">
+        <figure class="sketch-example">
+          <article class="sketch-surface sketch-box sketch-double-line">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <svg class="sketch-inner-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3>Bài tập sắp tới</h3>
+              <p>Ôn tập hàm số và đồ thị</p>
+              <div class="sketch-divider"></div>
+              <p class="sketch-meta">Hạn nộp: ngày mai</p>
+            </div>
+          </article>
+          <figcaption>
+            <strong>Phác nét đôi</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Box 3: Giấy ghi chú -->
+      <div class="col">
+        <figure class="sketch-example">
+          <article class="sketch-surface sketch-box sketch-postit">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-note"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3>Bài tập sắp tới</h3>
+              <p>Ôn tập hàm số và đồ thị</p>
+              <svg class="sketch-blue-rule" viewBox="0 0 320 12"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-rule"></use>
+              </svg>
+              <p class="sketch-meta">Hạn nộp: ngày mai</p>
+            </div>
+          </article>
+          <figcaption>
+            <strong>Giấy ghi chú</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Box 4: Sticker nổi -->
+      <div class="col">
+        <figure class="sketch-example">
+          <article class="sketch-surface sketch-box sketch-heavy">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-sticker"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3>Bài tập sắp tới</h3>
+              <p>Ôn tập hàm số và đồ thị</p>
+              <div class="sketch-divider sketch-divider-ink"></div>
+              <p class="sketch-meta">Hạn nộp: ngày mai</p>
+            </div>
+          </article>
+          <figcaption>
+            <strong>Sticker nổi</strong>
+            <span>Heavy · Cổng vào / marketing</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4 BAR ==================== -->
+  <section class="sketch-section" aria-labelledby="sketch-bar-title">
+    <div class="sketch-section-header">
+      <h2 id="sketch-bar-title">Bar / Thanh ngang</h2>
+      <p>Tiêu đề vùng + liên kết · Vùng bấm 48 px</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 g-4">
+      <div class="col">
+        <figure class="sketch-example">
+          <nav class="sketch-surface sketch-bar"
+               aria-label="Thanh lớp học — nét mực gọn">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-clean"></use>
+            </svg>
+            <div class="sketch-content sketch-bar-content">
+              <h3>Lớp học của bạn</h3>
+              <button type="button" class="sketch-text-action"
+                      data-action="view-classes">Xem tất cả</button>
+            </div>
+          </nav>
+          <figcaption>
+            <strong>Nét mực gọn</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <nav class="sketch-surface sketch-bar sketch-double-line"
+               aria-label="Thanh lớp học — phác nét đôi">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <svg class="sketch-inner-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <div class="sketch-content sketch-bar-content">
+              <h3>Lớp học của bạn</h3>
+              <button type="button" class="sketch-text-action"
+                      data-action="view-classes">Xem tất cả</button>
+            </div>
+          </nav>
+          <figcaption>
+            <strong>Phác nét đôi</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <nav class="sketch-surface sketch-bar"
+               aria-label="Thanh lớp học — giấy ghi chú">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-note"></use>
+            </svg>
+            <div class="sketch-content sketch-bar-content">
+              <div class="sketch-bar-heading">
+                <h3>Lớp học của bạn</h3>
+                <svg class="sketch-blue-rule" viewBox="0 0 320 12"
+                     preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                  <use href="#sketch-rule"></use>
+                </svg>
+              </div>
+              <button type="button" class="sketch-text-action"
+                      data-action="view-classes">Xem tất cả</button>
+            </div>
+          </nav>
+          <figcaption>
+            <strong>Giấy ghi chú</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <nav class="sketch-surface sketch-bar sketch-heavy"
+               aria-label="Thanh lớp học — sticker nổi">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-sticker"></use>
+            </svg>
+            <div class="sketch-content sketch-bar-content">
+              <h3>Lớp học của bạn</h3>
+              <button type="button"
+                      class="sketch-text-action sketch-action-separated"
+                      data-action="view-classes">Xem tất cả</button>
+            </div>
+          </nav>
+          <figcaption>
+            <strong>Sticker nổi</strong>
+            <span>Heavy · Cổng vào / marketing</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4 CONTAINER ==================== -->
+  <section class="sketch-section" aria-labelledby="sketch-container-title">
+    <div class="sketch-section-header">
+      <h2 id="sketch-container-title">Container / Khung nội dung</h2>
+      <p>Khung thông tin có nhãn · Ô nhập thẳng, nền trắng</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 g-4">
+      <div class="col">
+        <figure class="sketch-example">
+          <section class="sketch-surface sketch-container"
+                   aria-labelledby="container-clean-title">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-clean"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3 id="container-clean-title">Thông tin khóa học</h3>
+              <div class="sketch-divider"></div>
+              <label for="course-clean">Tên khóa học</label>
+              <input id="course-clean" class="sketch-demo-input"
+                     type="text" value="Toán Đại Số 101" />
+              <label for="description-clean">Mô tả</label>
+              <textarea id="description-clean" class="sketch-demo-input"
+                        rows="3">Khóa học nền tảng về hàm số và đồ thị</textarea>
+            </div>
+          </section>
+          <figcaption>
+            <strong>Nét mực gọn</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <section class="sketch-surface sketch-container sketch-double-line"
+                   aria-labelledby="container-double-title">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <svg class="sketch-inner-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-double"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3 id="container-double-title">Thông tin khóa học</h3>
+              <div class="sketch-divider"></div>
+              <label for="course-double">Tên khóa học</label>
+              <input id="course-double" class="sketch-demo-input"
+                     type="text" value="Toán Đại Số 101" />
+              <label for="description-double">Mô tả</label>
+              <textarea id="description-double" class="sketch-demo-input"
+                        rows="3">Khóa học nền tảng về hàm số và đồ thị</textarea>
+            </div>
+          </section>
+          <figcaption>
+            <strong>Phác nét đôi</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <section class="sketch-surface sketch-container"
+                   aria-labelledby="container-note-title">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-note"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3 id="container-note-title">Thông tin khóa học</h3>
+              <svg class="sketch-blue-rule sketch-title-rule"
+                   viewBox="0 0 320 12" preserveAspectRatio="none"
+                   aria-hidden="true" focusable="false">
+                <use href="#sketch-rule"></use>
+              </svg>
+              <label for="course-note">Tên khóa học</label>
+              <input id="course-note" class="sketch-demo-input"
+                     type="text" value="Toán Đại Số 101" />
+              <label for="description-note">Mô tả</label>
+              <textarea id="description-note" class="sketch-demo-input"
+                        rows="3">Khóa học nền tảng về hàm số và đồ thị</textarea>
+            </div>
+          </section>
+          <figcaption>
+            <strong>Giấy ghi chú</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <section class="sketch-surface sketch-container sketch-heavy"
+                   aria-labelledby="container-heavy-title">
+            <svg class="sketch-outline" viewBox="0 0 400 186"
+                 preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <use href="#sketch-sticker"></use>
+            </svg>
+            <div class="sketch-content">
+              <h3 id="container-heavy-title">Thông tin khóa học</h3>
+              <div class="sketch-divider sketch-divider-ink"></div>
+              <label for="course-heavy">Tên khóa học</label>
+              <input id="course-heavy" class="sketch-demo-input"
+                     type="text" value="Toán Đại Số 101" />
+              <label for="description-heavy">Mô tả</label>
+              <textarea id="description-heavy" class="sketch-demo-input"
+                        rows="3">Khóa học nền tảng về hàm số và đồ thị</textarea>
+            </div>
+          </section>
+          <figcaption>
+            <strong>Sticker nổi</strong>
+            <span>Heavy · Cổng vào / marketing</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 4 BUTTON ==================== -->
+  <section class="sketch-section" aria-labelledby="sketch-button-title">
+    <div class="sketch-section-header">
+      <h2 id="sketch-button-title">Button / Nút bấm</h2>
+      <p>Một nhãn, bốn vai trò · Chỉ một nút đỏ chính</p>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-4 g-4">
+      <div class="col">
+        <figure class="sketch-example">
+          <div class="sketch-button-stage">
+            <button type="button"
+                    class="sketch-surface sketch-button sketch-primary"
+                    data-action="continue">
+              <svg class="sketch-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-clean"></use>
+              </svg>
+              <span class="sketch-content sketch-button-content">
+                Tiếp tục <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <figcaption>
+            <strong>Nét mực gọn · Chính</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <div class="sketch-button-stage">
+            <button type="button"
+                    class="sketch-surface sketch-button sketch-ink sketch-double-line"
+                    data-action="continue">
+              <svg class="sketch-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-double"></use>
+              </svg>
+              <svg class="sketch-inner-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-double"></use>
+              </svg>
+              <span class="sketch-content sketch-button-content">
+                Tiếp tục <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <figcaption>
+            <strong>Phác nét đôi · Mực đặc</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <div class="sketch-button-stage">
+            <button type="button"
+                    class="sketch-surface sketch-button sketch-double-line"
+                    data-action="continue">
+              <svg class="sketch-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-note"></use>
+              </svg>
+              <svg class="sketch-inner-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-note"></use>
+              </svg>
+              <span class="sketch-content sketch-button-content">
+                Tiếp tục <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <figcaption>
+            <strong>Giấy ghi chú · Ghost</strong>
+            <span>Lite · Trong ứng dụng</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="col">
+        <figure class="sketch-example">
+          <div class="sketch-button-stage">
+            <button type="button"
+                    class="sketch-surface sketch-button sketch-heavy
+                           sketch-blue-outline sketch-focus-preview"
+                    data-action="continue"
+                    aria-describedby="focus-preview-note">
+              <svg class="sketch-outline" viewBox="0 0 400 186"
+                   preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <use href="#sketch-sticker"></use>
+              </svg>
+              <span class="sketch-content sketch-button-content">
+                Tiếp tục <i class="bi bi-arrow-right" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          <figcaption>
+            <strong>Sticker nổi · Focus</strong>
+            <span id="focus-preview-note">Heavy · Mẫu minh họa viền focus</span>
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sketch-board-footer">
+    <p>
+      Lite cho ứng dụng hằng ngày. Heavy dành cho cổng vào / marketing,
+      không thay thế mặc định hiện tại.
+    </p>
+    <p>16 mẫu · 4 nhóm · Cùng nội dung để so sánh</p>
+  </footer>
+</main>

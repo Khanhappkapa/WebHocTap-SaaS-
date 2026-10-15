@@ -34,7 +34,7 @@
         <h1 id="assignment-title">@Model.Assignment.Title</h1>
 
         <div class="assignment-meta d-flex flex-wrap">
-            <span class="assignment-chip">Hạn nộp: @Model.Assignment.Deadline.ToString("dd/MM/yyyy · HH:mm")</span>
+            <span class="assignment-chip"><img src="~/asset/images/calendar-date.svg" alt="" class="sketch-icon-sm me-1" width="16" height="16" />Hạn nộp: @Model.Assignment.Deadline.ToString("dd/MM/yyyy · HH:mm")</span>
             <span class="assignment-chip">Điểm tối đa: @Model.Assignment.MaxScore</span>
             @if (Model.Assignment.Deadline < DateTime.UtcNow)
             {

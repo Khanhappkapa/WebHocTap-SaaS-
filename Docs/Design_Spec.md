@@ -155,6 +155,19 @@ a { color: var(--cm-blue-pen); } a:hover { color: var(--cm-accent); }
 
 ---
 
+### 3.8. Admin & Profile Components (P7 — Áp dụng 16 mẫu nét & 8 PNG Mockups)
+| Class / Component | Mô tả | Mẫu áp dụng (trong 16 mẫu) |
+|---|---|---|
+| `.sketch-row-card` | Thẻ hàng người dùng / khóa học bo góc viền mực | `#sketch-clean` (Nét mực gọn — Tier 1 lặp lại ~70%) |
+| `.sketch-profile-box` | Khung chứa form hồ sơ và đổi mật khẩu | `#sketch-clean` / `#sketch-double` (Khung nhóm dữ liệu) |
+| `.sketch-avatar-circle` / `-lg` | Avatar tròn phác thảo chứa 2 chữ cái viết tắt (initials) | Phác thảo viền mực đen 1.5px/2px |
+| `.sketch-pill-*` | Huy hiệu vai trò & trạng thái (Quản trị viên, Giảng viên, Đang hoạt động...) | Nền màu đồng nhất (xanh/đen/xám) hoặc viền phác |
+| `.btn-sketch-action` | Nút thao tác viền mực bo tròn (Khóa, Mở khóa, Đóng, Ẩn/Hiện) | Nét mực viền đen, hover tinh tế |
+| `.btn-sketch-cta-red` | Nút chính "Lưu thay đổi" màu đỏ đặc | Tier 4 (Sticker / CTA nổi bật) |
+| `.sketch-empty-box` | Trạng thái danh sách rỗng (viền nét đứt + minh họa thùng giấy) | Viền dashed + `Loose empty box scribble.svg` |
+| `.sketch-toast-badge` | Huy hiệu thông báo trạng thái góc trên phải ("Đã lưu hồ sơ") | Viền mực phác thảo + icon tick xanh |
+| `.sketch-hand-error` | Dòng báo lỗi validation ("Mật khẩu nhập lại không khớp") | Font viết tay `FZ Caveat` màu đỏ |
+
 ## 4. LUẬT 2 TẦNG (bảng áp dụng theo trang — đừng trộn)
 
 | Tầng | Trang áp dụng | Đặc tính trực quan |

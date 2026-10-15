@@ -1,0 +1,457 @@
+/* Acme V2 tokens, Bootstrap 5, Icons và font phải đã có. */
+
+.sketch-definitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.sketch-board {
+  max-width: 1824px;
+  margin-inline: auto;
+  padding: clamp(1.25rem, 3.5vw, 4rem);
+  background: var(--cm-bg);
+  color: var(--cm-text);
+  font: 16px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.sketch-board,
+.sketch-board *,
+.sketch-surface,
+.sketch-surface * {
+  box-sizing: border-box;
+}
+
+.sketch-board-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--cm-line);
+}
+
+.sketch-board-header > div:first-child {
+  flex: 1 1 600px;
+}
+
+.sketch-eyebrow {
+  margin: 0 0 .25rem;
+  color: var(--cm-primary);
+  font: 32px/1.3 "Fz Caveat", cursive;
+}
+
+.sketch-board h1 {
+  margin: 0 0 .5rem;
+  color: var(--cm-text);
+  font: 700 clamp(1.8rem, 3vw, 3rem)/1.2
+    "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-intro {
+  margin: 0;
+  color: var(--cm-muted);
+}
+
+.sketch-palette h2 {
+  margin: 0 0 .75rem;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sketch-palette ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sketch-palette li {
+  width: 54px;
+  color: var(--cm-muted);
+  font-size: 11px;
+}
+
+.sketch-swatch {
+  display: block;
+  height: 26px;
+  margin-bottom: .35rem;
+  border: 1px solid var(--cm-line);
+  border-radius: var(--cm-radius);
+}
+
+.swatch-paper { background: var(--cm-bg); }
+.swatch-surface { background: var(--cm-surface); }
+.swatch-ink { background: var(--cm-text); }
+.swatch-blue { background: var(--cm-primary); }
+.swatch-red { background: var(--cm-accent); }
+.swatch-note { background: var(--cm-postit); }
+
+.sketch-section {
+  margin-bottom: 2.75rem;
+}
+
+.sketch-section-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  margin-bottom: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--cm-line);
+}
+
+.sketch-section-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.sketch-section-header p {
+  margin: 0;
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-example {
+  height: 100%;
+  margin: 0;
+  padding: .25rem .25rem .5rem;
+}
+
+.sketch-example figcaption {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  margin-top: 1rem;
+  font: 16px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-example figcaption strong {
+  color: var(--cm-text);
+  font-weight: 600;
+}
+
+.sketch-example figcaption span {
+  color: var(--cm-muted);
+  font-size: 13px;
+}
+
+/* Nội dung dùng layout thông thường.
+   Chỉ lớp SVG trang trí mới đặt absolute. */
+.sketch-surface {
+  position: relative;
+  isolation: isolate;
+  border: 0;
+  background: transparent;
+  color: var(--cm-text);
+  font-family: "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-outline,
+.sketch-inner-outline {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sketch-outline {
+  z-index: -2;
+  fill: var(--cm-surface);
+  stroke: var(--cm-text);
+  stroke-width: 1.5px;
+  filter: drop-shadow(var(--cm-shadow));
+}
+
+.sketch-inner-outline {
+  z-index: -1;
+  inset: 6px;
+  width: calc(100% - 12px);
+  height: calc(100% - 12px);
+  fill: none;
+  stroke: var(--cm-text);
+  stroke-width: 1px;
+}
+
+/* Paint được kế thừa vào nội dung của SVG <use>. */
+.sketch-contour {
+  fill: inherit;
+  stroke: inherit;
+  stroke-width: inherit;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.sketch-heavy > .sketch-outline {
+  stroke-width: 2px;
+  filter: drop-shadow(var(--cm-shadow-hover));
+}
+
+.sketch-postit > .sketch-outline {
+  fill: var(--cm-postit);
+}
+
+.sketch-content {
+  position: relative;
+  min-width: 0;
+  padding: 24px;
+}
+
+.sketch-content h3 {
+  margin: 0 0 .55rem;
+  color: inherit;
+  font: 700 21px/1.4 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-content p {
+  margin: 0 0 .75rem;
+  font: 16px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-content p.sketch-meta {
+  margin: .65rem 0 0;
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-box {
+  min-height: 186px;
+}
+
+.sketch-divider {
+  height: 1px;
+  margin-block: .75rem;
+  background: var(--cm-line);
+}
+
+.sketch-divider-ink {
+  background: var(--cm-text);
+}
+
+.sketch-blue-rule {
+  display: block;
+  width: 100%;
+  height: 12px;
+  margin-block: .25rem;
+}
+
+.sketch-rule-path {
+  fill: none;
+  stroke: var(--cm-primary);
+  stroke-width: 1px;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Bars */
+.sketch-bar {
+  min-height: 84px;
+}
+
+.sketch-bar-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem 1rem;
+  padding: 16px 24px;
+}
+
+.sketch-bar-content h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.sketch-bar-heading {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.sketch-text-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  min-width: 48px;
+  padding: .5rem;
+  border: 0;
+  background: transparent;
+  color: var(--cm-primary);
+  font: 600 14px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sketch-action-separated {
+  border-left: 1px solid var(--cm-text);
+  padding-left: 1rem;
+}
+
+/* Containers */
+.sketch-container {
+  min-height: 330px;
+}
+
+.sketch-container label {
+  display: block;
+  margin: .9rem 0 .35rem;
+  color: var(--cm-text);
+  font: 600 14px/1.5 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-title-rule {
+  width: 70%;
+}
+
+.sketch-demo-input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  padding: .7rem .8rem;
+  border: 1.5px solid var(--cm-text);
+  border-radius:
+    var(--cm-radius)
+    calc(var(--cm-radius) * 1.1)
+    var(--cm-radius)
+    calc(var(--cm-radius) * .9);
+  background: var(--cm-surface);
+  color: var(--cm-text);
+  font: 15px/1.65 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+textarea.sketch-demo-input {
+  min-height: 82px;
+  resize: vertical;
+}
+
+/* Buttons */
+.sketch-button-stage {
+  display: grid;
+  place-items: center;
+  min-height: 104px;
+  padding: 12px;
+}
+
+.sketch-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 260px);
+  min-width: 48px;
+  min-height: 64px;
+  padding: 0;
+  cursor: pointer;
+}
+
+.sketch-button-content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .65rem;
+  padding: 14px 24px;
+  color: inherit;
+  font: 700 24px/1.4 "Be Vietnam Pro", system-ui, sans-serif;
+}
+
+.sketch-primary > .sketch-outline {
+  fill: var(--cm-accent);
+}
+
+.sketch-ink {
+  color: var(--cm-bg);
+}
+
+.sketch-ink > .sketch-outline {
+  fill: var(--cm-text);
+}
+
+.sketch-ink > .sketch-inner-outline {
+  stroke: var(--cm-bg);
+}
+
+.sketch-blue-outline > .sketch-outline {
+  stroke: var(--cm-primary);
+}
+
+/* Chỉ dùng để trưng bày trạng thái Focus.
+   Bỏ class này khi dùng nút trong trang thật. */
+.sketch-focus-preview {
+  outline: 2px dashed var(--cm-primary);
+  outline-offset: 6px;
+  border-radius: var(--cm-radius);
+}
+
+.sketch-button:hover > .sketch-outline {
+  filter: drop-shadow(var(--cm-shadow-hover));
+}
+
+.sketch-button:active > .sketch-outline {
+  filter: none;
+}
+
+.sketch-button:disabled {
+  cursor: not-allowed;
+  color: var(--cm-muted);
+}
+
+.sketch-button:disabled > .sketch-outline {
+  filter: none;
+  fill: var(--cm-surface);
+  stroke: var(--cm-muted);
+}
+
+.sketch-button:disabled > .sketch-inner-outline {
+  stroke: var(--cm-muted);
+}
+
+.sketch-button:focus-visible,
+.sketch-text-action:focus-visible,
+.sketch-demo-input:focus-visible {
+  outline: 3px solid var(--cm-primary);
+  outline-offset: 5px;
+}
+
+.sketch-board-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--cm-line);
+  color: var(--cm-muted);
+  font-size: 14px;
+}
+
+.sketch-board-footer p {
+  margin: 0;
+}
+
+@media (max-width: 575.98px) {
+  .sketch-content { padding: 20px; }
+  .sketch-bar-content { padding: 14px 20px; }
+  .sketch-box,
+  .sketch-container { min-height: auto; }
+  .sketch-palette ul { gap: .75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sketch-board *,
+  .sketch-surface *,
+  .sketch-button {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}

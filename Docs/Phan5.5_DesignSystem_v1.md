@@ -155,7 +155,7 @@ Bảng tra cứu các emoji được thay thế bằng Bootstrap Icons ở Phase
 | ✏️ | `bi-pencil-square` | Sửa |
 | 👁️ | `bi-eye` | Xem chi tiết |
 | ⬇️ | `bi-download` | Tải xuống |
-| 📅 | `bi-calendar-event` | Buổi học |
+| 📅 | calendar-date.svg & calendar-grid.svg | Buổi học, Hạn nộp bài tập (Date) / Lịch trình khóa học (Grid) — Streamline Freehand SVG |
 | 📄 | `bi-file-earmark-text` | Tài liệu |
 | ⏳ | `bi-hourglass-split` | Đang xử lý |
 | 🔴 | `bi-broadcast` | Đang diễn ra |
@@ -198,3 +198,55 @@ Bảng tra cứu các emoji được thay thế bằng Bootstrap Icons ở Phase
 - [x] 3 layout đều tích hợp đầy đủ font Be Vietnam Pro, FZ Caveat và Bootstrap Icons
 - [x] Toàn bộ emoji Unicode (`📚📝🎥🏠📊🚀💰🔐`) trong các view P2–P5 đã được dọn sạch về 0
 - [x] `dotnet build` đạt **Build succeeded** (0 lỗi, 0 cảnh báo)
+
+---
+
+## 7. Thư viện 16 Mẫu Sketch Component Mở Rộng (Box, Bar, Container, Button)
+
+> **Cập nhật Phase 5.6**: Đã tích hợp 16 mẫu giao diện phác thảo vẽ tay (Acme-lite) dùng chung, sử dụng inline SVG symbols linh hoạt và co giãn tự nhiên theo khung layout (`vector-effect: non-scaling-stroke`).
+
+### 7.1. Cấu trúc SVG Symbols Dùng Chung
+Các symbols đã được định nghĩa tại `Views/Shared/_SketchSymbols.cshtml` và tích hợp sẵn vào toàn bộ Layouts (`_Layout.cshtml`, `_ClientLayout.cshtml`, `_AdminLayout.cshtml`). Khi sử dụng trên bất kỳ trang nào, bạn chỉ cần gọi thẻ `<svg class="sketch-outline"><use href="#<symbol-id>"></use></svg>`.
+
+| Symbol ID | Archetype | Mô tả kiểu dáng |
+|---|---|---|
+| `#sketch-clean` | Nét mực gọn (Clean) | Viền đơn nhẹ nhàng, thanh lịch, dùng cho card và box nội dung thường ngày. |
+| `#sketch-double` | Phác nét đôi (Double) | Viền kép nghệ thuật như phác họa chì than, tạo cảm giác sổ tay mỹ thuật. |
+| `#sketch-note` | Giấy ghi chú (Note) | Viền giấy nhớ có độ nghiêng tự nhiên, kết hợp màu vàng Post-it (`var(--cm-postit)`). |
+| `#sketch-sticker` | Sticker nổi (Heavy) | Viền dày dặn (2px) đổ bóng khối đậm (`--cm-shadow-hover`), ấn tượng cho marketing, CTA. |
+| `#sketch-rule` | Đường kẻ sóng (Rule) | Nét gạch phân cách màu xanh mực bút máy (`var(--cm-primary)`). |
+
+---
+
+### 7.2. Danh mục 16 Mẫu Component
+
+#### 1. Nhóm Box (4 Loại)
+* **Box 1 (Nét mực gọn)**: `.sketch-surface.sketch-box` + `<use href="#sketch-clean">`
+* **Box 2 (Phác nét đôi)**: `.sketch-surface.sketch-box` + `<use href="#sketch-clean">` (ngoài) & `<use href="#sketch-double">` (trong `.sketch-inner-outline`)
+* **Box 3 (Giấy ghi chú)**: `.sketch-surface.sketch-box.sketch-postit` + `<use href="#sketch-note">`
+* **Box 4 (Sticker nổi)**: `.sketch-surface.sketch-box.sketch-heavy` + `<use href="#sketch-sticker">`
+
+#### 2. Nhóm Bar (4 Loại)
+* **Bar 1 (Nét mực gọn)**: `.sketch-surface.sketch-bar` + `<use href="#sketch-clean">`
+* **Bar 2 (Phác nét đôi)**: `.sketch-surface.sketch-bar` + `<use href="#sketch-clean">` & `<use href="#sketch-double">`
+* **Bar 3 (Giấy ghi chú)**: `.sketch-surface.sketch-bar.sketch-postit` + `<use href="#sketch-note">`
+* **Bar 4 (Sticker nổi)**: `.sketch-surface.sketch-bar.sketch-heavy` + `<use href="#sketch-sticker">`
+
+#### 3. Nhóm Container (4 Loại)
+* **Container 1 (Nét mực gọn)**: `.sketch-surface.sketch-container` + `<use href="#sketch-clean">`
+* **Container 2 (Phác nét đôi)**: `.sketch-surface.sketch-container` + `<use href="#sketch-clean">` & `<use href="#sketch-double">`
+* **Container 3 (Giấy ghi chú)**: `.sketch-surface.sketch-container.sketch-postit` + `<use href="#sketch-note">`
+* **Container 4 (Sticker nổi)**: `.sketch-surface.sketch-container.sketch-heavy` + `<use href="#sketch-sticker">`
+
+#### 4. Nhóm Button (4 Loại)
+* **Nút 1 (Chính - Clean Primary)**: `.sketch-surface.sketch-button.sketch-primary` + `<use href="#sketch-clean">` (Màu đỏ cam `--cm-accent`)
+* **Nút 2 (Mực đặc - Ink Solid)**: `.sketch-surface.sketch-button.sketch-ink` + `<use href="#sketch-clean">` & `<use href="#sketch-double">` (Nền đen mực `--cm-text`, chữ sáng)
+* **Nút 3 (Viền xanh - Ghost Outline)**: `.sketch-surface.sketch-button.sketch-blue-outline` + `<use href="#sketch-note">` (Viền bút bi xanh `--cm-primary`)
+* **Nút 4 (Sticker nổi - Heavy Action)**: `.sketch-surface.sketch-button.sketch-heavy` + `<use href="#sketch-sticker">`
+
+---
+
+### 7.3. Trang Trưng Bày Trực Quan (Showcase)
+Toàn bộ 16 mẫu có thể được xem và thử nghiệm trực tiếp tại:
+* Đường dẫn web tĩnh: `wwwroot/sketch-showcase.html` (truy cập `http://localhost:5230/sketch-showcase.html`).
+
