@@ -20,6 +20,148 @@ namespace WebHocTap_SaaS_.Areas.Client.Controllers
         }
 
         // --------------------------------------------------
+        // DANH SÁCH BÀI TẬP (GET) — Teacher & Student
+        // Giáo viên: Xem bài tập đã tạo theo khóa, phân loại:
+        //   1. Bài chưa chấm (hiện lên trên)
+        //   2. Bài đã chấm (xuống dưới)
+        //   3. Học sinh chưa nộp
+        // --------------------------------------------------
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var userId = _userManager.GetUserId(User);
+            var isTeacher = User.IsInRole("Teacher");
+            var vm = new AssignmentIndexViewModel { IsTeacher = isTeacher };
+
+            if (isTeacher)
+            {
+                var teacherCourses = await _context.Courses
+                    .AsNoTracking()
+                    .Where(c => c.TeacherId == userId)
+                    .Include(c => c.Enrollments)
+                        .ThenInclude(e => e.Student)
+                    .ToListAsync();
+
+                var courseIds = teacherCourses.Select(c => c.Id).ToList();
+
+                var assignments = await _context.Assignments
+                    .AsNoTracking()
+                    .Where(a => courseIds.Contains(a.CourseId))
+                    .Include(a => a.Course)
+                    .Include(a => a.Submissions)
+                        .ThenInclude(s => s.Student)
+                    .OrderByDescending(a => a.CreatedAt)
+                    .ToListAsync();
+
+                foreach (var a in assignments)
+                {
+                    var course = teacherCourses.FirstOrDefault(c => c.Id == a.CourseId);
+                    var enrolledStudents = course?.Enrollments
+                        .Select(e => e.Student)
+                        .Where(s => s != null)
+                        .ToList() ?? new List<AppUser>();
+
+                    var item = new TeacherAssignmentItemViewModel
+                    {
+                        AssignmentId = a.Id,
+                        Title = a.Title,
+                        Description = a.Description,
+                        CourseId = a.CourseId,
+                        CourseTitle = a.Course?.Title ?? course?.Title ?? "Khóa học",
+                        Deadline = a.Deadline,
+                        MaxScore = a.MaxScore,
+                        CreatedAt = a.CreatedAt,
+                        TotalStudents = enrolledStudents.Count,
+                        SubmittedCount = a.Submissions.Count
+                    };
+
+                    // 1. Những bài chưa chấm hiện lên trên
+                    item.UngradedSubmissions = a.Submissions
+                        .Where(s => s.Score == null)
+                        .OrderBy(s => s.SubmittedAt)
+                        .Select(s => new SubmissionItemViewModel
+                        {
+                            SubmissionId = s.Id,
+                            StudentId = s.StudentId,
+                            StudentName = s.Student?.FullName ?? s.Student?.UserName ?? "Học viên",
+                            StudentEmail = s.Student?.Email ?? "",
+                            SubmittedAt = s.SubmittedAt,
+                            FileName = s.FileName,
+                            Score = s.Score
+                        }).ToList();
+
+                    // 2. Những bài chấm rồi xuống dưới
+                    item.GradedSubmissions = a.Submissions
+                        .Where(s => s.Score != null)
+                        .OrderByDescending(s => s.GradedAt ?? s.SubmittedAt)
+                        .Select(s => new SubmissionItemViewModel
+                        {
+                            SubmissionId = s.Id,
+                            StudentId = s.StudentId,
+                            StudentName = s.Student?.FullName ?? s.Student?.UserName ?? "Học viên",
+                            StudentEmail = s.Student?.Email ?? "",
+                            SubmittedAt = s.SubmittedAt,
+                            FileName = s.FileName,
+                            Score = s.Score,
+                            Feedback = s.Feedback,
+                            GradedAt = s.GradedAt
+                        }).ToList();
+
+                    // 3. Còn lại là học sinh chưa nộp
+                    var submittedStudentIds = a.Submissions.Select(s => s.StudentId).ToHashSet();
+                    item.UnsubmittedStudents = enrolledStudents
+                        .Where(s => s != null && !submittedStudentIds.Contains(s.Id))
+                        .Select(s => new UnsubmittedStudentViewModel
+                        {
+                            StudentId = s.Id,
+                            StudentName = s.FullName ?? s.UserName ?? "Học viên",
+                            StudentEmail = s.Email ?? ""
+                        }).ToList();
+
+                    vm.TeacherAssignments.Add(item);
+                }
+            }
+            else
+            {
+                var enrollments = await _context.Enrollments
+                    .AsNoTracking()
+                    .Where(e => e.StudentId == userId)
+                    .Include(e => e.Course)
+                    .ToListAsync();
+
+                var enrolledCourseIds = enrollments.Select(e => e.CourseId).ToList();
+
+                var assignments = await _context.Assignments
+                    .AsNoTracking()
+                    .Where(a => enrolledCourseIds.Contains(a.CourseId))
+                    .Include(a => a.Course)
+                    .Include(a => a.Submissions.Where(s => s.StudentId == userId))
+                    .OrderBy(a => a.Deadline)
+                    .ToListAsync();
+
+                foreach (var a in assignments)
+                {
+                    var sub = a.Submissions.FirstOrDefault();
+                    vm.StudentAssignments.Add(new StudentAssignmentItemViewModel
+                    {
+                        AssignmentId = a.Id,
+                        Title = a.Title,
+                        CourseId = a.CourseId,
+                        CourseTitle = a.Course?.Title ?? "Khóa học",
+                        Deadline = a.Deadline,
+                        MaxScore = a.MaxScore,
+                        HasSubmitted = sub != null,
+                        Score = sub?.Score,
+                        SubmittedAt = sub?.SubmittedAt,
+                        Feedback = sub?.Feedback
+                    });
+                }
+            }
+
+            return View(vm);
+        }
+
+        // --------------------------------------------------
         // TẠO BÀI TẬP (GET) — Teacher only
         // --------------------------------------------------
         [HttpGet]

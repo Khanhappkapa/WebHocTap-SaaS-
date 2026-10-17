@@ -109,7 +109,7 @@
                         </li>
                     }
                     <li class="nav-item">
-                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" href="#">
+                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" asp-area="Client" asp-controller="Assignment" asp-action="Index">
                             <span class="link-icon-box"><i class="bi bi-pencil-square"></i></span>
                             <span>Bài tập</span>
                         </a>
@@ -167,7 +167,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" href="#">
+                        <a class="nav-link sidebar-link @(currentCtrl == "Assignment" ? "active" : "")" asp-area="Client" asp-controller="Assignment" asp-action="Index">
                             <span class="link-icon-box"><i class="bi bi-pencil-square"></i></span>
                             <span>Bài tập</span>
                         </a>

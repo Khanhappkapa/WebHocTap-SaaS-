@@ -1,0 +1,402 @@
+@model WebHocTap_SaaS_.Models.ViewModels.AssignmentIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý bài tập";
+    ViewData["Description"] = "Theo dõi bài tập đã tạo, phân loại bài chờ chấm, bài đã chấm và danh sách học viên chưa nộp bài tại Bulb.edu.";
+}
+
+<div class="container-fluid py-4">
+    @* ── Header & Breadcrumbs ── *@
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small text-muted">
+                    <li class="breadcrumb-item"><a asp-area="Client" asp-controller="Dashboard" asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Bài tập</li>
+                </ol>
+            </nav>
+            <h1 class="h2 mb-0 d-flex align-items-center gap-2">
+                <i class="bi bi-pencil-square text-primary" aria-hidden="true"></i>
+                <span>@(Model.IsTeacher ? "Quản lý bài tập đã tạo" : "Danh sách bài tập của bạn")</span>
+            </h1>
+        </div>
+        @if (Model.IsTeacher)
+        {
+            <div>
+                <a class="btn btn-cta" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                    <i class="bi bi-plus-circle me-1" aria-hidden="true"></i> Tạo bài tập mới
+                </a>
+            </div>
+        }
+    </div>
+
+    @* ========== PHÍA GIÁO VIÊN (TEACHER VIEW) ========== *@
+    @if (Model.IsTeacher)
+    {
+        @* ── Summary Stats ── *@
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card-stat p-3">
+                    <span class="card-stat-label">Tổng bài tập</span>
+                    <strong class="card-stat-value">@Model.TotalAssignments</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-stat p-3">
+                    <span class="card-stat-label">Tổng bài đã nộp</span>
+                    <strong class="card-stat-value">@Model.TotalSubmissions</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-stat p-3" style="border-left: 4px solid var(--cm-accent);">
+                    <span class="card-stat-label">Chờ chấm điểm</span>
+                    <strong class="card-stat-value" style="color: var(--cm-accent-dark, #b45309);">@Model.TotalUngraded</strong>
+                </div>
+            </div>
+            <div class="col-6 col-md-3">
+                <div class="card-stat p-3" style="border-left: 4px solid var(--cm-green, #16a34a);">
+                    <span class="card-stat-label">Đã chấm xong</span>
+                    <strong class="card-stat-value" style="color: var(--cm-green, #16a34a);">@Model.TotalGraded</strong>
+                </div>
+            </div>
+        </div>
+
+        @if (Model.TeacherAssignments.Count == 0)
+        {
+            @* Empty state *@
+            <div class="sketch-surface p-5 text-center my-4">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content py-4">
+                    <i class="bi bi-journal-x fs-1 text-muted d-block mb-3" aria-hidden="true"></i>
+                    <h2 class="h4 mb-2">Chưa có bài tập nào được tạo</h2>
+                    <p class="text-muted mb-4">Hãy chọn khóa học trong mục Quản lý khóa học để thêm bài tập đầu tiên cho học viên.</p>
+                    <a class="btn btn-cta" asp-area="Client" asp-controller="Course" asp-action="Manage">
+                        <i class="bi bi-gear me-1"></i> Đến trang Quản lý khóa học
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column gap-3 mb-4">
+                @foreach (var item in Model.TeacherAssignments)
+                {
+                    <div class="sketch-surface p-3 p-md-4">
+                        <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                            <use href="#sketch-clean"></use>
+                        </svg>
+                        <div class="sketch-content position-relative">
+                            @* ── Card Top Header ── *@
+                            <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-2">
+                                <div style="flex: 1 1 60%;">
+                                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                        <h2 class="h5 mb-0 fw-bold">
+                                            <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@item.AssignmentId" class="text-dark text-decoration-none">
+                                                @item.Title
+                                            </a>
+                                        </h2>
+                                        @* Đường link dẫn đến chính khóa học *@
+                                        <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@item.CourseId" 
+                                           class="badge text-decoration-none" 
+                                           style="background: var(--cm-paper-tint); color: var(--cm-ink); border: 1.5px solid var(--cm-line);"
+                                           title="Xem chi tiết khóa học: @item.CourseTitle">
+                                            <i class="bi bi-journal-bookmark-fill me-1 text-primary" aria-hidden="true"></i>
+                                            Lớp: <strong class="text-primary text-decoration-underline">@item.CourseTitle</strong>
+                                        </a>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(item.Description))
+                                    {
+                                        <p class="text-muted small mb-2 text-truncate" style="max-width: 750px;">@item.Description</p>
+                                    }
+                                    <div class="d-flex flex-wrap align-items-center gap-2 small">
+                                        @if (item.IsOverdue)
+                                        {
+                                            <span class="badge badge-status-closed">
+                                                <i class="bi bi-exclamation-octagon me-1" aria-hidden="true"></i> Đã hết hạn (@item.Deadline.ToString("dd/MM/yyyy HH:mm"))
+                                            </span>
+                                        }
+                                        else if (item.IsDueSoon)
+                                        {
+                                            <span class="badge badge-status-draft">
+                                                <i class="bi bi-alarm me-1" aria-hidden="true"></i> Sắp hết hạn (@item.Deadline.ToString("dd/MM/yyyy HH:mm"))
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge badge-status-published">
+                                                <i class="bi bi-calendar2-check me-1" aria-hidden="true"></i> Hạn nộp: @item.Deadline.ToString("dd/MM/yyyy HH:mm")
+                                            </span>
+                                        }
+
+                                        <span class="badge bg-light text-dark border">
+                                            Điểm tối đa: @item.MaxScore
+                                        </span>
+
+                                        <span class="badge" style="background: var(--cm-blue-pen); color: white;">
+                                            <i class="bi bi-people-fill me-1" aria-hidden="true"></i> Đã nộp: <strong>@item.SubmittedCount/@item.TotalStudents</strong>
+                                        </span>
+
+                                        @if (item.UngradedSubmissions.Count > 0)
+                                        {
+                                            <span class="badge" style="background: var(--cm-accent); color: var(--cm-ink);">
+                                                <i class="bi bi-hourglass-split me-1" aria-hidden="true"></i> Có @item.UngradedSubmissions.Count bài chờ chấm
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+
+                                @* Actions *@
+                                <div class="d-flex align-items-center gap-2 flex-wrap">
+                                    <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@item.AssignmentId" class="btn btn-cta-ghost btn-sm">
+                                        <i class="bi bi-pen me-1" aria-hidden="true"></i> Chấm bài
+                                    </a>
+                                    <button class="btn btn-sketch-action btn-sm" type="button" 
+                                            data-bs-toggle="collapse" 
+                                            data-bs-target="#collapseSubmissions-@item.AssignmentId" 
+                                            aria-expanded="false" 
+                                            aria-controls="collapseSubmissions-@item.AssignmentId">
+                                        <i class="bi bi-list-check me-1" aria-hidden="true"></i> Danh sách học viên (@item.SubmittedCount/@item.TotalStudents)
+                                        <i class="bi bi-chevron-down ms-1" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            @* ── DROPDOWN COLLAPSIBLE: PHÂN LOẠI THEO YÊU CẦU ── *@
+                            @* 1. Chưa chấm hiện lên trên *@
+                            @* 2. Đã chấm xuống dưới *@
+                            @* 3. Còn lại là học sinh chưa nộp *@
+                            <div class="collapse mt-3" id="collapseSubmissions-@item.AssignmentId">
+                                <div class="p-3 rounded-3" style="background: var(--cm-paper-tint); border: 1.5px dashed var(--cm-line);">
+                                    
+                                    @* ── NHÓM 1: BÀI CHƯA CHẤM (TRÊN CÙNG) ── *@
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="fw-bold text-dark" style="font-family: var(--cm-font-hand); font-size: 1.15rem;">
+                                                <i class="bi bi-hourglass-split text-warning me-1" aria-hidden="true"></i> 1. Bài chưa chấm (Chờ chấm)
+                                            </span>
+                                            <span class="badge bg-warning text-dark fw-bold">@item.UngradedSubmissions.Count bài</span>
+                                        </div>
+                                        @if (item.UngradedSubmissions.Count == 0)
+                                        {
+                                            <p class="text-muted small mb-0 ps-3 fst-italic">Không có bài nào đang chờ chấm.</p>
+                                        }
+                                        else
+                                        {
+                                            <div class="list-group list-group-flush border rounded-3 bg-white">
+                                                @foreach (var sub in item.UngradedSubmissions)
+                                                {
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3 flex-wrap gap-2">
+                                                        <div>
+                                                            <strong class="text-dark">@sub.StudentName</strong>
+                                                            <span class="text-muted small ms-2"><i class="bi bi-envelope me-1"></i>@sub.StudentEmail</span>
+                                                            <div class="text-muted small">
+                                                                <i class="bi bi-clock me-1"></i> Nộp lúc: @sub.SubmittedAt.ToString("HH:mm, dd/MM/yyyy")
+                                                                @if (!string.IsNullOrEmpty(sub.FileName))
+                                                                {
+                                                                    <span class="ms-2"><i class="bi bi-file-earmark-arrow-up me-1"></i>@sub.FileName</span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@item.AssignmentId" class="btn btn-cta btn-sm">
+                                                            <i class="bi bi-pencil-fill me-1" aria-hidden="true"></i> Chấm điểm ngay
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                    @* ── NHÓM 2: BÀI ĐÃ CHẤM (XUỐNG DƯỚI) ── *@
+                                    <div class="mb-3">
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="fw-bold text-dark" style="font-family: var(--cm-font-hand); font-size: 1.15rem;">
+                                                <i class="bi bi-check-circle-fill text-success me-1" aria-hidden="true"></i> 2. Bài đã chấm điểm
+                                            </span>
+                                            <span class="badge bg-success text-white fw-bold">@item.GradedSubmissions.Count bài</span>
+                                        </div>
+                                        @if (item.GradedSubmissions.Count == 0)
+                                        {
+                                            <p class="text-muted small mb-0 ps-3 fst-italic">Chưa có bài nào được chấm điểm.</p>
+                                        }
+                                        else
+                                        {
+                                            <div class="list-group list-group-flush border rounded-3 bg-white">
+                                                @foreach (var sub in item.GradedSubmissions)
+                                                {
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3 flex-wrap gap-2">
+                                                        <div>
+                                                            <strong class="text-dark">@sub.StudentName</strong>
+                                                            <span class="text-muted small ms-2"><i class="bi bi-envelope me-1"></i>@sub.StudentEmail</span>
+                                                            <div class="small mt-1">
+                                                                <span class="badge me-2" style="background: var(--cm-accent); color: var(--cm-ink); font-weight: bold; font-size: 0.9rem;">
+                                                                    Điểm: @sub.Score?.ToString("0.##") / @item.MaxScore
+                                                                </span>
+                                                                @if (!string.IsNullOrEmpty(sub.Feedback))
+                                                                {
+                                                                    <span class="fst-italic" style="font-family: var(--cm-font-hand); color: var(--cm-blue-pen); font-size: 1.05rem;">
+                                                                        "@(sub.Feedback.Length > 70 ? sub.Feedback.Substring(0, 70) + "..." : sub.Feedback)"
+                                                                    </span>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@item.AssignmentId" class="btn btn-cta-ghost btn-sm">
+                                                            <i class="bi bi-eye me-1" aria-hidden="true"></i> Xem lại
+                                                        </a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                    @* ── NHÓM 3: HỌC SINH CHƯA NỘP (DƯỚI CÙNG) ── *@
+                                    <div>
+                                        <div class="d-flex align-items-center justify-content-between mb-2">
+                                            <span class="fw-bold text-muted" style="font-family: var(--cm-font-hand); font-size: 1.15rem;">
+                                                <i class="bi bi-dash-circle me-1" aria-hidden="true"></i> 3. Học sinh chưa nộp bài
+                                            </span>
+                                            <span class="badge bg-secondary text-white fw-bold">@item.UnsubmittedStudents.Count học viên</span>
+                                        </div>
+                                        @if (item.UnsubmittedStudents.Count == 0)
+                                        {
+                                            <p class="text-success small mb-0 ps-3 fw-semibold">
+                                                <i class="bi bi-check2-all me-1"></i> 100% học viên trong lớp đã hoàn thành bài nộp!
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <div class="list-group list-group-flush border rounded-3 bg-white">
+                                                @foreach (var st in item.UnsubmittedStudents)
+                                                {
+                                                    <div class="list-group-item d-flex justify-content-between align-items-center py-2 px-3">
+                                                        <div>
+                                                            <span class="text-dark fw-medium">@st.StudentName</span>
+                                                            <span class="text-muted small ms-2"><i class="bi bi-envelope me-1"></i>@st.StudentEmail</span>
+                                                        </div>
+                                                        <span class="badge bg-light text-muted border">Chưa nộp</span>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+    @* ========== PHÍA HỌC VIÊN (STUDENT VIEW) ========== *@
+    else
+    {
+        @if (Model.StudentAssignments.Count == 0)
+        {
+            <div class="sketch-surface p-5 text-center my-4">
+                <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                    <use href="#sketch-clean"></use>
+                </svg>
+                <div class="sketch-content py-4">
+                    <i class="bi bi-journal-check fs-1 text-muted d-block mb-3" aria-hidden="true"></i>
+                    <h2 class="h4 mb-2">Không có bài tập nào cần làm</h2>
+                    <p class="text-muted mb-4">Các khóa học bạn đang tham gia hiện chưa có bài tập mới nào.</p>
+                    <a class="btn btn-cta" asp-area="Client" asp-controller="Course" asp-action="MyCourses">
+                        <i class="bi bi-journal-code me-1"></i> Đến Khóa học của tôi
+                    </a>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="d-flex flex-column gap-3 mb-4">
+                @foreach (var a in Model.StudentAssignments)
+                {
+                    <div class="sketch-surface p-3 p-md-4">
+                        <svg class="sketch-outline" viewBox="0 0 400 186" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                            <use href="#sketch-clean"></use>
+                        </svg>
+                        <div class="sketch-content d-flex justify-content-between align-items-center flex-wrap gap-3">
+                            <div>
+                                <h2 class="h5 mb-1 fw-bold">
+                                    <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@a.AssignmentId" class="text-dark text-decoration-none">
+                                        @a.Title
+                                    </a>
+                                </h2>
+                                <div class="d-flex flex-wrap align-items-center gap-2 small">
+                                    <a asp-area="Client" asp-controller="Course" asp-action="Details" asp-route-id="@a.CourseId"
+                                       class="badge text-decoration-none"
+                                       style="background: var(--cm-paper-tint); color: var(--cm-ink); border: 1.5px solid var(--cm-line);">
+                                        <i class="bi bi-journal-bookmark-fill me-1 text-primary"></i> Khóa: <strong>@a.CourseTitle</strong>
+                                    </a>
+
+                                    <span class="badge @(a.IsOverdue ? "badge-status-closed" : (a.IsDueSoon ? "badge-status-draft" : "badge-status-published"))">
+                                        <i class="bi bi-clock me-1"></i> Hạn: @a.Deadline.ToString("dd/MM/yyyy HH:mm")
+                                    </span>
+
+                                    @if (a.HasSubmitted)
+                                    {
+                                        if (a.Score != null)
+                                        {
+                                            <span class="badge" style="background: var(--cm-accent); color: var(--cm-ink); font-weight: bold;">
+                                                <i class="bi bi-check2-all me-1"></i> Đã chấm: @a.Score?.ToString("0.##") / @a.MaxScore
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge" style="background: var(--cm-blue-pen); color: white;">
+                                                <i class="bi bi-hourglass-split me-1"></i> Đã nộp (Chờ chấm)
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-light text-danger border border-danger">
+                                            <i class="bi bi-exclamation-circle me-1"></i> Chưa nộp bài
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+
+                            <div>
+                                <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@a.AssignmentId" class="btn btn-cta btn-sm">
+                                    @(a.HasSubmitted ? "Xem kết quả" : "Nộp bài ngay")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (btn) {
+                btn.addEventListener('click', function (e) {
+                    var targetSel = this.getAttribute('data-bs-target');
+                    if (targetSel) {
+                        var targetEl = document.querySelector(targetSel);
+                        if (targetEl) {
+                            var isOpen = targetEl.classList.contains('show');
+                            if (isOpen) {
+                                targetEl.classList.remove('show');
+                                this.setAttribute('aria-expanded', 'false');
+                            } else {
+                                targetEl.classList.add('show');
+                                this.setAttribute('aria-expanded', 'true');
+                            }
+                            var icon = this.querySelector('.bi-chevron-down, .bi-chevron-up');
+                            if (icon) {
+                                icon.classList.toggle('bi-chevron-down', isOpen);
+                                icon.classList.toggle('bi-chevron-up', !isOpen);
+                            }
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
