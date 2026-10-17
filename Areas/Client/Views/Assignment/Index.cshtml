@@ -151,13 +151,13 @@
                                     <a asp-area="Client" asp-controller="Assignment" asp-action="Details" asp-route-id="@item.AssignmentId" class="btn btn-cta-ghost btn-sm">
                                         <i class="bi bi-pen me-1" aria-hidden="true"></i> Chấm bài
                                     </a>
-                                    <button class="btn btn-sketch-action btn-sm" type="button" 
+                                    <button class="btn btn-sketch-action btn-sm collapsed" type="button" 
                                             data-bs-toggle="collapse" 
                                             data-bs-target="#collapseSubmissions-@item.AssignmentId" 
                                             aria-expanded="false" 
                                             aria-controls="collapseSubmissions-@item.AssignmentId">
                                         <i class="bi bi-list-check me-1" aria-hidden="true"></i> Danh sách học viên (@item.SubmittedCount/@item.TotalStudents)
-                                        <i class="bi bi-chevron-down ms-1" aria-hidden="true"></i>
+                                        <i class="bi bi-chevron-down ms-1 collapse-chevron" aria-hidden="true"></i>
                                     </button>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                             @* 1. Chưa chấm hiện lên trên *@
                             @* 2. Đã chấm xuống dưới *@
                             @* 3. Còn lại là học sinh chưa nộp *@
-                            <div class="collapse mt-3" id="collapseSubmissions-@item.AssignmentId">
+                            <div class="collapse assignment-collapse mt-3" id="collapseSubmissions-@item.AssignmentId">
                                 <div class="p-3 rounded-3" style="background: var(--cm-paper-tint); border: 1.5px dashed var(--cm-line);">
                                     
                                     @* ── NHÓM 1: BÀI CHƯA CHẤM (TRÊN CÙNG) ── *@
@@ -371,29 +371,31 @@
     }
 </div>
 
+<style>
+    .collapse-chevron {
+        display: inline-block;
+        transition: transform 0.25s ease-in-out;
+    }
+    .btn-sketch-action[aria-expanded="true"] .collapse-chevron {
+        transform: rotate(180deg);
+    }
+</style>
+
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (btn) {
-                btn.addEventListener('click', function (e) {
-                    var targetSel = this.getAttribute('data-bs-target');
-                    if (targetSel) {
-                        var targetEl = document.querySelector(targetSel);
-                        if (targetEl) {
-                            var isOpen = targetEl.classList.contains('show');
-                            if (isOpen) {
-                                targetEl.classList.remove('show');
-                                this.setAttribute('aria-expanded', 'false');
-                            } else {
-                                targetEl.classList.add('show');
-                                this.setAttribute('aria-expanded', 'true');
-                            }
-                            var icon = this.querySelector('.bi-chevron-down, .bi-chevron-up');
-                            if (icon) {
-                                icon.classList.toggle('bi-chevron-down', isOpen);
-                                icon.classList.toggle('bi-chevron-up', !isOpen);
-                            }
-                        }
+            // Lắng nghe sự kiện collapse chuẩn của Bootstrap để đảm bảo aria-expanded và trạng thái icon đồng bộ
+            document.querySelectorAll('.assignment-collapse').forEach(function (collapseEl) {
+                collapseEl.addEventListener('show.bs.collapse', function () {
+                    var btn = document.querySelector('[data-bs-target="#' + collapseEl.id + '"]');
+                    if (btn) {
+                        btn.setAttribute('aria-expanded', 'true');
+                    }
+                });
+                collapseEl.addEventListener('hide.bs.collapse', function () {
+                    var btn = document.querySelector('[data-bs-target="#' + collapseEl.id + '"]');
+                    if (btn) {
+                        btn.setAttribute('aria-expanded', 'false');
                     }
                 });
             });
