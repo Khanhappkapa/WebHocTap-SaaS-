@@ -6,6 +6,7 @@
 @model WebHocTap_SaaS_.Models.ViewModels.AdminCourseIndexViewModel
 @{
     ViewData["Title"] = "Giám sát khóa học";
+    ViewData["Description"] = "Quản lý trạng thái khóa học, đóng, mở và ẩn khóa học toàn hệ thống Bulb.edu.";
 }
 
 <div class="container-fluid px-0 px-md-3 py-3" style="max-width: 1200px;">
@@ -199,7 +200,7 @@
 @* ── Confirmation Modal: Chuẩn theo Admin — Xác nhận thao tác khóa học.png ── *@
 <div class="modal fade" id="confirmCloseModal" tabindex="-1" aria-labelledby="confirmCloseModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" style="max-width: 440px;">
-        <div class="modal-content" style="border: 2px solid var(--cm-ink, #2d2d2d); border-radius: 10px; background: #ffffff; box-shadow: 4px 4px 0 rgba(0,0,0,0.12);">
+        <div class="modal-content" style="border: 2px solid var(--cm-ink, var(--cm-ink)); border-radius: 10px; background: var(--cm-surface); box-shadow: 4px 4px 0 rgba(0,0,0,0.12);">
             <div class="modal-header border-bottom py-3 px-4">
                 <h5 class="modal-title fw-bold text-dark" id="confirmCloseModalLabel" style="font-family: var(--cm-font-body);">Xác nhận thao tác</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>

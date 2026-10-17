@@ -4,6 +4,7 @@
 @model WebHocTap_SaaS_.Models.ViewModels.RegisterViewModel
 @{
     ViewData["Title"] = "Đăng ký tài khoản";
+    ViewData["Description"] = "Đăng ký tài khoản mới để bắt đầu học tập và giảng dạy trực tuyến tại Bulb.edu.";
 }
 
 <main class="on-public py-5">
@@ -50,8 +51,8 @@
                             <label asp-for="UserRole" class="form-label fw-bold">Bạn là:</label>
                             <select asp-for="UserRole" class="form-select form-control sketch-input">
                                 <option value="">-- Chọn vai trò --</option>
-                                <option value="Teacher">👨‍🏫 Giáo viên</option>
-                                <option value="Student">🎓 Học viên</option>
+                                <option value="Teacher">Giáo viên</option>
+                                <option value="Student">Học viên</option>
                             </select>
                             <span asp-validation-for="UserRole" class="error-msg d-block mt-1"></span>
                         </div>

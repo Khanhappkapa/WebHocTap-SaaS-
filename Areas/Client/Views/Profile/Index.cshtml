@@ -1,11 +1,12 @@
 @* ============================================================
     File: Areas/Client/Views/Profile/Index.cshtml
     Mô tả: Hồ sơ của tôi (P7) - Chuẩn theo mockup Client — Hồ sơ — Desktop.png & Mobile.png
-    Áp dụng 16 mẫu nét: 2 Container phác nét (#sketch-clean) + Nút CTA đỏ rực (#ff4d4f) + Font viết tay FZ Caveat
+    Áp dụng 16 mẫu nét: 2 Container phác nét (#sketch-clean) + Nút CTA đỏ rực (var(--cm-accent)) + Font viết tay FZ Caveat
 ============================================================ *@
 @model WebHocTap_SaaS_.Models.ViewModels.ProfileViewModel
 @{
     ViewData["Title"] = "Hồ sơ của tôi";
+    ViewData["Description"] = "Quản lý thông tin tài khoản cá nhân, họ tên và đổi mật khẩu bảo mật tại Bulb.edu.";
     var hasPasswordMismatch = ViewData["PasswordMismatch"] is true;
 }
 
@@ -14,7 +15,7 @@
     <div class="mb-3">
         <a asp-area="Client" asp-controller="Dashboard" asp-action="Index"
            class="text-decoration-none fw-medium d-inline-flex align-items-center"
-           style="color: var(--cm-primary, #2563eb); font-size: 0.95rem;">
+           style="color: var(--cm-primary); font-size: 0.95rem;">
             ← Về bảng điều khiển
         </a>
     </div>
@@ -32,7 +33,7 @@
         }
         else if (TempData["Error"] != null)
         {
-            <div class="sketch-toast-badge text-danger" style="border-color: var(--cm-danger, #ef4444);">
+            <div class="sketch-toast-badge text-danger" style="border-color: var(--cm-danger);">
                 <i class="bi bi-exclamation-circle text-danger fs-5"></i>
                 <span>@TempData["Error"]</span>
             </div>
@@ -49,7 +50,7 @@
                 </svg>
                 <div class="sketch-content sketch-profile-content">
                     <h2 class="h4 fw-bold mb-3" style="font-family: var(--cm-font-body);">Thông tin cá nhân</h2>
-                    <hr class="border-top my-3" style="border-color: var(--cm-line, #e4e4e7);" />
+                    <hr class="border-top my-3" style="border-color: var(--cm-line);" />
 
                     @* Avatar + Role *@
                     <div class="d-flex align-items-center gap-3 mb-4">
@@ -97,7 +98,7 @@
                 </svg>
                 <div class="sketch-content sketch-profile-content">
                     <h2 class="h4 fw-bold mb-3" style="font-family: var(--cm-font-body);">Đổi mật khẩu</h2>
-                    <hr class="border-top my-3" style="border-color: var(--cm-line, #e4e4e7);" />
+                    <hr class="border-top my-3" style="border-color: var(--cm-line);" />
 
                     <form asp-area="Client" asp-controller="Profile" asp-action="ChangePassword" method="post">
                         <div class="mb-3">
